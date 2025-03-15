@@ -17,7 +17,7 @@
   <Properties>
     <DisplayName>LoanShark</DisplayName>
     <PublisherDisplayName>apava</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <Logo>Assets\Martin.jpeg</Logo>
   </Properties>
 
   <Dependencies>
@@ -37,10 +37,15 @@
         DisplayName="LoanShark"
         Description="LoanShark"
         BackgroundColor="transparent"
-        Square150x150Logo="Assets\Square150x150Logo.png"
-        Square44x44Logo="Assets\Square44x44Logo.png">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
-        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        Square150x150Logo="Assets\Martin.jpeg"
+        Square44x44Logo="Assets\Martin.jpeg">
+        <uap:DefaultTile Wide310x150Logo="Assets\Martin.jpeg" >
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="wide310x150Logo"/>
+            <uap:ShowOn Tile="square150x150Logo"/>
+          </uap:ShowNameOnTiles>
+        </uap:DefaultTile >
+        <uap:SplashScreen Image="Assets\Martin.jpeg" />
       </uap:VisualElements>
     </Application>
   </Applications>
