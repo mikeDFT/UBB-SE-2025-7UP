@@ -23,7 +23,8 @@ CREATE TABLE bank_accounts (
     max_per_transaction FLOAT NOT NULL DEFAULT 50000,
     max_nr_transactions_daily INT NOT NULL DEFAULT 100,
     blocked BIT NOT NULL DEFAULT 0,
-    FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE
+    FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
+	FOREIGN KEY (currency) REFERENCES currencies(currency_name),
 );
 
 CREATE TABLE transactions (
@@ -38,7 +39,9 @@ CREATE TABLE transactions (
     transaction_type VARCHAR(100) NOT NULL CHECK (transaction_type IN ('user to user', 'loan', 'stocks')),
     transaction_description VARCHAR(50) DEFAULT '',
     FOREIGN KEY (sender_iban) REFERENCES bank_accounts(iban),
-    FOREIGN KEY (receiver_iban) REFERENCES bank_accounts(iban)
+    FOREIGN KEY (receiver_iban) REFERENCES bank_accounts(iban),
+	FOREIGN KEY (sender_currency) REFERENCES currencies(currency_name),
+	FOREIGN KEY (receiver_currency) REFERENCES currencies(currency_name),
 );
 
 CREATE TABLE loans (
@@ -52,7 +55,8 @@ CREATE TABLE loans (
     tax_percentage FLOAT NOT NULL CHECK (tax_percentage > 0),
     number_months INT NOT NULL CHECK (number_months > 0),
     loan_state VARCHAR(50) NOT NULL CHECK (loan_state IN ('paid', 'unpaid')),
-    FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE
+    FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
+	FOREIGN KEY (currency) REFERENCES currencies(currency_name),
 );
 
 CREATE TABLE currencies (
