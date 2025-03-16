@@ -2,6 +2,10 @@ create database loan_shark;
 
 use loan_shark;
 
+CREATE TABLE currencies (
+	currency_name varchar(5) primary key
+);
+
 CREATE TABLE users (
     id_user INT PRIMARY KEY IDENTITY(1,1),
     cnp VARCHAR(13) NOT NULL UNIQUE,
@@ -59,15 +63,12 @@ CREATE TABLE loans (
 	FOREIGN KEY (currency) REFERENCES currencies(currency_name),
 );
 
-CREATE TABLE currencies (
-	currency_name varchar(5) primary key
-);
 
 CREATE TABLE currency_exchange_rates (
     from_currency VARCHAR(5) NOT NULL,
     to_currency VARCHAR(5) NOT NULL,
     rate FLOAT NOT NULL CHECK (rate > 0),
-	FOREIGN KEY from_currency REFERENCES currencies(currency_name) ON DELETE CASCADE,
-	FOREIGN KEY to_currency REFERENCES currencies(currency_name) ON DELETE CASCADE,
+	FOREIGN KEY (from_currency) REFERENCES currencies(currency_name),
+	FOREIGN KEY (to_currency) REFERENCES currencies(currency_name),
     PRIMARY KEY (from_currency, to_currency)
 );
