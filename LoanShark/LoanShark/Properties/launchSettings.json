@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "LoanShark (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "LoanShark (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
