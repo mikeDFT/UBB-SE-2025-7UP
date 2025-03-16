@@ -12,6 +12,9 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using System.Diagnostics;
+using LoanShark.Data;
+using LoanShark.Helper;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -30,7 +33,17 @@ namespace LoanShark
 
         private void myButton_Click(object sender, RoutedEventArgs e)
         {
-            myButton.Content = "Clicked";
+            myButton.Content = AppConfig.GetConnectionString("MyLocalDb");
+            try
+            {
+                DataLink dataLink = new DataLink();
+                dataLink.OpenConnection();
+                dataLink.CloseConnection();
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+            }
         }
     }
 }

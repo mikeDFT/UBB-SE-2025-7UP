@@ -4,7 +4,7 @@ using System.Diagnostics;
 using LoanShark.Helper;
 using Microsoft.Data.SqlClient;
 
-namespace LoanShark.DataLink
+namespace LoanShark.Data
 {
     class DataLink
     {

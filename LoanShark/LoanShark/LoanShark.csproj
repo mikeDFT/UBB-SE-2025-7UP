@@ -39,10 +39,6 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250228001" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataLink\Procedures\Currencies\" />
-    <Folder Include="DataLink\Procedures\CurrencyExchangeRates\" />
-    <Folder Include="DataLink\Procedures\Transactions\" />
-    <Folder Include="DataLink\Procedures\Users\" />
     <Folder Include="Repository\" />
   </ItemGroup>
 
