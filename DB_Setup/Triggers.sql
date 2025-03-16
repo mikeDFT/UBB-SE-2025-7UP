@@ -1,5 +1,5 @@
 use loan_shark;
-
+GO
 CREATE OR ALTER TRIGGER trg_update_transactions_on_bank_account_delete
 ON bank_accounts
 AFTER DELETE
@@ -22,7 +22,7 @@ BEGIN
     WHERE sender_iban IS NULL AND receiver_iban IS NULL;
 END;
 
-
+GO
 CREATE TRIGGER trg_delete_currency_exchange_rates_on_currency_delete
 ON currencies
 AFTER DELETE
