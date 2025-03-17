@@ -1,0 +1,79 @@
+<Window
+    x:Class="LoanShark.LoanView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LoanShark"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="LoanShark">
+
+    <Grid x:Name="MainGrid">
+        <!-- Main Loans Page -->
+        <UserControl x:Name="MainLoansPage" Visibility="Visible">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Main Loans Page" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="10"/>
+                <ListView x:Name="LoansListView" ItemsSource="{Binding Loans}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding LoanID}" Margin="5"/>
+                                <TextBlock Text="{Binding Currency}" Margin="5"/>
+                                <TextBlock Text="{Binding Amount}" Margin="5"/>
+                                <TextBlock Text="{Binding AmountToPay}" Margin="5"/>
+                                <TextBlock Text="{Binding DateTaken}" Margin="5"/>
+                                <TextBlock Text="{Binding DateDeadline}" Margin="5"/>
+                                <TextBlock Text="{Binding NumberMonths}" Margin="5"/>
+                                <TextBlock Text="{Binding TaxPercentage}" Margin="5"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                    <Button Content="Take loan" Click="GoToTakeLoanPageButton_Click" Margin="5"/>
+                    <Button Content="Pay loan" Click="GoToPayLoanPageButton_Click" Margin="5"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0">
+                    <Button Content="Close" Click="CloseButton_Click" Margin="0"/>
+                </StackPanel>
+            </StackPanel>
+        </UserControl>
+
+        <!-- Take Loan Page -->
+        <UserControl x:Name="TakeLoanPage" Visibility="Collapsed">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Take Loan Page" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="10"/>
+
+                <ComboBox x:Name="BankAccountComboBox" PlaceholderText="Select Bank Account" SelectionChanged="BankAccountComboBox_SelectionChanged" Margin="5"/>
+
+                <TextBox x:Name="AmountTextBox" PlaceholderText="Enter Amount" TextChanged="AmountTextBox_TextChanged" Margin="5"/>
+                <TextBlock Text="Amount cannot exceed one million" Foreground="Gray" Margin="5"/>
+
+                <ComboBox x:Name="MonthsComboBox" PlaceholderText="Select Number of Months" SelectionChanged="MonthsComboBox_SelectionChanged" Margin="5"/>
+
+                <TextBlock x:Name="TaxPercentageTextBlock" Text="Tax Percentage: N/A" Margin="5"/>
+                <TextBlock x:Name="AmountToPayTextBlock" Text="Amount to Pay: N/A" Margin="5"/>
+
+                <Button Content="Take loan" Click="TakeLoanButton_Click" Margin="5"/>
+                <TextBlock x:Name="ErrorMessageTextBlock" Text="" Foreground="Red" Margin="5"/>
+
+                <Button Content="Back" Click="BackButton_Click" Margin="5"/>
+            </StackPanel>
+        </UserControl>
+
+        <!-- Pay Loan Page -->
+        <UserControl x:Name="PayLoanPage" Visibility="Collapsed">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Pay Loan Page" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="10"/>
+
+                <ComboBox x:Name="PayBankAccountComboBox" PlaceholderText="Select Bank Account" Margin="5"/>
+                <ComboBox x:Name="LoanToPayComboBox" PlaceholderText="Select Loan to Pay" Margin="5"/>
+
+                <Button Content="Pay loan" Click="PayLoanButton_Click" Margin="5"/>
+                <TextBlock x:Name="PayErrorMessageTextBlock" Text="" Foreground="Red" Margin="5"/>
+
+                <Button Content="Back" Click="BackButton_Click" Margin="5"/>
+            </StackPanel>
+        </UserControl>
+    </Grid>
+</Window>

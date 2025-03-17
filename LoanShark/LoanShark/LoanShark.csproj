@@ -61,4 +61,12 @@
   <ItemGroup>
     <PRIResource Remove="NewFolder\**" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="View\LoanView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\LoanView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
 </Project>
