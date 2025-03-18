@@ -15,7 +15,6 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Shapes;
-using LoanShark.Domain;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -34,7 +33,6 @@ namespace LoanShark
         public App()
         {
             this.InitializeComponent();
-            HashedPassword hp = new HashedPassword("mypassword");
         }
 
         /// <summary>
