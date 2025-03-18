@@ -12,7 +12,7 @@ CREATE TABLE users (
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
-    phone_number VARCHAR(20) NOT NULL UNIQUE CHECK (phone_number LIKE '^07[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
+    phone_number VARCHAR(20) NOT NULL UNIQUE CHECK (phone_number LIKE '07%' AND LEN(phone_number)=10 AND phone_number NOT LIKE '%[^0-9]%'),
     hashed_password VARCHAR(255) NOT NULL,
     password_salt VARCHAR(32) NOT NULL
 );
