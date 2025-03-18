@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using BCrypt.Net;
-using System.Security.Cryptography;
 using System.Linq;
-using Microsoft.Identity.Client;
-using System.ComponentModel;
-using Microsoft.UI.Xaml.CustomAttributes;
+using BCrypt.Net;
 
 namespace LoanShark.Domain
 {
