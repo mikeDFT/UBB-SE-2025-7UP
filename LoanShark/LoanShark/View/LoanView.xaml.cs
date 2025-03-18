@@ -23,7 +23,7 @@ namespace LoanShark
 
             ViewModel.CloseAction = () => this.Close(); // the closing action
 
-            //resizeWindow(1600, 1100);
+            //resizeWindow(1600, 1100); // not used, but I can resize the window w this
         }
 
         private void resizeWindow(int width, int height)
@@ -38,7 +38,7 @@ namespace LoanShark
         }
 
 
-        // making sure if the user erases the text, the amount becomes 0
+        // Making sure if the user erases the text, the amount becomes 0
         private void AmountTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             // This method is needed to handle empty text values
