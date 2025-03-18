@@ -10,7 +10,6 @@
     Title="LoanShark">
 
     <Grid>
-        <!-- This Frame will load TransactionsView -->
         <Frame x:Name="NavigationFrame"/>
     </Grid>
 </Window>

@@ -3,12 +3,12 @@ using LoanShark.ViewModel;
 
 namespace LoanShark.View
 {
-    public sealed partial class TransactionsView : Page
+    public sealed partial class SendMoneyView : Page
     {
-        public TransactionsView()
+        public SendMoneyView()
         {
             this.InitializeComponent();
-            this.DataContext = new TransactionsViewModel(this);
+            this.DataContext = new SendMoneyViewModel(this);
         }
     }
 }
