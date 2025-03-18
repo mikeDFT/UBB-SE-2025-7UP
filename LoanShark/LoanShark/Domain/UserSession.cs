@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace LoanShark.Domain
@@ -8,7 +9,7 @@ namespace LoanShark.Domain
         // a UserSession will have the following keys stored in the dictionary:
         // id_user, cnp, first_name, last_name, email, phone_number
         // for the hashed_password and password_salt, we will allways fetch from the database for security reasons
-        private Dictionary<string, string?> userData;
+        private Dictionary<string, string?>? userData;
         
         public UserSession()
         {
@@ -36,6 +37,10 @@ namespace LoanShark.Domain
 
         public void SetUserData(string key, string value)
         {
+            if (this.userData == null)
+            {
+                throw new Exception("UserSession is null");
+            }
             // Check for the key because we initialize the object with all the possible keys
             if (!this.userData.ContainsKey(key))
             {
@@ -47,11 +52,20 @@ namespace LoanShark.Domain
 
         public string? GetUserData(string key)
         {
+            if (this.userData == null)
+            {
+                throw new Exception("UserSession is null");
+            }
             if (!this.userData.ContainsKey(key))
             {
                 throw new KeyNotFoundException("Key not found in UserSession");
             }
             return this.userData[key];
+        }
+
+        public void InvalidateUserSession()
+        {
+            this.userData = null;
         }
     }
 }
