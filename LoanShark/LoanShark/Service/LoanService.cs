@@ -1,9 +1,11 @@
 ﻿using LoanShark.Domain;
+using LoanShark.Repository;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.System;
 
 namespace LoanShark.Service
 {
@@ -11,8 +13,8 @@ namespace LoanShark.Service
     {
         // Simulated database for demonstration purposes
         private static List<Loan> _loans = new List<Loan>();
-        private static Dictionary<string, BankAccount> _bankAccounts = new Dictionary<string, BankAccount>();
-        
+        private readonly ILoanRepository _loanRepository;
+
         // Currency conversion rates (relative to EUR)
         private static readonly Dictionary<string, float> _currencyRates = new Dictionary<string, float>
         {
@@ -24,7 +26,9 @@ namespace LoanShark.Service
 
         public LoanService()
         {
-            InitializeSampleData();
+            _loanRepository = new LoanRepository();
+
+            //InitializeSampleData();
         }
 
         // Get all loans for a specific user
@@ -33,17 +37,18 @@ namespace LoanShark.Service
             Debug.WriteLine(_loans.Count);
             Debug.WriteLine(_loans.Where(loan => loan.UserID == userId).ToList().Count);
 
-            return _loans.Where(loan => loan.UserID == userId).ToList();
+            return _loanRepository.GetLoansByUserId(userId);
         }
 
         // Get only unpaid loans for a user
-        public List<Loan> GetUnpaidLoans(int userId)
+        public List<Loan> GetUnpaidUserLoans(int userId)
         {
-            return _loans.Where(loan => loan.UserID == userId && loan.State == "unpaid").ToList();
+            return GetUserLoans(userId).Where(
+                loan => loan.State == "unpaid").ToList();
         }
 
         // Create a new loan with the specified parameters
-        public Loan TakeLoan(int userId, float amount, string currency, int months)
+        public Loan TakeLoan(int userId, float amount, string currency, string accountIBAN, int months)
         {
             // Validate loan parameters
             if (ValidateLoanRequest(amount, months) != "success")
@@ -53,14 +58,20 @@ namespace LoanShark.Service
 
             // Calculate tax percentage
             float taxPercentage = CalculateTaxPercentage(months);
-            
+
+            // TODO: give money
+
             // Create a new loan
             var loan = new Loan(
+                -1,
                 userId,
                 amount,
                 currency,
-                1 + taxPercentage / 100,  // Tax factor (e.g., 1.05 for 5%)
-                months
+                DateTime.Now,
+                null,
+                taxPercentage,
+                months,
+                "unpaid"
             );
             
             // Add to our "database"
@@ -71,7 +82,7 @@ namespace LoanShark.Service
         }
 
         // Process loan payment from specified bank account
-        public string PayLoan(int loanId, string bankAccountId)
+        public string PayLoan(int userID, int loanId, string accountIBAN)
         {
             // Get the loan
             var loan = GetLoanById(loanId);
@@ -80,18 +91,20 @@ namespace LoanShark.Service
                 Debug.WriteLine($"Cannot pay loan: Loan not found or already paid. ID={loanId}");
                 return "Loan not found or already paid";
             }
-            
+
+            var _bankAccounts = GetUserBankAccounts(userID);
+            BankAccount? bankAccount = _bankAccounts.Find((bankAcc) => bankAcc.IBAN == accountIBAN);
             // Get the bank account
-            if (!_bankAccounts.TryGetValue(bankAccountId, out var bankAccount))
+            if (bankAccount == null)
             {
-                Debug.WriteLine($"Cannot pay loan: Bank account not found. ID={bankAccountId}");
+                Debug.WriteLine($"Cannot pay loan: Bank account not found. ID={accountIBAN}");
                 return "Bank account not found";
             }
             
             // Check if there are sufficient funds
-            if (!CheckSufficientFunds(bankAccountId, (float)loan.AmountToPay, loan.Currency))
+            if (!CheckSufficientFunds(userID, accountIBAN, (float)loan.AmountToPay, loan.Currency))
             {
-                Debug.WriteLine($"Cannot pay loan: Insufficient funds in account {bankAccountId}");
+                Debug.WriteLine($"Cannot pay loan: Insufficient funds in account {accountIBAN}");
                 return "Insufficient funds";
             }
             
@@ -100,7 +113,7 @@ namespace LoanShark.Service
                 ? (float)loan.AmountToPay
                 : ConvertCurrency((float)loan.AmountToPay, loan.Currency, bankAccount.Currency);
                 
-            UpdateBankAccount(bankAccountId, deductAmount, bankAccount.Currency, true);
+            UpdateBankAccount(userID, accountIBAN, deductAmount, bankAccount.Currency);
             
             // Mark loan as paid
             loan.MarkAsPaid();
@@ -166,9 +179,12 @@ namespace LoanShark.Service
         }
 
         // Check if a bank account has sufficient funds
-        public bool CheckSufficientFunds(string bankAccountId, float amount, string currency)
+        public bool CheckSufficientFunds(int userID, string accountIBAN, float amount, string currency)
         {
-            if (!_bankAccounts.TryGetValue(bankAccountId, out var bankAccount))
+            var _bankAccounts = GetUserBankAccounts(userID);
+            BankAccount? bankAccount = _bankAccounts.Find((bankAcc) => bankAcc.IBAN == accountIBAN);
+
+            if (bankAccount == null)
             {
                 return false;
             }
@@ -176,74 +192,69 @@ namespace LoanShark.Service
             // If currencies match, simple comparison
             if (bankAccount.Currency == currency)
             {
-                return bankAccount.Balance >= amount;
+                return bankAccount.Amount >= amount;
             }
             
             // Convert amount to account currency
             float convertedAmount = ConvertCurrency(amount, currency, bankAccount.Currency);
-            return bankAccount.Balance >= convertedAmount;
+            return bankAccount.Amount >= convertedAmount;
         }
 
         // Update bank account balance
-        public void UpdateBankAccount(string bankAccountId, float amount, string currency, bool isDebit)
+        public void UpdateBankAccount(int userID, string accountIBAN, float amount, string currency)
         {
-            if (!_bankAccounts.TryGetValue(bankAccountId, out var bankAccount))
+            var _bankAccounts = GetUserBankAccounts(userID);
+            BankAccount? bankAccount = _bankAccounts.Find((bankAcc) => bankAcc.IBAN == accountIBAN);
+            if (bankAccount == null)
             {
-                throw new ArgumentException($"Bank account not found: {bankAccountId}");
+                throw new ArgumentException($"Bank account not found: {accountIBAN}");
             }
             
             if (bankAccount.Currency != currency)
             {
                 throw new ArgumentException("Currency mismatch");
             }
+
+            bankAccount.Amount -= amount;
             
-            if (isDebit)
-            {
-                bankAccount.Balance -= amount;
-            }
-            else
-            {
-                bankAccount.Balance += amount;
-            }
-            
-            Debug.WriteLine($"Bank account updated: {bankAccountId}, New balance: {bankAccount.Balance} {bankAccount.Currency}");
+            Debug.WriteLine($"Bank account updated: {accountIBAN}, New balance: {bankAccount.Amount} {bankAccount.Currency}");
         }
 
         // Get loan details by ID
-        public Loan GetLoanById(int loanId)
+        public Loan? GetLoanById(int loanId)
         {
-            return _loans.FirstOrDefault(loan => loan.LoanID == loanId);
+            return _loanRepository.GetAllLoans().FirstOrDefault(loan => loan.LoanID == loanId);
         }
 
         // Get all bank accounts for a user
         public List<BankAccount> GetUserBankAccounts(int userId)
         {
-            return _bankAccounts.Values.Where(account => account.UserID == userId).ToList();
+            return _loanRepository.GetBankAccountsByUserId(userId);
         }
         
         // Get formatted bank account strings for display
         public List<string> GetFormattedBankAccounts(int userId)
         {
             return GetUserBankAccounts(userId)
-                .Select(account => $"{account.IBAN} - {account.Currency} - {account.Balance}")
+                .Select(account => $"{account.IBAN} - {account.Currency} - {account.Amount}")
                 .ToList();
         }
 
-        // Initialize sample data for testing
-        private void InitializeSampleData()
-        {
-            // Sample bank accounts
-            _bankAccounts.Add("IBAN1", new BankAccount(123, "IBAN1", "EUR", 1000));
-            _bankAccounts.Add("IBAN2", new BankAccount(123, "IBAN2", "USD", 2000));
-            _bankAccounts.Add("IBAN3", new BankAccount(123, "IBAN3", "GBP", 3000));
+        //// Initialize sample data for testing
+        //private void InitializeSampleData()
+        //{
+        //    // Sample bank accounts
+        //    _bankAccounts.Add("IBAN1", new BankAccount(123, "IBAN1", "EUR", 1000));
+        //    _bankAccounts.Add("IBAN2", new BankAccount(123, "IBAN2", "USD", 2000));
+        //    _bankAccounts.Add("IBAN3", new BankAccount(123, "IBAN3", "GBP", 3000));
 
-            // Sample loans
-            var currencies = new List<string> { "EUR", "USD", "GBP" };
-            for (int i = 0; i < 5; i++)
-                _loans.Add(new Loan(123, (i+5)*10, currencies[i % currencies.Count], i+10, i+6));
+        //    // Sample loans
+        //    var currencies = new List<string> { "EUR", "USD", "GBP" };
+        //    for (int i = 0; i < 5; i++)
+        //        _loans.Add(new Loan(i, 123, (i+5)*10, currencies[i % currencies.Count], DateTime.Now, null, i+10, i+6, "unpaid"));
 
-            // Mark the first loan as paid for demonstration
-            _loans[0].MarkAsPaid();
-        }
+        //    // Mark the first loan as paid for demonstration
+        //    _loans[0].MarkAsPaid();
+        //}
     }
 }

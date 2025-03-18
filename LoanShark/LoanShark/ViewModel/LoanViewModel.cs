@@ -357,7 +357,7 @@ namespace LoanShark.ViewModel
                 string currency = ExtractCurrencyFromBankAccount(SelectedBankAccount);
                 
                 // Create new loan using the service
-                var newLoan = _loanService.TakeLoan(userID, Amount, currency, SelectedMonths);
+                var newLoan = _loanService.TakeLoan(userID, Amount, currency, ExtractIbanFromBankAccount(SelectedBankAccount), SelectedMonths);
 
                 // Refreshing the data from the service
                 LoadData();
@@ -537,7 +537,7 @@ namespace LoanShark.ViewModel
                 string bankAccountId = ExtractIbanFromBankAccount(SelectedBankAccount);
                 
                 // Pay the loan using the service
-                string errorMessage = _loanService.PayLoan(selectedLoan.LoanID, bankAccountId);
+                string errorMessage = _loanService.PayLoan(userID, selectedLoan.LoanID, bankAccountId);
                 
                 if (errorMessage != "success")
                 {
@@ -563,7 +563,6 @@ namespace LoanShark.ViewModel
 
         private string ExtractIbanFromBankAccount(string bankAccount)
         {
-            // Format: "IBAN1 - EUR - 1000"
             string[] parts = bankAccount.Split('-');
             if (parts.Length >= 1)
             {
@@ -605,7 +604,7 @@ namespace LoanShark.ViewModel
                 }
                 
                 // Get unpaid loans for display
-                var unpaidLoans = _loanService.GetUnpaidLoans(userID);
+                var unpaidLoans = _loanService.GetUnpaidUserLoans(userID);
                 foreach (var loan in unpaidLoans)
                 {
                     UnpaidLoans.Add(loan);

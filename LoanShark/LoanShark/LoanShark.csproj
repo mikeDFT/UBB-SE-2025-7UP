@@ -43,9 +43,6 @@
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.3" />
     <PackageReference Include="System.Security.Permissions" Version="9.0.3" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repository\" />
-  </ItemGroup>
 
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution

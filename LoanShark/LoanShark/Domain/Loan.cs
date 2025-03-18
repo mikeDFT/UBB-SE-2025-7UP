@@ -8,9 +8,7 @@ namespace LoanShark.Domain
 {
     public class Loan
     {
-        private static int _loanCounter = 1; // to change
-
-        public int LoanID { get; private set; }
+        public int LoanID { get; set; }
         public int UserID { get; set; }
         public double Amount { get; set; }
         public double AmountToPay
@@ -26,17 +24,20 @@ namespace LoanShark.Domain
         public string State { get; private set; } // "paid" or "unpaid"
 
 
-        public Loan(int userID, double amount, string currency, float taxPercentage, int numberMonths)
+        public Loan(int loanID, int userID, double amount,
+            string currency, DateTime dateTaken, DateTime? datePaid,
+            float taxPercentage, int numberMonths, string state)
         {
-            LoanID = _loanCounter++;
+            LoanID = loanID;
             UserID = userID;
             Amount = amount;
             Currency = currency;
+            DateTaken = dateTaken;
+            DateDeadline = DateTaken.AddMonths(numberMonths);
+            DatePaid = datePaid;
             TaxPercentage = taxPercentage;
             NumberMonths = numberMonths;
-            DateTaken = DateTime.Now;
-            DateDeadline = DateTaken.AddMonths(numberMonths);
-            State = "unpaid";
+            State = state;
         }
 
         public void MarkAsPaid()
