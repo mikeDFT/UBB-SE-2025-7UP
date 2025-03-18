@@ -26,7 +26,7 @@
                            Width="550"
                            Padding="20,10,20,10">
                     <TextBlock Text="My Loans" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,20"/>
-                    <ListView x:Name="LoansListView" ItemsSource="{Binding Loans}" MaxHeight="400">
+                    <ListView x:Name="LoansListView" ItemsSource="{Binding UnpaidLoans}" MaxHeight="400">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -121,7 +121,7 @@
 
                     <!-- Error Message -->
                     <TextBlock x:Name="ErrorMessageTextBlock" 
-                              Text="{Binding ErrorMessage}" 
+                              Text="{Binding TakeErrorMessage}" 
                               Foreground="Red" 
                               Margin="0,5,0,15"
                               HorizontalAlignment="Center"/>

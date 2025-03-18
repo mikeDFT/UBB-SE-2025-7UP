@@ -22,13 +22,12 @@ namespace LoanShark.ViewModel
         private string selectedLoanDisplay;
         private float amount;
         private int selectedMonths;
-        private string errorMessage;
+        private string takeErrorMessage;
         private string payErrorMessage;
         private string currentPage;
         private string taxPercentage = "Tax Percentage: N/A";
         private string amountToPay = "Amount to Pay: N/A";
         private string selectedLoanAmount = "Loan Amount: N/A";
-        private string selectedLoanCurrency = "Loan Currency: N/A";
         private string selectedAccountBalance = "Account Balance: N/A";
         private string convertedLoanAmount = "Converted Amount: N/A";
 
@@ -131,15 +130,15 @@ namespace LoanShark.ViewModel
             }
         }
 
-        public string ErrorMessage
+        public string TakeErrorMessage
         {
-            get => errorMessage;
+            get => takeErrorMessage;
             set
             {
-                if (errorMessage != value)
+                if (takeErrorMessage != value)
                 {
-                    errorMessage = value;
-                    OnPropertyChanged(nameof(ErrorMessage));
+                    takeErrorMessage = value;
+                    OnPropertyChanged(nameof(TakeErrorMessage));
                 }
             }
         }
@@ -181,19 +180,6 @@ namespace LoanShark.ViewModel
             }
         }
 
-        public string SelectedLoanCurrency
-        {
-            get => selectedLoanCurrency;
-            set
-            {
-                if (selectedLoanCurrency != value)
-                {
-                    selectedLoanCurrency = value;
-                    OnPropertyChanged(nameof(SelectedLoanCurrency));
-                }
-            }
-        }
-
         public string SelectedAccountBalance
         {
             get => selectedAccountBalance;
@@ -203,6 +189,7 @@ namespace LoanShark.ViewModel
                 {
                     selectedAccountBalance = value;
                     OnPropertyChanged(nameof(SelectedAccountBalance));
+                    UpdateSelectedLoan();
                 }
             }
         }
@@ -303,10 +290,10 @@ namespace LoanShark.ViewModel
             Months = new ObservableCollection<int> { 6, 12, 24, 36 };
             UnpaidLoans = new ObservableCollection<Loan>();
             UnpaidLoansDisplay = new ObservableCollection<string>();
-            
-            // Load data from service
+
+            // Refreshing the data from the service
             LoadData();
-            
+
             // Initialize commands
             TakeLoanCommand = new RelayCommand(TakeLoan);
             PayLoanCommand = new RelayCommand(PayLoan);
@@ -323,60 +310,6 @@ namespace LoanShark.ViewModel
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private IEnumerable<string> GetBankAccounts()
-        {
-            return new List<string>
-            {
-                "IBAN1 - EUR - 1000",
-                "IBAN2 - USD - 2000",
-                "IBAN3 - GBP - 3000"
-            };
-        }
-
-        private IEnumerable<Loan> GetUnpaidLoans()
-        {
-            var allLoans = GetAllLoans();
-            return allLoans.Where(loan => loan.State == "unpaid");
-        }
-
-        private IEnumerable<Loan> GetAllLoans()
-        {
-            var currencies = new List<string> { "EUR", "USD", "GBP" };
-            var Loans = new List<Loan>();
-            for (int i = 0; i < 5; i++)
-                Loans.Add(new Loan(i, i, currencies[i % currencies.Count], i, i));
-            return Loans;
-        }
-
-        private bool areTakeLoanDetailsValid()
-        {
-            Debug.WriteLine($"Validating loan details: BankAccount={SelectedBankAccount}, Amount={Amount}, Months={SelectedMonths}");
-            
-            // Check if bank account is selected
-            if (string.IsNullOrEmpty(SelectedBankAccount))
-            {
-                Debug.WriteLine("Validation failed: No bank account selected");
-                return false;
-            }
-            
-            // Check if amount is valid
-            if (Amount <= 0 || Amount > 1000000)
-            {
-                Debug.WriteLine($"Validation failed: Invalid amount {Amount}");
-                return false;
-            }
-            
-            // Check if months is valid
-            if (SelectedMonths <= 0)
-            {
-                Debug.WriteLine("Validation failed: No months selected");
-                return false;
-            }
-            
-            Debug.WriteLine("Validation passed");
-            return true;
         }
 
         private void UpdateAmountToPay()
@@ -397,22 +330,12 @@ namespace LoanShark.ViewModel
                 float amountToPayValue = _loanService.CalculateAmountToPay(Amount, taxPercentageValue);
                 
                 TaxPercentage = $"Tax Percentage: {taxPercentageValue}%";
-                AmountToPay = $"Amount to Pay: {amountToPayValue:F2}";
-                
-                Debug.WriteLine($"Calculated: Tax %: {taxPercentageValue}, Amount to pay: {amountToPayValue}");
-            }
+                AmountToPay = $"Amount to Pay: {amountToPayValue:F2}";}
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error in UpdateAmountToPay: {ex.Message}");
                 TaxPercentage = "Tax Percentage: Error";
                 AmountToPay = "Amount to Pay: Error";
             }
-        }
-
-        private float CalculateTaxPercentage(int months)
-        {
-            // 1.5% per month
-            return months * 1.5f;
         }
 
         private void TakeLoan()
@@ -422,9 +345,10 @@ namespace LoanShark.ViewModel
             try
             {
                 // Validate inputs through the service
-                if (!_loanService.ValidateLoanRequest(Amount, SelectedMonths) || string.IsNullOrEmpty(SelectedBankAccount))
+                string errorMessage = _loanService.ValidateLoanRequest(Amount, SelectedMonths);
+                if (errorMessage != "success")
                 {
-                    ErrorMessage = "Invalid data provided";
+                    TakeErrorMessage = errorMessage;
                     Debug.WriteLine($"Validation failed: SelectedBankAccount: {SelectedBankAccount}, Amount: {Amount}, SelectedMonths: {SelectedMonths}");
                     return;
                 }
@@ -433,16 +357,11 @@ namespace LoanShark.ViewModel
                 string currency = ExtractCurrencyFromBankAccount(SelectedBankAccount);
                 
                 // Create new loan using the service
-                var newLoan = _loanService.CreateLoan(userID, Amount, currency, SelectedMonths);
-                
-                // Add to collections
-                Loans.Add(newLoan);
-                UnpaidLoans.Add(newLoan);
-                
-                // Add to display collection
-                string displayString = $"{newLoan.Currency} - {newLoan.AmountToPay:F2} - {newLoan.DateDeadline:d}";
-                UnpaidLoansDisplay.Add(displayString);
-                
+                var newLoan = _loanService.TakeLoan(userID, Amount, currency, SelectedMonths);
+
+                // Refreshing the data from the service
+                LoadData();
+
                 // Clear input fields
                 ClearTakeLoanFields();
                 
@@ -452,7 +371,7 @@ namespace LoanShark.ViewModel
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error in TakeLoan: {ex.Message}");
-                ErrorMessage = "An error occurred while processing your loan";
+                TakeErrorMessage = "An error occurred while processing your loan";
             }
         }
 
@@ -479,7 +398,7 @@ namespace LoanShark.ViewModel
             Amount = 0;
             selectedMonths = 0;
             
-            ErrorMessage = string.Empty;
+            TakeErrorMessage = string.Empty;
             TaxPercentage = "Tax Percentage: N/A";
             AmountToPay = "Amount to Pay: N/A";
         }
@@ -491,7 +410,6 @@ namespace LoanShark.ViewModel
             SelectedLoanDisplay = null;
             PayErrorMessage = string.Empty;
             SelectedLoanAmount = "Loan Amount: N/A";
-            SelectedLoanCurrency = "Loan Currency: N/A";
             SelectedAccountBalance = "Account Balance: N/A";
             ConvertedLoanAmount = "Converted Amount: N/A";
         }
@@ -504,8 +422,8 @@ namespace LoanShark.ViewModel
             {
                 selectedLoan = null;
                 SelectedLoanAmount = "Loan Amount: N/A";
-                SelectedLoanCurrency = "Loan Currency: N/A";
                 ConvertedLoanAmount = "Converted Amount: N/A";
+                UpdatePaymentDetails();
                 return;
             }
 
@@ -517,7 +435,6 @@ namespace LoanShark.ViewModel
                 {
                     selectedLoan = loan;
                     SelectedLoanAmount = $"Loan Amount: {loan.AmountToPay:F2} {loan.Currency}";
-                    SelectedLoanCurrency = $"Loan Currency: {loan.Currency}";
                     Debug.WriteLine($"Found matching loan: ID={loan.LoanID}, Amount={loan.AmountToPay}, Currency={loan.Currency}");
                     break;
                 }
@@ -530,7 +447,7 @@ namespace LoanShark.ViewModel
         {
             Debug.WriteLine("UpdatePaymentDetails called");
             
-            if (selectedLoan == null || string.IsNullOrEmpty(SelectedBankAccount))
+            if (string.IsNullOrEmpty(SelectedBankAccount))
             {
                 SelectedAccountBalance = "Account Balance: N/A";
                 ConvertedLoanAmount = "Converted Amount: N/A";
@@ -549,7 +466,11 @@ namespace LoanShark.ViewModel
                     
                     // Set account balance display
                     SelectedAccountBalance = $"Account Balance: {accountBalance:F2} {accountCurrency}";
-                    
+
+                    // If there is no loan selected
+                    if (string.IsNullOrEmpty(SelectedLoanDisplay))
+                        return;
+
                     // Extract loan details
                     float loanAmount = (float)selectedLoan.AmountToPay;
                     string loanCurrency = selectedLoan.Currency;
@@ -598,84 +519,6 @@ namespace LoanShark.ViewModel
             return true;
         }
 
-        private bool HasSufficientFunds()
-        {
-            if (selectedLoan == null || string.IsNullOrEmpty(SelectedBankAccount))
-            {
-                return false;
-            }
-
-            try
-            {
-                // Extract account details
-                string[] accountParts = SelectedBankAccount.Split('-');
-                if (accountParts.Length < 3) return false;
-                
-                string accountCurrency = accountParts[1].Trim();
-                float accountBalance = float.Parse(accountParts[2].Trim());
-                
-                // Extract loan details
-                float loanAmount = (float)selectedLoan.AmountToPay;
-                string loanCurrency = selectedLoan.Currency;
-                
-                // If currencies match, simple comparison
-                if (accountCurrency == loanCurrency)
-                {
-                    Debug.WriteLine($"Currencies match: Account={accountBalance} {accountCurrency}, Loan={loanAmount} {loanCurrency}");
-                    return accountBalance >= loanAmount;
-                }
-                
-                // Currencies differ, do conversion
-                float convertedLoanAmount = ConvertCurrency(loanAmount, loanCurrency, accountCurrency);
-                Debug.WriteLine($"Currencies differ: Account={accountBalance} {accountCurrency}, Loan={loanAmount} {loanCurrency}, Converted={convertedLoanAmount} {accountCurrency}");
-                
-                return accountBalance >= convertedLoanAmount;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error checking funds: {ex.Message}");
-                return false;
-            }
-        }
-
-        private float ConvertCurrency(float amount, string fromCurrency, string toCurrency)
-        {
-            // Simple conversion rates for example:
-            // 1 EUR = 1.1 USD
-            // 1 EUR = 0.85 GBP
-            
-            // Convert to EUR first as a base currency
-            float amountInEUR;
-            
-            switch (fromCurrency) // to change
-            {
-                case "EUR":
-                    amountInEUR = amount;
-                    break;
-                case "USD":
-                    amountInEUR = amount / 1.1f;
-                    break;
-                case "GBP":
-                    amountInEUR = amount / 0.85f;
-                    break;
-                default:
-                    amountInEUR = amount; // Assume 1:1 for unknown currencies
-                    break;
-            }
-            
-            // Convert from EUR to target currency
-            switch (toCurrency)
-            {
-                case "EUR":
-                    return amountInEUR;
-                case "USD":
-                    return amountInEUR * 1.1f;
-                case "GBP":
-                    return amountInEUR * 0.85f;
-                default:
-                    return amountInEUR; // Assume 1:1 for unknown currencies
-            }
-        }
 
         private void PayLoan()
         {
@@ -694,32 +537,17 @@ namespace LoanShark.ViewModel
                 string bankAccountId = ExtractIbanFromBankAccount(SelectedBankAccount);
                 
                 // Pay the loan using the service
-                bool success = _loanService.PayLoan(selectedLoan.LoanID, bankAccountId);
+                string errorMessage = _loanService.PayLoan(selectedLoan.LoanID, bankAccountId);
                 
-                if (!success)
+                if (errorMessage != "success")
                 {
-                    PayErrorMessage = "Not enough funds";
-                    return;
+                   PayErrorMessage = errorMessage;
+                   return;
                 }
                 
-                // Remove the paid loan from collections
-                Loans.Remove(selectedLoan);
-                UnpaidLoans.Remove(selectedLoan);
-                
-                // Remove from display collection
-                string displayToRemove = SelectedLoanDisplay;
-                if (!string.IsNullOrEmpty(displayToRemove))
-                {
-                    for (int i = 0; i < UnpaidLoansDisplay.Count; i++)
-                    {
-                        if (UnpaidLoansDisplay[i] == displayToRemove)
-                        {
-                            UnpaidLoansDisplay.RemoveAt(i);
-                            break;
-                        }
-                    }
-                }
-                
+                // Refreshing the data from the service
+                LoadData();
+
                 // Clear fields
                 ClearPayLoanFields();
                 
@@ -799,12 +627,6 @@ namespace LoanShark.ViewModel
                 Debug.WriteLine($"Error loading data: {ex.Message}");
                 // Consider showing an error message to the user
             }
-        }
-
-        // Reload data from service
-        public void RefreshData()
-        {
-            LoadData();
         }
     }
 
