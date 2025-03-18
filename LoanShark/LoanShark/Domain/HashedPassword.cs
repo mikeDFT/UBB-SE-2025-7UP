@@ -38,18 +38,17 @@ namespace LoanShark.Domain
         // from the database which will allways be valid
         public HashedPassword(string someString, string salt, bool needsHashing)
         {
+            this.salt = salt;
             // if this is the password data retrieved from the database, no need for hashing
             if (!needsHashing) 
             {
                 this.hashedPassword = someString;
-                this.salt = salt;
             }
             // else, hash the password, this will be used for the part in which we take the password inputted from the user
             // and create a HashedPassword object with it
             else
             {
                 this.hashedPassword = BCrypt.Net.BCrypt.HashPassword(someString, this.salt);
-                this.salt = salt;
             }
         }
 
