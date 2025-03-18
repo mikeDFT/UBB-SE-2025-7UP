@@ -24,7 +24,7 @@ namespace LoanShark.ViewModel
             BackCommand = new RelayCommand(() => { /* Navigate Back (not implemented) */ });
             SendMoneyCommand = new RelayCommand(() =>  _page.Frame.Navigate(typeof(SendMoneyView)));
             PayLoanCommand = new RelayCommand(() => { /* Navigate to Pay Loan (not implemented) */ });
-            CurrencyExchangeCommand = new RelayCommand(() => { /* Navigate to Currency Exchange (not implemented) */ });
+            CurrencyExchangeCommand = new RelayCommand(() => _page.Frame.Navigate(typeof(CurrencyExchangeTableView)));
             TransactionsHistoryCommand = new RelayCommand(() => { /* Navigate to Transactions History (not implemented) */ });
         }
     }

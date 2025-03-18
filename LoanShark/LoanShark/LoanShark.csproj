@@ -64,6 +64,9 @@
     <PRIResource Remove="NewFolder\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="View\CurrencyExchangeTableView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
     <None Update="View\SendMoneyView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
