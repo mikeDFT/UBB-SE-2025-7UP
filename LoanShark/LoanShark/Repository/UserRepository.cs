@@ -18,6 +18,7 @@ namespace LoanShark.Repository
     {
         User CreateUser(User user);
         User? GetUserById(int id_user);
+        bool DeleteUser(int userId);
     }
 
     public class UserRepository: IUserRepository
@@ -85,5 +86,23 @@ namespace LoanShark.Repository
                 return null;
             }
         }
+        public bool DeleteUser(int userId)
+        {
+            try
+            {
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@id_user", userId)
+                };
+                _dataLink.ExecuteNonQuery("DeleteUser", parameters);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"REPO: Error deleting user: {ex.Message}");
+                return false;
+            }
+        }
+
     }
 }
