@@ -11,7 +11,7 @@ namespace LoanShark.Domain
         public int TransactionID { get; set; }
         public string SenderIban { get; set; }
         public string ReceiverIban { get; set; }
-        public DateTime TransferDate { get; set; }
+        public DateTime TransactionDate { get; set; }
         public string SenderCurrency { get; set; }
         public string ReceiverCurrency { get; set; }
         public double SenderAmount { get; set; }
@@ -27,7 +27,7 @@ namespace LoanShark.Domain
             this.TransactionID = TransactionID;
             this.SenderIban = SenderIban;
             this.ReceiverIban = ReceiverIban;
-            this.TransferDate = TransferDate;
+            this.TransactionDate = TransferDate;
             this.SenderCurrency = SenderCurrency;
             this.ReceiverCurrency = ReceiverCurrency;
             this.SenderAmount = SenderAmount;
@@ -40,7 +40,7 @@ namespace LoanShark.Domain
             this.TransactionID = Convert.ToInt32(hashMap["transaction_id"]);
             this.SenderIban = hashMap["sender_iban"].ToString();
             this.ReceiverIban = hashMap["receiver_iban"].ToString();
-            this.TransferDate = Convert.ToDateTime(hashMap["transaction_datetime"]);
+            this.TransactionDate = Convert.ToDateTime(hashMap["transaction_datetime"]);
             this.SenderCurrency = hashMap["sender_currency"].ToString();
             this.ReceiverCurrency = hashMap["receiver_currency"].ToString();
             this.SenderAmount = Convert.ToDouble(hashMap["sender_amount"]);
@@ -54,7 +54,7 @@ namespace LoanShark.Domain
             return "Transaction ID: " + TransactionID + "\n" +
                    "Sender IBAN: " + SenderIban + "\n" +
                    "Receiver IBAN: " + ReceiverIban + "\n" +
-                   "Transfer Date: " + TransferDate + "\n" +
+                   "Transfer Date: " + TransactionDate + "\n" +
                    "Sender Currency: " + SenderCurrency + "\n" +
                    "Receiver Currency: " + ReceiverCurrency + "\n" +
                    "Sender Amount: " + SenderAmount + "\n" +
@@ -67,9 +67,15 @@ namespace LoanShark.Domain
         {
             return "Sender IBAN: " + SenderIban + "\n" +
                    "Receiver IBAN: " + ReceiverIban + "\n\n" + 
-                   "Sender Amount: " + SenderAmount + " " + SenderCurrency + "\n" + 
-                   "Receiver Amount: " + ReceiverAmount + " " + ReceiverCurrency + "\n\n" +
+                   "Sent Amount: " + SenderAmount + " " + SenderCurrency + "\n" + 
+                   "Received Amount: " + ReceiverAmount + " " + ReceiverCurrency + "\n\n" +
+                   "Date: " + TransactionDate + "\n\n" +
                    "Type: " + TransactionType;
+        }
+
+        public string tostringCSV()
+        {
+            return $"{TransactionID},{SenderIban},{ReceiverIban},{TransactionDate},{SenderCurrency},{ReceiverCurrency},{SenderAmount},{ReceiverAmount},{TransactionType},{TransactionDescription}";
         }
 
     }
