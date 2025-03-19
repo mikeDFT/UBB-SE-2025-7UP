@@ -15,7 +15,7 @@ namespace LoanShark.ViewModel
         private readonly Page _page;
         private readonly TransactionsService _transactionService;
 
-        public ObservableCollection<CurrencyExchangeRate> ExchangeRates { get; } = new ObservableCollection<CurrencyExchangeRate>();
+        public ObservableCollection<CurrencyExchange> ExchangeRates { get; } = new ObservableCollection<CurrencyExchange>();
 
         public ICommand BackCommand { get; }
 

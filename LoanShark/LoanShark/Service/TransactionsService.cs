@@ -27,19 +27,19 @@ namespace LoanShark.Service
             return $"Payment of {amount} processed to {iban}.";
         }
 
-        public async Task<List<CurrencyExchangeRate>> GetCurrencyExchangeRatesAsync()
+        public async Task<List<CurrencyExchange>> GetCurrencyExchangeRatesAsync()
         {
             await Task.Delay(500); // Simulate network/database delay
 
             var random = new Random();
-            return new List<CurrencyExchangeRate>
+            return new List<CurrencyExchange>
             {
-                new CurrencyExchangeRate { FromCurrency = "USD", ToCurrency = "EUR", ExchangeRate = Math.Round((decimal)(0.80 + random.NextDouble() * 0.10), 4) },
-                new CurrencyExchangeRate { FromCurrency = "EUR", ToCurrency = "USD", ExchangeRate = Math.Round((decimal)(1.10 + random.NextDouble() * 0.10), 4) },
-                new CurrencyExchangeRate { FromCurrency = "USD", ToCurrency = "GBP", ExchangeRate = Math.Round((decimal)(0.70 + random.NextDouble() * 0.10), 4) },
-                new CurrencyExchangeRate { FromCurrency = "GBP", ToCurrency = "USD", ExchangeRate = Math.Round((decimal)(1.30 + random.NextDouble() * 0.10), 4) },
-                new CurrencyExchangeRate { FromCurrency = "USD", ToCurrency = "JPY", ExchangeRate = Math.Round((decimal)(110.00 + random.NextDouble() * 10.00), 2) },
-                new CurrencyExchangeRate { FromCurrency = "JPY", ToCurrency = "USD", ExchangeRate = Math.Round((decimal)(0.009 + random.NextDouble() * 0.002), 5) }
+                new CurrencyExchange("USD", "EUR", Math.Round((decimal)(0.80 + random.NextDouble() * 0.10), 4)),
+                new CurrencyExchange("EUR", "USD", Math.Round((decimal)(1.10 + random.NextDouble() * 0.10), 4)),
+                new CurrencyExchange("USD", "GBP", Math.Round((decimal)(0.70 + random.NextDouble() * 0.10), 4)),
+                new CurrencyExchange("GBP", "USD", Math.Round((decimal)(1.30 + random.NextDouble() * 0.10), 4)),
+                new CurrencyExchange("USD", "JPY", Math.Round((decimal)(110.00 + random.NextDouble() * 10.00), 2)),
+                new CurrencyExchange("JPY", "USD", Math.Round((decimal)(0.009 + random.NextDouble() * 0.002), 5))
             };
         }
     }

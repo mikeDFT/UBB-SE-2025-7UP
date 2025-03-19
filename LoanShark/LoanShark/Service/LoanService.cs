@@ -33,7 +33,7 @@ namespace LoanShark.Service
         }
 
         // Create a new loan with the specified parameters
-        public Loan TakeLoan(int userId, float amount, string currency, string accountIBAN, int months)
+        public Loan TakeLoan(int userId, decimal amount, string currency, string accountIBAN, int months)
         {
             // Validate loan parameters
             if (ValidateLoanRequest(amount, months) != "success")
@@ -42,7 +42,7 @@ namespace LoanShark.Service
             }
 
             // Calculate tax percentage
-            float taxPercentage = CalculateTaxPercentage(months);
+            decimal taxPercentage = CalculateTaxPercentage(months);
 
             // TODO: give money
 
@@ -87,16 +87,16 @@ namespace LoanShark.Service
             }
             
             // Check if there are sufficient funds
-            if (!CheckSufficientFunds(userID, accountIBAN, (float)loan.AmountToPay, loan.Currency))
+            if (!CheckSufficientFunds(userID, accountIBAN, loan.AmountToPay, loan.Currency))
             {
                 Debug.WriteLine($"Cannot pay loan: Insufficient funds in account {accountIBAN}");
                 return "Insufficient funds";
             }
             
             // Deduct from bank account
-            float deductAmount = loan.Currency == bankAccount.Currency
-                ? (float)loan.AmountToPay
-                : ConvertCurrency((float)loan.AmountToPay, loan.Currency, bankAccount.Currency);
+            decimal deductAmount = loan.Currency == bankAccount.Currency
+                ? loan.AmountToPay
+                : ConvertCurrency(loan.AmountToPay, loan.Currency, bankAccount.Currency);
                 
             UpdateBankAccount(userID, accountIBAN, deductAmount, bankAccount.Currency);
             
@@ -114,20 +114,20 @@ namespace LoanShark.Service
         }
 
         // Calculate the tax percentage based on loan duration
-        public float CalculateTaxPercentage(int months)
+        public decimal CalculateTaxPercentage(int months)
         {
             // Simple calculation: 1% per month
-            return months * 1.0f;
+            return months;
         }
 
         // Calculate the total amount to be repaid
-        public float CalculateAmountToPay(float amount, float taxPercentage)
+        public decimal CalculateAmountToPay(decimal amount, decimal taxPercentage)
         {
             return amount * (1 + taxPercentage / 100);
         }
 
         // Handle currency conversion
-        public float ConvertCurrency(float amount, string fromCurrency, string toCurrency)
+        public decimal ConvertCurrency(decimal amount, string fromCurrency, string toCurrency)
         {
             if (fromCurrency == toCurrency)
             {
@@ -140,7 +140,7 @@ namespace LoanShark.Service
 
             CurrencyExchange currencyRate = nullableCurrencyRate;
 
-            float result = amount * currencyRate.ExchangeRate;
+            decimal result = amount * currencyRate.ExchangeRate;
 
             Debug.WriteLine($"Currency conversion: {amount} {fromCurrency} = {result} {toCurrency}");
             return result;
@@ -159,7 +159,7 @@ namespace LoanShark.Service
         }
 
         // Validate loan request parameters
-        public string ValidateLoanRequest(float amount, int months)
+        public string ValidateLoanRequest(decimal amount, int months)
         {
             // Amount must be positive and not exceed one million
             if (amount <= 0 || amount > 1000000)
@@ -180,7 +180,7 @@ namespace LoanShark.Service
         }
 
         // Check if a bank account has sufficient funds
-        public bool CheckSufficientFunds(int userID, string accountIBAN, float amount, string currency)
+        public bool CheckSufficientFunds(int userID, string accountIBAN, decimal amount, string currency)
         {
             var _bankAccounts = GetUserBankAccounts(userID);
             BankAccount? bankAccount = _bankAccounts.Find((bankAcc) => bankAcc.IBAN == accountIBAN);
@@ -193,16 +193,16 @@ namespace LoanShark.Service
             // If currencies match, simple comparison
             if (bankAccount.Currency == currency)
             {
-                return bankAccount.Amount >= amount;
+                return bankAccount.Balance >= amount;
             }
             
             // Convert amount to account currency
-            float convertedAmount = ConvertCurrency(amount, currency, bankAccount.Currency);
-            return bankAccount.Amount >= convertedAmount;
+            decimal convertedAmount = ConvertCurrency(amount, currency, bankAccount.Currency);
+            return bankAccount.Balance >= convertedAmount;
         }
 
         // Update bank account balance
-        public void UpdateBankAccount(int userID, string accountIBAN, float amount, string currency)
+        public void UpdateBankAccount(int userID, string accountIBAN, decimal amount, string currency)
         {
             var _bankAccounts = GetUserBankAccounts(userID);
             BankAccount? bankAccount = _bankAccounts.Find((bankAcc) => bankAcc.IBAN == accountIBAN);
@@ -216,9 +216,9 @@ namespace LoanShark.Service
                 throw new ArgumentException("Currency mismatch");
             }
 
-            bankAccount.Amount -= amount;
+            bankAccount.Balance -= amount;
             
-            Debug.WriteLine($"Bank account updated: {accountIBAN}, New balance: {bankAccount.Amount} {bankAccount.Currency}");
+            Debug.WriteLine($"Bank account updated: {accountIBAN}, New balance: {bankAccount.Balance} {bankAccount.Currency}");
         }
 
         // Get loan details by ID
@@ -237,7 +237,7 @@ namespace LoanShark.Service
         public List<string> GetFormattedBankAccounts(int userId)
         {
             return GetUserBankAccounts(userId)
-                .Select(account => $"{account.IBAN} - {account.Currency} - {account.Amount}")
+                .Select(account => $"{account.IBAN} - {account.Currency} - {account.Balance}")
                 .ToList();
         }
     }

@@ -10,9 +10,9 @@ namespace LoanShark.Domain
     {
         public string FromCurrency { get; set; }
         public string ToCurrency { get; set; }
-        public float ExchangeRate { get; set; }
+        public decimal ExchangeRate { get; set; }
 
-        public CurrencyExchange(string fromCurrency, string toCurrency, float exchangeRate)
+        public CurrencyExchange(string fromCurrency, string toCurrency, decimal exchangeRate)
         {
             FromCurrency = fromCurrency;
             ToCurrency = toCurrency;

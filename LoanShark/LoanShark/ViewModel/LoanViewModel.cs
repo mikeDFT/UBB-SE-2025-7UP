@@ -20,7 +20,7 @@ namespace LoanShark.ViewModel
         private string selectedBankAccount;
         private Loan selectedLoan;
         private string selectedLoanDisplay;
-        private float amount;
+        private decimal amount;
         private int selectedMonths;
         private string takeErrorMessage;
         private string payErrorMessage;
@@ -100,7 +100,7 @@ namespace LoanShark.ViewModel
             }
         }
 
-        public float Amount
+        public decimal Amount
         {
             get => amount;
             set
@@ -337,7 +337,7 @@ namespace LoanShark.ViewModel
                 }
                 else
                 {
-                    float taxPercentageValue = _loanService.CalculateTaxPercentage(SelectedMonths);
+                    decimal taxPercentageValue = _loanService.CalculateTaxPercentage(SelectedMonths);
                     TaxPercentage = $"Tax Percentage: {taxPercentageValue}%";
                 }
 
@@ -348,8 +348,8 @@ namespace LoanShark.ViewModel
             try
             {
                 // Use service to calculate tax percentage and amount to pay
-                float taxPercentageValue = _loanService.CalculateTaxPercentage(SelectedMonths);
-                float amountToPayValue = _loanService.CalculateAmountToPay(Amount, taxPercentageValue);
+                decimal taxPercentageValue = _loanService.CalculateTaxPercentage(SelectedMonths);
+                decimal amountToPayValue = _loanService.CalculateAmountToPay(Amount, taxPercentageValue);
                 
                 TaxPercentage = $"Tax Percentage: {taxPercentageValue}%";
                 AmountToPay = $"Amount to Pay: {amountToPayValue:F2}";}
@@ -495,7 +495,7 @@ namespace LoanShark.ViewModel
                         return;
 
                     // Extract loan details
-                    float loanAmount = (float)selectedLoan.AmountToPay;
+                    decimal loanAmount = selectedLoan.AmountToPay;
                     string loanCurrency = selectedLoan.Currency;
                     
                     // Check if currencies match
@@ -507,7 +507,7 @@ namespace LoanShark.ViewModel
                     else
                     {
                         // Convert loan amount to account currency using service
-                        float convertedAmount = _loanService.ConvertCurrency(loanAmount, loanCurrency, accountCurrency);
+                        decimal convertedAmount = _loanService.ConvertCurrency(loanAmount, loanCurrency, accountCurrency);
                         ConvertedLoanAmount = $"Payment Required: {convertedAmount:F2} {accountCurrency} (converted from {loanAmount:F2} {loanCurrency})";
                     }
                 }

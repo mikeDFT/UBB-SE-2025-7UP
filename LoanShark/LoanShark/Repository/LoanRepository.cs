@@ -221,11 +221,11 @@ namespace LoanShark.Repository
             return new Loan(
                 Convert.ToInt32(row["id_loan"]),
                 Convert.ToInt32(row["id_user"]),
-                Convert.ToSingle(row["amount"]),
+                Convert.ToDecimal(row["amount"]),
                 row["currency"].ToString() ?? "",
                 Convert.ToDateTime(row["date_taken"]),
                 row["date_paid"] == DBNull.Value ? null : (DateTime?)Convert.ToDateTime(row["date_paid"]),
-                Convert.ToSingle(row["tax_percentage"]),
+                Convert.ToDecimal(row["tax_percentage"]),
                 Convert.ToInt32(row["number_months"]),
                 row["loan_state"].ToString() ?? ""
             );
@@ -245,11 +245,18 @@ namespace LoanShark.Repository
 
         private BankAccount ConvertDataRowToBankAccount(DataRow row) {
             return new BankAccount(
+                row["iban"].ToString(),
                 Convert.ToInt32(row["id_user"]),
-                Convert.ToString(row["iban"]) ?? "",
-                Convert.ToString(row["currency"]) ?? "",
-                Convert.ToInt32(row["amount"])
+                Convert.ToDecimal(row["amount"]),
+                row["currency"].ToString(),
+                row["custom_name"]?.ToString(),
+                Convert.ToDecimal(row["daily_limit"]),
+                Convert.ToDecimal(row["max_per_transaction"]),
+                Convert.ToInt32(row["max_nr_transactions_daily"]),
+                Convert.ToBoolean(row["blocked"])
             );
+
+
         }
 
         // CONVERT DATA TABLE TO CURRENCY EXCHANGE FUNCTIONS
@@ -268,7 +275,7 @@ namespace LoanShark.Repository
             return new CurrencyExchange(
                 row["from_currency"].ToString() ?? "",
                 row["to_currency"].ToString() ?? "",
-                (float)Convert.ToDouble(row["rate"])
+                (decimal)Convert.ToDouble(row["rate"])
             );
         }
     }
