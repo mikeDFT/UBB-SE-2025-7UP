@@ -19,6 +19,9 @@ namespace LoanShark.Repository
         User CreateUser(User user);
         User? GetUserById(int id_user);
         bool DeleteUser(int userId);
+        bool CNPExists(CNP cnp);
+        bool EmailExists(Email email);
+        bool PhoneNumberExists(PhoneNumber phoneNumber);
     }
 
     public class UserRepository: IUserRepository
@@ -104,5 +107,58 @@ namespace LoanShark.Repository
             }
         }
 
+        public bool CNPExists(CNP cnp)
+        {
+            try
+            {
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@cnp", cnp.ToString())
+                };
+                DataTable dt = _dataLink.ExecuteReader("GetUserByCNP", parameters);
+                return dt.Rows.Count > 0;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"REPO: Error checking if CNP exists: {ex.Message}");
+                return false;
+            }
+        }
+
+        public bool EmailExists(Email email)
+        {
+            try
+            {
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@email", email.ToString())
+                };
+                DataTable dt = _dataLink.ExecuteReader("GetUserByEmail", parameters);
+                return dt.Rows.Count > 0;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"REPO: Error checking if email exists: {ex.Message}");
+                return false;
+            }
+        }
+
+        public bool PhoneNumberExists(PhoneNumber phoneNumber)
+        {
+            try
+            {
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@phone_number", phoneNumber.ToString())
+                };
+                DataTable dt = _dataLink.ExecuteReader("GetUserByPhoneNumber", parameters);
+                return dt.Rows.Count > 0;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"REPO: Error checking if phone number exists: {ex.Message}");
+                return false;
+            }
+        }
     }
 }
