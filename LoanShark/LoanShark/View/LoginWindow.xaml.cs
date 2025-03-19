@@ -26,6 +26,7 @@ namespace LoanShark.View
     public sealed partial class LoginWindow : Window
     {
         public LoginViewModel viewModel { get; private set; }
+        public event EventHandler? LoginSuccess;
         
         public LoginWindow()
         {
@@ -49,12 +50,7 @@ namespace LoanShark.View
             {
                 // navigate to the main window
                 Debug.Print("Login successful");
-                // Close the current login window
-                // this.Close();
-                
-                // Create and activate the main window
-                // var mainWindow = new MainWindow();
-                // mainWindow.Activate();
+                OpenMainPageWindow();
             }
             else
             {
@@ -63,6 +59,12 @@ namespace LoanShark.View
                 passwordBox.Password = string.Empty;
                 passwordBox.Focus(FocusState.Programmatic);
             }
+        }
+
+        private void OpenMainPageWindow() // opens the main page window and closes the login window
+        {
+            this.LoginSuccess?.Invoke(this, EventArgs.Empty);
+            this.Close();
         }
 
         private void EmailBox_KeyDown(object sender, KeyRoutedEventArgs e)

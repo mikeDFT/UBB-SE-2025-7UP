@@ -61,6 +61,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="View\LoginWindow.xaml" />
+    <None Remove="View\MainPageWindow.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\MainPageWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="View\LoginWindow.xaml">

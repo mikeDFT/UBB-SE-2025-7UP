@@ -43,9 +43,17 @@ namespace LoanShark
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             m_loginWindow = new LoginWindow();
+            m_loginWindow.LoginSuccess += LoginWindow_OnLoginSuccess;
             m_loginWindow.Activate();
         }
 
-        private Window? m_loginWindow;
+        private void LoginWindow_OnLoginSuccess(object sender, EventArgs e)
+        {
+            m_mainPageWindow = new MainPageWindow();
+            m_mainPageWindow.Activate();
+        }
+
+        private LoginWindow? m_loginWindow;
+        private MainPageWindow? m_mainPageWindow;
     }
 }
