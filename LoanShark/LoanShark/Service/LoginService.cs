@@ -21,8 +21,8 @@ namespace LoanShark.Service
                 DataTable dt = this.repo.GetUserCredentials(email);
 
                 //if exception is not thorwn, then the user exists and we continue with the validation
-                string hashedPassword = dt.Rows[0]["hashed_password"].ToString();
-                string passwordSalt = dt.Rows[0]["password_salt"].ToString();
+                string hashedPassword = dt.Rows[0]["hashed_password"]?.ToString() ?? string.Empty;
+                string passwordSalt = dt.Rows[0]["password_salt"]?.ToString() ?? string.Empty;
 
                 HashedPassword userPassword = new HashedPassword(hashedPassword, passwordSalt, false);
                 HashedPassword inputPassword = new HashedPassword(password, passwordSalt, true);
