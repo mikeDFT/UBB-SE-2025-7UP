@@ -47,7 +47,7 @@ namespace LoanShark
             m_loginWindow.Activate();
         }
 
-        private void LoginWindow_OnLoginSuccess(object sender, EventArgs e)
+        private void LoginWindow_OnLoginSuccess(object? sender, EventArgs e)
         {
             m_mainPageWindow = new MainPageWindow();
             m_mainPageWindow.Activate();
