@@ -79,10 +79,10 @@ namespace LoanShark.ViewModel
                     OnPropertyChanged(nameof(SelectedBankAccount));
                     
                     // For Take Loan page
-                    UpdateAmountToPay();
+                    UpdateTakeLoanBoxDetails();
                     
                     // For Pay Loan page
-                    UpdatePaymentDetails();
+                    UpdatePayLoanBoxDetails();
                 }
             }
         }
@@ -110,7 +110,7 @@ namespace LoanShark.ViewModel
                     amount = value;
                     OnPropertyChanged(nameof(Amount));
                     Debug.WriteLine("Amount", Amount);
-                    UpdateAmountToPay();
+                    UpdateTakeLoanBoxDetails();
                 }
             }
         }
@@ -125,7 +125,7 @@ namespace LoanShark.ViewModel
                     selectedMonths = value;
                     OnPropertyChanged(nameof(SelectedMonths));
                     Debug.WriteLine($"SelectedMonths changed to: {value}");
-                    UpdateAmountToPay();
+                    UpdateTakeLoanBoxDetails();
                 }
             }
         }
@@ -204,7 +204,7 @@ namespace LoanShark.ViewModel
                     selectedLoanDisplay = value;
                     OnPropertyChanged(nameof(SelectedLoanDisplay));
                     UpdateSelectedLoan();
-                    UpdatePaymentDetails();
+                    UpdatePayLoanBoxDetails();
                 }
             }
         }
@@ -252,6 +252,17 @@ namespace LoanShark.ViewModel
             {
                 payLoanPageVisibility = value;
                 OnPropertyChanged(nameof(PayLoanPageVisibility));
+            }
+        }
+
+        private Visibility hasUnpaidLoans;
+        public Visibility HasUnpaidLoans
+        {
+            get => hasUnpaidLoans;
+            set
+            {
+                hasUnpaidLoans = value;
+                OnPropertyChanged(nameof(hasUnpaidLoans));
             }
         }
 
@@ -312,13 +323,24 @@ namespace LoanShark.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void UpdateAmountToPay()
+        // For the take a loan page (the details in the box)
+        private void UpdateTakeLoanBoxDetails()
         {
-            Debug.WriteLine($"UpdateAmountToPay called. SelectedBankAccount: {SelectedBankAccount}, Amount: {Amount}, SelectedMonths: {SelectedMonths}");
-            
+            Debug.WriteLine($"UpdateTakeLoanBoxDetails called. SelectedBankAccount: {SelectedBankAccount}, Amount: {Amount}, SelectedMonths: {SelectedMonths}");
+
             if (string.IsNullOrEmpty(SelectedBankAccount) || Amount <= 0 || SelectedMonths <= 0)
             {
-                TaxPercentage = "Tax Percentage: N/A";
+                // when there is no number of months chosen, the tax percentage is N/A
+                if (SelectedMonths <= 0)
+                {
+                    TaxPercentage = "Tax Percentage: N/A";
+                }
+                else
+                {
+                    float taxPercentageValue = _loanService.CalculateTaxPercentage(SelectedMonths);
+                    TaxPercentage = $"Tax Percentage: {taxPercentageValue}%";
+                }
+
                 AmountToPay = "Amount to Pay: N/A";
                 return;
             }
@@ -423,7 +445,7 @@ namespace LoanShark.ViewModel
                 selectedLoan = null;
                 SelectedLoanAmount = "Loan Amount: N/A";
                 ConvertedLoanAmount = "Converted Amount: N/A";
-                UpdatePaymentDetails();
+                UpdatePayLoanBoxDetails();
                 return;
             }
 
@@ -440,12 +462,13 @@ namespace LoanShark.ViewModel
                 }
             }
             
-            UpdatePaymentDetails();
+            UpdatePayLoanBoxDetails();
         }
 
-        private void UpdatePaymentDetails()
+        // For the pay a loan page (the details in the box)
+        private void UpdatePayLoanBoxDetails()
         {
-            Debug.WriteLine("UpdatePaymentDetails called");
+            Debug.WriteLine("UpdatePayLoanBoxDetails called");
             
             if (string.IsNullOrEmpty(SelectedBankAccount))
             {
@@ -585,7 +608,7 @@ namespace LoanShark.ViewModel
             PayLoanPageVisibility = CurrentPage == "PayLoanPage" ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        // Load data from the service
+        // Load data from the service, also used for reloading (refreshing) data
         private void LoadData()
         {
             try
@@ -602,9 +625,11 @@ namespace LoanShark.ViewModel
                 {
                     Loans.Add(loan);
                 }
-                
+
                 // Get unpaid loans for display
-                var unpaidLoans = _loanService.GetUnpaidUserLoans(userID);
+                List<Loan> unpaidLoans = _loanService.GetUnpaidUserLoans(userID);
+                unpaidLoans.Sort((loan1, loan2) => loan1.DateTaken.CompareTo(loan2.DateTaken));
+
                 foreach (var loan in unpaidLoans)
                 {
                     UnpaidLoans.Add(loan);
@@ -629,6 +654,7 @@ namespace LoanShark.ViewModel
         }
     }
 
+    // For the commands used above (like CloseCommand etc)
     public class RelayCommand : ICommand
     {
         private readonly Action execute;

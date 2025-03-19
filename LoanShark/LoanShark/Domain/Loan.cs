@@ -13,7 +13,7 @@ namespace LoanShark.Domain
         public double Amount { get; set; }
         public double AmountToPay
         {
-            get { return Amount * TaxPercentage; }
+            get { return Amount * (1 + TaxPercentage/100); }
         }
         public string Currency { get; set; }
         public DateTime DateTaken { get; set; }

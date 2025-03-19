@@ -23,7 +23,8 @@ namespace LoanShark
 
             ViewModel.CloseAction = () => this.Close(); // the closing action
 
-            //resizeWindow(1600, 1100); // not used, but I can resize the window w this
+            // Resizing window to see the whole table
+            resizeWindow(1800, 900);
         }
 
         private void resizeWindow(int width, int height)
@@ -33,10 +34,9 @@ namespace LoanShark
             var windowId = Win32Interop.GetWindowIdFromWindow(windowHandle);
             var appWindow = AppWindow.GetFromWindowId(windowId);
 
-            // Set window size (600x700 pixels)
+            // Set window size
             appWindow.Resize(new Windows.Graphics.SizeInt32(width, height));
         }
-
 
         // Making sure if the user erases the text, the amount becomes 0
         private void AmountTextBox_TextChanged(object sender, TextChangedEventArgs e)

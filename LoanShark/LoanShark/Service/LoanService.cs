@@ -12,31 +12,16 @@ namespace LoanShark.Service
     public class LoanService
     {
         // Simulated database for demonstration purposes
-        private static List<Loan> _loans = new List<Loan>();
         private readonly ILoanRepository _loanRepository;
-
-        // Currency conversion rates (relative to EUR)
-        private static readonly Dictionary<string, float> _currencyRates = new Dictionary<string, float>
-        {
-            { "EUR", 1.0f },
-            { "USD", 1.1f },
-            { "GBP", 0.85f },
-            // Add more currencies as needed
-        };
 
         public LoanService()
         {
             _loanRepository = new LoanRepository();
-
-            //InitializeSampleData();
         }
 
         // Get all loans for a specific user
         public List<Loan> GetUserLoans(int userId)
         {
-            Debug.WriteLine(_loans.Count);
-            Debug.WriteLine(_loans.Where(loan => loan.UserID == userId).ToList().Count);
-
             return _loanRepository.GetLoansByUserId(userId);
         }
 
@@ -73,9 +58,9 @@ namespace LoanShark.Service
                 months,
                 "unpaid"
             );
-            
-            // Add to our "database"
-            _loans.Add(loan);
+
+            // gives it a valid unique ID
+            loan = _loanRepository.CreateLoan(loan);
             
             Debug.WriteLine($"Created loan: ID={loan.LoanID}, Amount={amount}, Currency={currency}, Months={months}");
             return loan;
@@ -92,9 +77,9 @@ namespace LoanShark.Service
                 return "Loan not found or already paid";
             }
 
+            // Get the bank account
             var _bankAccounts = GetUserBankAccounts(userID);
             BankAccount? bankAccount = _bankAccounts.Find((bankAcc) => bankAcc.IBAN == accountIBAN);
-            // Get the bank account
             if (bankAccount == null)
             {
                 Debug.WriteLine($"Cannot pay loan: Bank account not found. ID={accountIBAN}");
@@ -117,6 +102,12 @@ namespace LoanShark.Service
             
             // Mark loan as paid
             loan.MarkAsPaid();
+            bool success = _loanRepository.UpdateLoan(loan);
+            if(!success)
+            {
+                Debug.WriteLine("Update loan failed");
+                return "Update loan failed";
+            }
             
             Debug.WriteLine($"Loan paid: ID={loanId}, Amount={loan.AmountToPay}, Currency={loan.Currency}");
             return "success";
@@ -142,19 +133,29 @@ namespace LoanShark.Service
             {
                 return amount;
             }
-            
-            // Ensure we have rates for both currencies
-            if (!_currencyRates.ContainsKey(fromCurrency) || !_currencyRates.ContainsKey(toCurrency))
-            {
-                throw new ArgumentException("Unsupported currency");
-            }
-            
-            // Convert to EUR first as a base currency, then to target currency
-            float amountInEUR = amount / _currencyRates[fromCurrency];
-            float result = amountInEUR * _currencyRates[toCurrency];
-            
+
+            CurrencyExchange? nullableCurrencyRate = GetCurrencyRate(_loanRepository.GetAllCurrencyExchanges(), fromCurrency, toCurrency);
+            if (nullableCurrencyRate == null) 
+                throw new ArgumentException("Can't find currencies: " + fromCurrency + " to " + toCurrency);
+
+            CurrencyExchange currencyRate = nullableCurrencyRate;
+
+            float result = amount * currencyRate.ExchangeRate;
+
             Debug.WriteLine($"Currency conversion: {amount} {fromCurrency} = {result} {toCurrency}");
             return result;
+        }
+
+        // Helps find the needed currency rate
+        public CurrencyExchange? GetCurrencyRate(List<CurrencyExchange> CurrencyRates, string fromCurrency, string toCurrency)
+        {
+            foreach (CurrencyExchange rate in CurrencyRates)
+            {
+                if (rate.FromCurrency == fromCurrency && rate.ToCurrency == toCurrency)
+                    return rate;
+            }
+
+            return null;
         }
 
         // Validate loan request parameters
@@ -239,22 +240,5 @@ namespace LoanShark.Service
                 .Select(account => $"{account.IBAN} - {account.Currency} - {account.Amount}")
                 .ToList();
         }
-
-        //// Initialize sample data for testing
-        //private void InitializeSampleData()
-        //{
-        //    // Sample bank accounts
-        //    _bankAccounts.Add("IBAN1", new BankAccount(123, "IBAN1", "EUR", 1000));
-        //    _bankAccounts.Add("IBAN2", new BankAccount(123, "IBAN2", "USD", 2000));
-        //    _bankAccounts.Add("IBAN3", new BankAccount(123, "IBAN3", "GBP", 3000));
-
-        //    // Sample loans
-        //    var currencies = new List<string> { "EUR", "USD", "GBP" };
-        //    for (int i = 0; i < 5; i++)
-        //        _loans.Add(new Loan(i, 123, (i+5)*10, currencies[i % currencies.Count], DateTime.Now, null, i+10, i+6, "unpaid"));
-
-        //    // Mark the first loan as paid for demonstration
-        //    _loans[0].MarkAsPaid();
-        //}
     }
 }

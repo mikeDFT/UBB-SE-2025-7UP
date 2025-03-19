@@ -56,7 +56,9 @@ namespace LoanShark.Repository
                 // Get the ID of the newly created loan
                 int newLoanId = (int)parameters.First(p => p.ParameterName == "@id_loan").Value;
                 loan.LoanID = newLoanId;
-                
+
+                Debug.WriteLine("REPO: Loan created", newLoanId, loan.ToString());
+
                 return loan;
             }
             catch (Exception ex)
@@ -140,6 +142,7 @@ namespace LoanShark.Repository
                 };
 
                 int rowsAffected = _dataLink.ExecuteNonQuery("UpdateLoan", parameters);
+                Debug.WriteLine("REPO: Loan updated", loan.ToString());
                 return rowsAffected > 0;
             }
             catch (Exception ex)
@@ -159,6 +162,7 @@ namespace LoanShark.Repository
                 };
 
                 int rowsAffected = _dataLink.ExecuteNonQuery("DeleteLoan", parameters);
+                Debug.WriteLine("REPO: Loan deleted", loanId);
                 return rowsAffected > 0;
             }
             catch (Exception ex)
@@ -207,7 +211,8 @@ namespace LoanShark.Repository
             {
                 loans.Add(ConvertDataRowToLoan(row));
             }
-            
+
+            Debug.WriteLine("REPO: Got loans by user", loans.Count, loans);
             return loans;
         }
 
@@ -234,14 +239,15 @@ namespace LoanShark.Repository
                 bankAccounts.Add(ConvertDataRowToBankAccount(row));
             }
 
+            Debug.WriteLine("REPO: Got bank accounts by user", bankAccounts.Count, bankAccounts);
             return bankAccounts;
         }
 
         private BankAccount ConvertDataRowToBankAccount(DataRow row) {
             return new BankAccount(
                 Convert.ToInt32(row["id_user"]),
-                Convert.ToString(row["id_bank_account"]) ?? "",
-                Convert.ToString(row["bank_name"]) ?? "",
+                Convert.ToString(row["iban"]) ?? "",
+                Convert.ToString(row["currency"]) ?? "",
                 Convert.ToInt32(row["amount"])
             );
         }
@@ -253,7 +259,8 @@ namespace LoanShark.Repository
             foreach (DataRow row in dataTable.Rows) {
                 currencyExchanges.Add(ConvertDataRowToCurrencyExchange(row));
             }
-            
+
+            Debug.WriteLine("REPO: Got currency exchanges by user", currencyExchanges.Count, currencyExchanges);
             return currencyExchanges;
         }
 
@@ -261,7 +268,7 @@ namespace LoanShark.Repository
             return new CurrencyExchange(
                 row["from_currency"].ToString() ?? "",
                 row["to_currency"].ToString() ?? "",
-                Convert.ToSingle(row["exchange_rate"])
+                (float)Convert.ToDouble(row["rate"])
             );
         }
     }

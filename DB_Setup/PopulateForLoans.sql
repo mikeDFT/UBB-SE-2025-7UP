@@ -38,3 +38,10 @@ VALUES
 ('USD', 'RON', 4.50),
 ('RON', 'EUR', 0.20),
 ('RON', 'USD', 0.22);
+
+
+/*
+UPDATE loans
+SET date_taken= DATEADD(day, 3, date_taken)
+WHERE currency = 'EUR'
+*/
