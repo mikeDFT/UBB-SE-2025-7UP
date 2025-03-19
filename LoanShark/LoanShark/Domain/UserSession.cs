@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace LoanShark.Domain
 {
-    class UserSession
+    public class UserSession
     {
         // a UserSession will have the following keys stored in the dictionary:
         // id_user, cnp, first_name, last_name, email, phone_number

@@ -32,16 +32,13 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="BCrypt.Net" Version="0.1.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.3" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250228001" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repository\" />
   </ItemGroup>
 
   <!--
