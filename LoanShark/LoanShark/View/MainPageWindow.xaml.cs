@@ -27,5 +27,21 @@ namespace LoanShark.View
         {
             this.InitializeComponent();
         }
+
+        private void AccountSettingsButtonHandler(object sender, RoutedEventArgs e)
+        {
+            return;
+        }
+
+        private void LogOutButtonHandler(object sender, RoutedEventArgs e)
+        {
+            return;
+        }
+
+        private void ExitLoanSharkButtonHandler(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Exit();
+        }
     }
+
 }
