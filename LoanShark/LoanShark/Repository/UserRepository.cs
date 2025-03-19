@@ -11,6 +11,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.UserDataTasks;
+using Windows.System;
+using User = LoanShark.Domain.User;
 
 namespace LoanShark.Repository
 {
@@ -19,6 +21,7 @@ namespace LoanShark.Repository
         User CreateUser(User user);
         User? GetUserById(int id_user);
         bool DeleteUser(int userId);
+        string[] GetUserPasswordHashSalt(int userID);
     }
 
     public class UserRepository: IUserRepository
@@ -102,6 +105,24 @@ namespace LoanShark.Repository
                 Debug.WriteLine($"REPO: Error deleting user: {ex.Message}");
                 return false;
             }
+        }
+
+        public string[] GetUserPasswordHashSalt(int userID)
+        {
+            // grabs the hashed password and the salt for the user from the database
+            var parameterList = new SqlParameter[]
+            {
+                   new SqlParameter("@id_user",userID) ,
+                   new SqlParameter("@password_hash", System.Data.SqlDbType.VarChar){Direction = ParameterDirection.Output},
+                   new SqlParameter("@password_salt", System.Data.SqlDbType.VarChar){Direction = ParameterDirection.Output}
+               };
+            _dataLink.ExecuteNonQuery("GetHashedPassword", parameterList);
+            string passwordHash = (string)parameterList.First(x=>x.ParameterName == "@password_hash").Value;
+            string salt = (string)parameterList.First(x => x.ParameterName == "@password_salt").Value;
+
+            string[] list = { passwordHash, salt };
+            return list;
+
         }
 
     }
