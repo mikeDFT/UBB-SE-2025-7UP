@@ -12,13 +12,12 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
+using LoanShark.Domain;
 using LoanShark.Data;
-using LoanShark.Helper;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using LoanShark.Domain;
-using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -28,14 +27,17 @@ namespace LoanShark
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainWindow : Window
+    public sealed partial class TransactionHistory : Window
     {
 
-        public ObservableCollection<Transaction> Transactions { get; set; }
-
-        public MainWindow()
+        public ObservableCollection<string> TransactionsForMenu { get; set; }
+        public ObservableCollection<string> TransactionsDetailed { get; set; }
+        public TransactionHistory()
         {
-            this.Transactions = new ObservableCollection<Transaction>();
+            this.InitializeComponent();
+
+            this.TransactionsForMenu = new ObservableCollection<string>();
+            this.TransactionsDetailed = new ObservableCollection<string>();
             try
             {
                 // Create an instance of the DataLink class
@@ -63,7 +65,8 @@ namespace LoanShark
                     }
 
                     Transaction transaction = new Transaction(hashMap);
-                    this.Transactions.Add(transaction);
+                    this.TransactionsForMenu.Add(transaction.tostringForMenu());
+                    this.TransactionsDetailed.Add(transaction.tostringDetailed());
                 }
             }
             catch (Exception ex)
@@ -72,21 +75,11 @@ namespace LoanShark
             }
 
             this.InitializeComponent();
+
         }
 
-        private void myButton_Click(object sender, RoutedEventArgs e)
-        {
-            myButton.Content = AppConfig.GetConnectionString("MyLocalDb");
-            try
-            {
-                DataLink dataLink = new DataLink();
-                dataLink.OpenConnection();
-                dataLink.CloseConnection();
-            }
-            catch (Exception ex)
-            {
-                Debug.Print(ex.Message);
-            }
-        }
+        
+
+
     }
 }

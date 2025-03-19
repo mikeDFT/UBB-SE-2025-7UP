@@ -62,4 +62,12 @@
   <ItemGroup>
     <PRIResource Remove="NewFolder\**" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="TransactionHistory.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="TransactionHistory.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
 </Project>
