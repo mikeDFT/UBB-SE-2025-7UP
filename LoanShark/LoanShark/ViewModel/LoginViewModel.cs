@@ -1,70 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using LoanShark.Service;
-using Microsoft.UI.Xaml;
 
 namespace LoanShark.ViewModel
 {
-    class LoginViewModel : INotifyPropertyChanged
+    public class LoginViewModel : INotifyPropertyChanged
     {
         private readonly LoginService loginService;
         private string email;
         private string errorMessage;
         private bool isErrorVisible;
         
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public LoginViewModel()
         {
-            this.loginService = new LoginService();
+            this.email = string.Empty;
+            this.errorMessage = string.Empty;
             this.isErrorVisible = false;
+            this.loginService = new LoginService();
         }
 
-        public string GetEmail()
+        public string Email
         {
-            return this.email;
-        }
-
-        public void SetEmail(string value)
-        {
-            if (this.email != value)
+            get => email;
+            set
             {
-                this.email = value;
-                OnPropertyChanged(nameof(GetEmail));
+                if (email != value)
+                {
+                    email = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-
-        public string GetErrorMessage()
+        public string ErrorMessage
         {
-            return this.errorMessage;
-        }
-
-        public void SetErrorMessage(string value)
-        {
-            if (this.errorMessage != value)
+            get => errorMessage;
+            set
             {
-                this.errorMessage = value;
-                OnPropertyChanged(nameof(GetErrorMessage));
+                if (errorMessage != value)
+                {
+                    errorMessage = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        public bool GetIsErrorVisible()
+        public bool IsErrorVisible
         {
-            return this.isErrorVisible;
-        }
-
-        public void SetIsErrorVisible(bool value)
-        {
-            if (this.isErrorVisible != value)
+            get => isErrorVisible;
+            set
             {
-                this.isErrorVisible = value;
-                OnPropertyChanged(nameof(GetIsErrorVisible));
+                if (isErrorVisible != value)
+                {
+                    isErrorVisible = value;
+                    OnPropertyChanged();
+                }
             }
         }
         
@@ -72,24 +65,31 @@ namespace LoanShark.ViewModel
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                this.errorMessage = "Email or password cannot be empty";
+                ErrorMessage = "Email or password cannot be empty";
+                IsErrorVisible = true;
                 return false;
             }
             
-            this.isErrorVisible = false;
+            IsErrorVisible = false;
             bool isValid = this.loginService.ValidateUserCredentials(email, password);
             
             if (!isValid)
             {
-                this.errorMessage = "Invalid email or password";
+                ErrorMessage = "Invalid email or password";
+                IsErrorVisible = true;
+            }
+            else
+            {
+                ErrorMessage = string.Empty;
+                IsErrorVisible = false;
             }
             
             return isValid;
         }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

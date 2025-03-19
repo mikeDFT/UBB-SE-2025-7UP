@@ -25,12 +25,12 @@ namespace LoanShark.View
     /// </summary>
     public sealed partial class LoginWindow : Window
     {
-        private readonly LoginViewModel loginViewModel;
+        public LoginViewModel viewModel { get; private set; }
         
         public LoginWindow()
         {
             this.InitializeComponent();
-            this.loginViewModel = new LoginViewModel();
+            this.viewModel = new LoginViewModel();
         }
 
         public void LoginButtonHandler(object sender, RoutedEventArgs e) 
@@ -40,14 +40,12 @@ namespace LoanShark.View
 
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                this.loginViewModel.SetErrorMessage("Email and password cannot be empty");
-                this.loginViewModel.SetIsErrorVisible(true);
-                errorMessageLabel.Text = this.loginViewModel.GetErrorMessage();
-                errorMessageLabel.Visibility = this.loginViewModel.GetIsErrorVisible() ? Visibility.Visible : Visibility.Collapsed;
+                this.viewModel.ErrorMessage = "Email and password cannot be empty";
+                this.viewModel.IsErrorVisible = true;
                 return;
             }
 
-            if (this.loginViewModel.ValidateCredentials(email, password))
+            if (this.viewModel.ValidateCredentials(email, password))
             {
                 // navigate to the main window
                 Debug.Print("Login successful");
@@ -60,10 +58,8 @@ namespace LoanShark.View
             }
             else
             {
-                // Update UI based on ViewModel state
-                errorMessageLabel.Text = this.loginViewModel.GetErrorMessage();
-                errorMessageLabel.Visibility = this.loginViewModel.GetIsErrorVisible() ? Visibility.Visible : Visibility.Collapsed;
-                
+                // The ViewModel.IsErrorVisible and ViewModel.ErrorMessage will be updated by the ValidateCredentials method
+                // and the UI will be updated automatically through binding
                 passwordBox.Password = string.Empty;
                 passwordBox.Focus(FocusState.Programmatic);
             }
