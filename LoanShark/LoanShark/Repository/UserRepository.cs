@@ -18,6 +18,7 @@ namespace LoanShark.Repository
     {
         User CreateUser(User user);
         User? GetUserById(int id_user);
+        bool UpdateUser(User user);
         bool DeleteUser(int userId);
         bool CNPExists(CNP cnp);
         bool EmailExists(Email email);
@@ -89,6 +90,32 @@ namespace LoanShark.Repository
                 return null;
             }
         }
+
+        public bool UpdateUser(User user)
+        {
+            try
+            {
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@id_user", user.UserID),
+                    new SqlParameter("@cnp", user.CNP.ToString()),
+                    new SqlParameter("@first_name", user.FirstName),
+                    new SqlParameter("@last_name", user.LastName),
+                    new SqlParameter("@email", user.Email.ToString()),
+                    new SqlParameter("@phone_number", user.PhoneNumber.ToString()),
+                    new SqlParameter("@hashed_password", user.HashedPassword.GetHashedPassword()),
+                    new SqlParameter("@password_salt", user.HashedPassword.GetSalt())
+                };
+                _dataLink.ExecuteNonQuery("UpdateUser", parameters);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"REPO: Error updating user: {ex.Message}");
+                return false;
+            }
+        }
+
         public bool DeleteUser(int userId)
         {
             try
