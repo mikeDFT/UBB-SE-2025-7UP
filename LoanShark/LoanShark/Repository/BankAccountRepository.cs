@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using LoanShark.Data;
 using LoanShark.Domain;
 using Microsoft.Data.SqlClient;
+using Windows.Networking.NetworkOperators;
 
 namespace LoanShark.Repository
 {
@@ -22,6 +23,7 @@ namespace LoanShark.Repository
         bool removeBankAccount(string IBAN);
 
         List<string> getCurrencies();
+        List<string> getCredentials(string email);
     }
 
     class BankAccountRepository : IBankAccountRepository
@@ -84,8 +86,8 @@ namespace LoanShark.Repository
 
         public bool addBankAccount(BankAccount bankAccount)
         {
-            //           try
-            //           {
+           try
+           {
             Debug.WriteLine(bankAccount.iban);
                 var sqlParams = new SqlParameter[]
                 {
@@ -101,18 +103,19 @@ namespace LoanShark.Repository
                 };
                 dataLink.ExecuteNonQuery("AddBankAccount", sqlParams);
                 return true;
-  //          }
-  //          catch (Exception e)
-  //         {
-  //              Debug.WriteLine("Oopsie on add bank account repo");
-  //              return false;
-  //          }
+           }
+            catch (Exception e)
+           {
+                Debug.WriteLine("Oopsie on add bank account repo");
+                return false;
+            }
         }
         
         public bool removeBankAccount(string IBAN)
         {
             try
             {
+                Debug.WriteLine(IBAN);
                 var sqlParams = new SqlParameter[] 
                 { 
                     new SqlParameter("@iban", IBAN) 
@@ -165,6 +168,16 @@ namespace LoanShark.Repository
         {
             DataTable dataTable = dataLink.ExecuteReader("GetCurrencies");
             return ConvertDataTableToCurrencyList(dataTable);
+        }
+
+        public List<string> getCredentials(string email)
+        {
+            var sqlParams = new SqlParameter[] { new SqlParameter("@email", email) };
+            DataTable dataTable = dataLink.ExecuteReader("GetCredentials", sqlParams);
+            List<string> credentials = new List<string>();
+            credentials.Add(dataTable.Rows[0]["hashed_password"].ToString());
+            credentials.Add(dataTable.Rows[0]["password_salt"].ToString());
+            return credentials;
         }
     }
 }
