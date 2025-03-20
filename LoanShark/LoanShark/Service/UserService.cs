@@ -18,6 +18,8 @@ namespace LoanShark.Service
             _userRepository = new UserRepository();
         }
 
+        // if cnp is valid and not used by another user returns null
+        // otherwise returns an error message
         public string? CheckCnp(int userId, string cnp)
         {
             if (cnp.Length != 13)
@@ -36,6 +38,8 @@ namespace LoanShark.Service
             return null;
         }
 
+        // if email is valid and not used by another user returns null
+        // otherwise returns an error message
         public string? CheckEmail(int userId, string email)
         {
             if (!Email.IsValid(email))
@@ -50,6 +54,8 @@ namespace LoanShark.Service
             return null;
         }
 
+        // if phoneNumber is valid and not used by another user returns null
+        // otherwise returns an error message
         public string? CheckPhoneNumber(int userId, string phoneNumber)
         {
             if (phoneNumber.Length != 10)
@@ -72,6 +78,7 @@ namespace LoanShark.Service
             return null;
         }
 
+        // creates a new user
         public void CreateUser(string cnp, string firstName, string lastName, string email, string phoneNumber, string password)
         {
             User user = new User(
@@ -86,11 +93,16 @@ namespace LoanShark.Service
             _userRepository.CreateUser(user);
         }
 
+        // on success returns the given user with the given userId
+        // on failure returns null
         public User? GetUserInformation(int userId)
         {
             return _userRepository.GetUserById(userId);
-        }    
+        }
 
+        // updates the information of the user
+        // on success returns true
+        // on failure returns false
         public bool UpdateUser(User user)
         {
             return _userRepository.UpdateUser(user);

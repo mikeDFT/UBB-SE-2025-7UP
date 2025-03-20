@@ -262,6 +262,7 @@ namespace LoanShark.ViewModel
             }
         }
 
+        // validates all fields and updates user information
         public void UpdateUser()
         {
             if (user  == null)
@@ -383,6 +384,7 @@ namespace LoanShark.ViewModel
             CloseCommand.Execute(null);
         }
 
+        // opens the delete user confirmation window
         public void DeleteUser()
         {
             if (user == null)

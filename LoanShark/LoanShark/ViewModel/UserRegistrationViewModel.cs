@@ -248,6 +248,7 @@ namespace LoanShark.ViewModel
             CloseCommand = new RelayCommand(() => CloseAction?.Invoke());
         }
 
+        // validates all fields and creates a new user
         public void CreateUser()
         {
             if (string.IsNullOrWhiteSpace(FirstName))

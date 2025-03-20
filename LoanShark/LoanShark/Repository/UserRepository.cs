@@ -37,6 +37,9 @@ namespace LoanShark.Repository
             _dataLink = new DataLink();
         }
 
+        // saves a new user in the database
+        // on success returns the user with the corresponding userId from the database
+        // on failure returns null
         public User CreateUser(User user)
         {
             try
@@ -64,6 +67,8 @@ namespace LoanShark.Repository
             }
         }
 
+        // on success returns the user with the given userId
+        // on failure returns null
         public User? GetUserById(int userId)
         {
             try
@@ -95,6 +100,9 @@ namespace LoanShark.Repository
             }
         }
 
+        // updates the information of the user
+        // on success returns true
+        // on failure returns false
         public bool UpdateUser(User user)
         {
             try
@@ -120,6 +128,9 @@ namespace LoanShark.Repository
             }
         }
 
+        // deletes the user with the given userId
+        // on success returns true
+        // on failure returns false
         public bool DeleteUser(int userId)
         {
             try
@@ -138,6 +149,8 @@ namespace LoanShark.Repository
             }
         }
 
+        // on success returns the user with the given cnp
+        // on failure returns null
         public User? GetUserByCnp(Cnp cnp)
         {
             try
@@ -169,6 +182,8 @@ namespace LoanShark.Repository
             }
         }
 
+        // on success returns the user with the given email
+        // on failure returns null
         public User? GetUserByEmail(Email email)
         {
             try
@@ -200,6 +215,8 @@ namespace LoanShark.Repository
             }
         }
 
+        // on success returns the user with the given phone number
+        // on failure returns null
         public User? GetUserByPhoneNumber(PhoneNumber phoneNumber)
         {
             try

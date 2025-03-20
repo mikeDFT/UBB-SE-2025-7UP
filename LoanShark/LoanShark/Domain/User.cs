@@ -20,6 +20,7 @@ namespace LoanShark.Domain
             _emailAddress = emailAddress;
         }
 
+        // checks if a string is a valid email address
         public static bool IsValid(string emailAddress)
         {
             try
@@ -67,6 +68,7 @@ namespace LoanShark.Domain
             _cnp = cnp;
         }
 
+        // checks if a string is a valid cnp
         public static bool IsValid(string cnp)
         {
             if (cnp.Length != 13)
@@ -114,6 +116,7 @@ namespace LoanShark.Domain
             _phoneNumber = phoneNumber;
         }
 
+        // checks if a string is a valid phone number
         public static bool IsValid(string phoneNumber)
         {
             if (phoneNumber.Length != 10)
