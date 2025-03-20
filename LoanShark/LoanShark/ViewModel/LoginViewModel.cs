@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using LoanShark.Service;
 
 namespace LoanShark.ViewModel
@@ -61,7 +62,7 @@ namespace LoanShark.ViewModel
             }
         }
         
-        public bool ValidateCredentials(string email, string password)
+        public async Task<bool> ValidateCredentials(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
@@ -71,7 +72,7 @@ namespace LoanShark.ViewModel
             }
             
             this.IsErrorVisible = false;
-            bool isValid = this.loginService.ValidateUserCredentials(email, password);
+            bool isValid = await this.loginService.ValidateUserCredentials(email, password);
             
             if (!isValid)
             {
@@ -87,9 +88,9 @@ namespace LoanShark.ViewModel
             return isValid;
         }
 
-        public void InstantiateUserSessionAfterLogin(string email)
+        public async Task InstantiateUserSessionAfterLogin(string email)
         {
-            this.loginService.InstantiateUserSessionAfterLogin(email);
+            await this.loginService.InstantiateUserSessionAfterLogin(email);
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

@@ -2,6 +2,7 @@
 using LoanShark.Repository;
 using System;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace LoanShark.Service
 {
@@ -14,11 +15,11 @@ namespace LoanShark.Service
             this.repo = new LoginRepository();
         }
 
-        public bool ValidateUserCredentials(string email, string password)
+        public async Task<bool> ValidateUserCredentials(string email, string password)
         {
             try
             {
-                DataTable dt = this.repo.GetUserCredentials(email);
+                DataTable dt = await this.repo.GetUserCredentials(email);
 
                 //if exception is not thorwn, then the user exists and we continue with the validation
                 string hashedPassword = dt.Rows[0]["hashed_password"]?.ToString() ?? string.Empty;
@@ -35,9 +36,9 @@ namespace LoanShark.Service
             }
         }
 
-        public void InstantiateUserSessionAfterLogin(string email) 
+        public async Task InstantiateUserSessionAfterLogin(string email) 
         {
-            DataTable dt = this.repo.GetUserInfoAfterLogin(email);
+            DataTable dt = await this.repo.GetUserInfoAfterLogin(email);
 
             UserSession.Instance.Initialize(
                 dt.Rows[0]["id_user"]?.ToString() ?? string.Empty,

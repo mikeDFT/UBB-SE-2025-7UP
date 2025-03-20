@@ -14,6 +14,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System.Diagnostics;
 using LoanShark.ViewModel;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -34,7 +35,7 @@ namespace LoanShark.View
             this.viewModel = new LoginViewModel();
         }
 
-        public void LoginButtonHandler(object sender, RoutedEventArgs e) 
+        public async void LoginButtonHandler(object sender, RoutedEventArgs e) 
         {
             string email = emailTextBox.Text;
             string password = passwordBox.Password;
@@ -46,11 +47,11 @@ namespace LoanShark.View
                 return;
             }
 
-            if (this.viewModel.ValidateCredentials(email, password))
+            if (await this.viewModel.ValidateCredentials(email, password))
             {
                 // navigate to the main window
                 Debug.Print("Login successful");
-                this.viewModel.InstantiateUserSessionAfterLogin(email);
+                await this.viewModel.InstantiateUserSessionAfterLogin(email);
                 OpenMainPageWindow();
             }
             else
@@ -80,6 +81,9 @@ namespace LoanShark.View
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
+                // no await here, because the LoginButtonHandler is not async
+                // it is async void, but you don't need to await it
+                // Event handlers are not awaited by default
                 LoginButtonHandler(sender, e);
             }
         }
