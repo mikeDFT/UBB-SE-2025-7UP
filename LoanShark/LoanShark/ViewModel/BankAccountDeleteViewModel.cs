@@ -1,5 +1,7 @@
 ﻿using LoanShark.Helper;
+using LoanShark.Service;
 using LoanShark.View;
+using Microsoft.UI.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,8 +17,12 @@ namespace LoanShark.ViewModel
         public ICommand NoCommand { get; }
         public ICommand YesCommand { get; }
         public Action onClose { get; set; }
-        public BankAccountDeleteViewModel()
+        private BankAccountService service;
+        private string _iban;
+        public BankAccountDeleteViewModel(string IBAN)
         {
+            service = new BankAccountService();
+            _iban = IBAN;
             NoCommand = new RelayCommand(OnNoButtonClicked);
             YesCommand = new RelayCommand(OnYesButtonClicked);
         }
@@ -29,7 +35,8 @@ namespace LoanShark.ViewModel
 
         public void OnYesButtonClicked()
         {
-            var window = new BankAccountVerifyView();
+            Debug.WriteLine("Yes button");
+            var window = new BankAccountVerifyView(_iban);
             window.Activate();
         }
 
