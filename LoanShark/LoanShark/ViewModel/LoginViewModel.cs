@@ -24,12 +24,12 @@ namespace LoanShark.ViewModel
 
         public string Email
         {
-            get => email;
+            get => this.email;
             set
             {
-                if (email != value)
+                if (this.email != value)
                 {
-                    email = value;
+                    this.email = value;
                     OnPropertyChanged();
                 }
             }
@@ -37,25 +37,25 @@ namespace LoanShark.ViewModel
 
         public string ErrorMessage
         {
-            get => errorMessage;
+            get => this.errorMessage;
             set
             {
-                if (errorMessage != value)
+                if (this.errorMessage != value)
                 {
-                    errorMessage = value;
-                    OnPropertyChanged();
+                    this.errorMessage = value;
+                    this.OnPropertyChanged();
                 }
             }
         }
 
         public bool IsErrorVisible
         {
-            get => isErrorVisible;
+            get => this.isErrorVisible;
             set
             {
-                if (isErrorVisible != value)
+                if (this.isErrorVisible != value)
                 {
-                    isErrorVisible = value;
+                    this.isErrorVisible = value;
                     OnPropertyChanged();
                 }
             }
@@ -65,23 +65,23 @@ namespace LoanShark.ViewModel
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                ErrorMessage = "Email or password cannot be empty";
-                IsErrorVisible = true;
+                this.ErrorMessage = "Email or password cannot be empty";
+                this.IsErrorVisible = true;
                 return false;
             }
             
-            IsErrorVisible = false;
+            this.IsErrorVisible = false;
             bool isValid = this.loginService.ValidateUserCredentials(email, password);
             
             if (!isValid)
             {
-                ErrorMessage = "Invalid email or password";
-                IsErrorVisible = true;
+                this.ErrorMessage = "Invalid email or password";
+                this.IsErrorVisible = true;
             }
             else
             {
-                ErrorMessage = string.Empty;
-                IsErrorVisible = false;
+                this.ErrorMessage = string.Empty;
+                this.IsErrorVisible = false;
             }
             
             return isValid;
@@ -89,7 +89,7 @@ namespace LoanShark.ViewModel
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
