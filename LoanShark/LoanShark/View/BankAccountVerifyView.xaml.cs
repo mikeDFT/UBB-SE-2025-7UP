@@ -24,10 +24,14 @@ namespace LoanShark.View
     /// </summary>
     public sealed partial class BankAccountVerifyView : Window
     {
-        public BankAccountVerifyView()
+        BankAccountVerifyViewModel viewModel;
+        public BankAccountVerifyView(string IBAN)
         {
             this.InitializeComponent();
-            MainGrid.DataContext = new BankAccountVerifyViewModel();
+            viewModel = new BankAccountVerifyViewModel(IBAN);
+            MainGrid.DataContext = viewModel;
+
+            viewModel.OnClose = () => this.Close();
         }
     }
 }

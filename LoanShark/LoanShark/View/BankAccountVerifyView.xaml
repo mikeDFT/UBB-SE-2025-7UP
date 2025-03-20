@@ -23,8 +23,8 @@
         </Border>
 
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBox MinWidth="300" PlaceholderText="Email:" Margin="20"/>
-            <PasswordBox PlaceholderText="Password:" Margin="20" PasswordChar="*"/>
+            <TextBox x:Name="emailInput" MinWidth="300" PlaceholderText="Email:" Margin="20" Text="{Binding Email, Mode=TwoWay}"/>
+            <PasswordBox x:Name="passwordInput" PlaceholderText="Password:" Margin="20" PasswordChar="*" Password="{Binding Password, Mode=TwoWay}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
