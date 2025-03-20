@@ -2,30 +2,29 @@
 using CommunityToolkit.Mvvm.Input;
 using LoanShark.Service;
 using LoanShark.Domain;
-using Microsoft.UI.Xaml.Controls;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using LoanShark.Domain;
+using System;
 
 namespace LoanShark.ViewModel
 {
     public class CurrencyExchangeTableViewModel : ObservableObject
     {
-        private readonly Page _page;
         private readonly TransactionsService _transactionService;
 
         public ObservableCollection<CurrencyExchange> ExchangeRates { get; } = new ObservableCollection<CurrencyExchange>();
 
-        public ICommand BackCommand { get; }
+        public ICommand CloseCommand { get; }
 
-        public CurrencyExchangeTableViewModel(Page page)
+        public Action CloseAction { get; set; }
+
+        public CurrencyExchangeTableViewModel()
         {
-            _page = page;
             _transactionService = new TransactionsService();
             LoadExchangeRatesAsync();
 
-            BackCommand = new RelayCommand(NavigateBack);
+            CloseCommand = new RelayCommand(CloseWindow);
         }
 
         private async void LoadExchangeRatesAsync()
@@ -39,12 +38,9 @@ namespace LoanShark.ViewModel
             }
         }
 
-        private void NavigateBack()
+        private void CloseWindow()
         {
-            if (_page.Frame.CanGoBack)
-            {
-                _page.Frame.GoBack();
-            }
+            CloseAction?.Invoke();
         }
     }
 }

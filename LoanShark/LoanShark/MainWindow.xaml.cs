@@ -30,12 +30,6 @@ namespace LoanShark
         public MainWindow()
         {
             this.InitializeComponent();
-
-
-                if (NavigationFrame != null)
-                {
-                    NavigationFrame.Navigate(typeof(TransactionsView));
-                }
        
         }
 

@@ -1,8 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Windows.Input;
-using Microsoft.UI.Xaml.Controls;
 using LoanShark.Service;
+using System.Windows.Input;
 using System.Threading.Tasks;
 using System;
 
@@ -10,7 +9,6 @@ namespace LoanShark.ViewModel
 {
     public class SendMoneyViewModel : ObservableObject
     {
-        private readonly Page _page;
         private readonly TransactionsService _transactionService;
 
         public string IBAN { get; set; }
@@ -18,21 +16,16 @@ namespace LoanShark.ViewModel
         public string Details { get; set; }
 
         public ICommand PayCommand { get; }
-        public ICommand BackCommand { get; }
+        public ICommand CloseCommand { get; }
+
+        public Action CloseAction { get; set; }
 
         public SendMoneyViewModel()
         {
             _transactionService = new TransactionsService();
-        }
-
-
-        public SendMoneyViewModel(Page page)
-        {
-            _page = page;
-            _transactionService = new TransactionsService();
 
             PayCommand = new AsyncRelayCommand(ProcessPaymentAsync);
-            BackCommand = new RelayCommand(NavigateBack);
+            CloseCommand = new RelayCommand(CloseWindow);
         }
 
         private async Task ProcessPaymentAsync()
@@ -41,7 +34,7 @@ namespace LoanShark.ViewModel
             try
             {
                 amount = Convert.ToDecimal(SumOfMoney);
-                string result = await _transactionService.AddTransaction(_transactionService.GetCurrentUserIBAN(), IBAN, Convert.ToDecimal(SumOfMoney), Details);
+                string result = await _transactionService.AddTransaction(_transactionService.GetCurrentUserIBAN(), IBAN, amount, Details);
                 await ShowMessage(result);
             }
             catch (Exception)
@@ -49,27 +42,16 @@ namespace LoanShark.ViewModel
                 await ShowMessage("Invalid amount.");
                 return;
             }
-            
-        }
-
-        private void NavigateBack()
-        {
-            if (_page.Frame.CanGoBack)
-            {
-                _page.Frame.GoBack();
-            }
         }
 
         private async Task ShowMessage(string message)
         {
-            ContentDialog dialog = new ContentDialog
-            {
-                Title = "Transaction",
-                Content = message,
-                CloseButtonText = "OK",
-                XamlRoot = _page.XamlRoot
-            };
-            await dialog.ShowAsync();
+            Console.WriteLine(message);
+        }
+
+        private void CloseWindow()
+        {
+            CloseAction?.Invoke();
         }
     }
 }

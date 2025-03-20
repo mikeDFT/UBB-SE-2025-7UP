@@ -1,31 +1,55 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using LoanShark.View;
-using Microsoft.UI.Xaml.Controls;
-using System;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System;
+using Microsoft.UI.Xaml;
 
 namespace LoanShark.ViewModel
 {
-    public class TransactionsViewModel
+    public class TransactionsViewModel : ObservableObject
     {
-        private readonly Page _page;
-
-        public ICommand BackCommand { get; }
+        public ICommand CloseCommand { get; }
         public ICommand SendMoneyCommand { get; }
         public ICommand PayLoanCommand { get; }
         public ICommand CurrencyExchangeCommand { get; }
         public ICommand TransactionsHistoryCommand { get; }
 
-        public TransactionsViewModel() { }
+        public Action CloseAction { get; set; }
 
-        public TransactionsViewModel(Page page)
+        public TransactionsViewModel()
         {
-            _page = page;
-            BackCommand = new RelayCommand(() => { /* Navigate Back (not implemented) */ });
-            SendMoneyCommand = new RelayCommand(() =>  _page.Frame.Navigate(typeof(SendMoneyView)));
-            PayLoanCommand = new RelayCommand(() => _page.Frame.Navigate(typeof(LoanView)));
-            CurrencyExchangeCommand = new RelayCommand(() => _page.Frame.Navigate(typeof(CurrencyExchangeTableView)));
-            TransactionsHistoryCommand = new RelayCommand(() => { /* Navigate to Transactions History (not implemented) */ });
+            CloseCommand = new RelayCommand(CloseWindow);
+            SendMoneyCommand = new RelayCommand(OpenSendMoneyWindow);
+            PayLoanCommand = new RelayCommand(OpenPayLoanWindow);
+            CurrencyExchangeCommand = new RelayCommand(OpenCurrencyExchangeWindow);
+            TransactionsHistoryCommand = new RelayCommand(() => { /* Implement Transactions History */ });
+        }
+
+        private void OpenSendMoneyWindow()
+        {
+            OpenChildWindow(new SendMoneyView());
+        }
+
+        private void OpenPayLoanWindow()
+        {
+            OpenChildWindow(new LoanView(123));
+        }
+
+        private void OpenCurrencyExchangeWindow()
+        {
+            OpenChildWindow(new CurrencyExchangeTableView());
+        }
+
+        private void OpenChildWindow(Window childWindow)
+        {
+            childWindow.Activate();
+        }
+
+        private void CloseWindow()
+        {
+            CloseAction?.Invoke();
         }
     }
 }

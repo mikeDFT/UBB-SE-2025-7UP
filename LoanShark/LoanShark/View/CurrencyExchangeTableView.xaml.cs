@@ -1,14 +1,39 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿using Microsoft.UI.Xaml;
 using LoanShark.ViewModel;
+using Microsoft.UI.Windowing;
+using Microsoft.UI;
+using WinRT.Interop;
 
 namespace LoanShark.View
 {
-    public sealed partial class CurrencyExchangeTableView : Page
+    public sealed partial class CurrencyExchangeTableView : Window
     {
+        private readonly CurrencyExchangeTableViewModel _viewModel;
+        private AppWindow _appWindow;
+
         public CurrencyExchangeTableView()
         {
             this.InitializeComponent();
-            this.DataContext = new CurrencyExchangeTableViewModel(this);
+            _viewModel = new CurrencyExchangeTableViewModel();
+
+            MainGrid.DataContext = _viewModel; 
+
+            _viewModel.CloseAction = CloseWindow; 
+
+            InitializeWindow(1000,800);
+        }
+
+        private void CloseWindow()
+        {
+            _appWindow.Destroy();
+        }
+
+        private void InitializeWindow(int width, int height)
+        {
+            var windowHandle = WindowNative.GetWindowHandle(this);
+            var windowId = Win32Interop.GetWindowIdFromWindow(windowHandle);
+            _appWindow = AppWindow.GetFromWindowId(windowId);
+            _appWindow.Resize(new Windows.Graphics.SizeInt32(width, height));
         }
     }
 }
