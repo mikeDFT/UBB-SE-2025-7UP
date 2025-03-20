@@ -6,36 +6,45 @@
     xmlns:local="using:LoanShark.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:domain="using:LoanShark.Domain"
     mc:Ignorable="d"
     Title="Loan Shark">
 
-    <DropDownButton x:Name="menuButton" 
-                    VerticalAlignment="Top" 
-                    HorizontalAlignment="Left" 
-                    Margin="10,10,0,0" 
-                    AutomationProperties.Name="Menu">
-        <DropDownButton.Content>
-            <FontIcon Glyph="&#xE700;" FontSize="20"/>
-        </DropDownButton.Content>
-        <DropDownButton.Flyout>
-            <MenuFlyout Placement="BottomEdgeAlignedLeft">
-                <MenuFlyoutItem x:Name="accountSettingsButton" Text="Account Settings" Click="AccountSettingsButtonHandler">
-                    <MenuFlyoutItem.Icon>
-                        <FontIcon Glyph="&#xE713;"/>
-                    </MenuFlyoutItem.Icon>
-                </MenuFlyoutItem>
-                <MenuFlyoutItem x:Name="logOutButton" Text="Log Out" Click="LogOutButtonHandler">
-                    <MenuFlyoutItem.Icon>
-                        <FontIcon Glyph="&#xE89B;"/>
-                    </MenuFlyoutItem.Icon>
-                </MenuFlyoutItem>
-                <MenuFlyoutItem x:Name="exitLoanSharkButton" Text="Exit Loan Shark" Click="ExitLoanSharkButtonHandler">
-                    <MenuFlyoutItem.Icon>
-                        <FontIcon Glyph="&#xE10A;"/>
-                    </MenuFlyoutItem.Icon>
-                </MenuFlyoutItem>
-            </MenuFlyout>
-        </DropDownButton.Flyout>
-    </DropDownButton>
-
+    <Grid>
+        <DropDownButton x:Name="menuButton" 
+                        VerticalAlignment="Top" 
+                        HorizontalAlignment="Left" 
+                        Margin="10,10,0,0" 
+                        AutomationProperties.Name="Menu">
+            <DropDownButton.Content>
+                <FontIcon Glyph="&#xE700;" FontSize="20"/>
+            </DropDownButton.Content>
+            <DropDownButton.Flyout>
+                <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                    <MenuFlyoutItem x:Name="accountSettingsButton" Text="Account Settings" Click="AccountSettingsButtonHandler">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon Glyph="&#xE713;"/>
+                        </MenuFlyoutItem.Icon>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem x:Name="logOutButton" Text="Log Out" Click="LogOutButtonHandler">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon Glyph="&#xE89B;"/>
+                        </MenuFlyoutItem.Icon>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem x:Name="exitLoanSharkButton" Text="Exit Loan Shark" Click="ExitLoanSharkButtonHandler">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon Glyph="&#xE10A;"/>
+                        </MenuFlyoutItem.Icon>
+                    </MenuFlyoutItem>
+                </MenuFlyout>
+            </DropDownButton.Flyout>
+        </DropDownButton>
+        
+        <TextBlock x:Name="centeredTextField"
+                 Width="Auto"
+                 TextWrapping="Wrap"
+                 TextTrimming="CharacterEllipsis"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"/>
+    </Grid>
 </Window>

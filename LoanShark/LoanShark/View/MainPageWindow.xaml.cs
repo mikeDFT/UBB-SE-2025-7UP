@@ -34,6 +34,16 @@ namespace LoanShark.View
             this.InitializeComponent();
             // Register this window
             RegisterWindow(this);
+            
+            // Set the welcome text from UserSession
+            try {
+                string? firstName = UserSession.Instance.GetUserData("first_name");
+                centeredTextField.Text = firstName != null ? $"Welcome back, {firstName}" : "Welcome, user";
+            }
+            catch (Exception ex) {
+                centeredTextField.Text = "Welcome, user";
+                Debug.Print($"Error getting user data: {ex.Message}");
+            }
         }
 
         // Static method to register windows with the tracking system
