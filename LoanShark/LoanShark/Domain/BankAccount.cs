@@ -35,5 +35,6 @@ namespace LoanShark.Domain
         {
             blocked = !blocked;
         }
+
     }
 }

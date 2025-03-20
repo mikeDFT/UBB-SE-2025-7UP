@@ -91,5 +91,10 @@ namespace LoanShark.Service
                     return finalIBAN;
             }
         }
+        public bool updateBankAccount(string IBAN , string name, float daily_limit, float max_per_trans, int max_nr_trans, bool blocked)
+        {
+            var NBA = new BankAccount(IBAN, "RON", 0, blocked, 123, name, daily_limit, max_per_trans, max_nr_trans);
+            return _bankAccountRepository.updateBankAccount(IBAN, NBA);
+        }
     }
 }

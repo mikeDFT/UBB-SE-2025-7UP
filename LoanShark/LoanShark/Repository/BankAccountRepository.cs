@@ -20,6 +20,7 @@ namespace LoanShark.Repository
 
         bool addBankAccount(BankAccount bankAccount);
         bool removeBankAccount(string IBAN);
+        bool updateBankAccount(string IBAN, BankAccount NBA);
     }
 
     class BankAccountRepository : IBankAccountRepository
@@ -146,6 +147,42 @@ namespace LoanShark.Repository
                 bankAccounts.Add(ConvertDataTableRowToBankAccount(row));
             }
             return bankAccounts;
+        }
+
+        public bool updateBankAccount(string IBAN, BankAccount NBA)
+        {
+            foreach(var bk in this.getAllBankAccounts())
+            {
+                if(bk.iban == IBAN)
+                {
+                    bk.name = NBA.name;
+                    bk.dailyLimit = NBA.dailyLimit;
+                    bk.maximumNrTransactions = NBA.maximumNrTransactions;
+                    bk.maximumPerTransaction = NBA.maximumPerTransaction;
+                    bk.blocked = NBA.blocked;
+                    try
+                    {
+                        var sqlParams = new SqlParameter[]
+                        {
+                             new SqlParameter("@iban", IBAN),
+                             new SqlParameter("@custom_name", NBA.name),
+                             new SqlParameter("@daily_limit", NBA.dailyLimit),
+                             new SqlParameter("@max_per_transaction",NBA.maximumPerTransaction),
+                             new SqlParameter("@max_nr_transactions_daily",NBA.maximumNrTransactions),
+                             new SqlParameter("@blocked",NBA.blocked)
+                        };
+                        dataLink.ExecuteNonQuery("UpdateBankAccount", sqlParams);
+                        return true;
+                    }
+                    catch(Exception e)
+                    {
+                        Debug.WriteLine("Could not update bank account");
+                        return false;
+                    }
+
+                }
+            }
+            return false;
         }
     }
 }
