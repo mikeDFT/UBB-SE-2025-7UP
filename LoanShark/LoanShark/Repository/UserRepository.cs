@@ -17,10 +17,10 @@ namespace LoanShark.Repository
     public interface IUserRepository
     {
         User CreateUser(User user);
-        User? GetUserById(int id_user);
+        User? GetUserById(int userId);
         bool UpdateUser(User user);
         bool DeleteUser(int userId);
-        bool CNPExists(CNP cnp);
+        bool CnpExists(Cnp cnp);
         bool EmailExists(Email email);
         bool PhoneNumberExists(PhoneNumber phoneNumber);
     }
@@ -39,7 +39,7 @@ namespace LoanShark.Repository
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@cnp", user.CNP.ToString()),
+                    new SqlParameter("@cnp", user.Cnp.ToString()),
                     new SqlParameter("@first_name", user.FirstName),
                     new SqlParameter("@last_name", user.LastName),
                     new SqlParameter("@email", user.Email.ToString()),
@@ -60,13 +60,13 @@ namespace LoanShark.Repository
             }
         }
 
-        public User? GetUserById(int id_user)
+        public User? GetUserById(int userId)
         {
             try
             {
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@id_user", id_user)
+                    new SqlParameter("@id_user", userId)
                 };
                 DataTable dt = _dataLink.ExecuteReader("GetUserById", parameters);
                 if (dt.Rows.Count == 0)
@@ -75,8 +75,8 @@ namespace LoanShark.Repository
                 }
                 DataRow dr = dt.Rows[0];
                 return new User(
-                    id_user,
-                    new CNP(dr["cnp"].ToString() ?? ""),
+                    userId,
+                    new Cnp(dr["cnp"].ToString() ?? ""),
                     dr["first_name"].ToString() ?? "",
                     dr["last_name"].ToString() ?? "",
                     new Email(dr["email"].ToString() ?? ""),
@@ -98,7 +98,7 @@ namespace LoanShark.Repository
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@id_user", user.UserID),
-                    new SqlParameter("@cnp", user.CNP.ToString()),
+                    new SqlParameter("@cnp", user.Cnp.ToString()),
                     new SqlParameter("@first_name", user.FirstName),
                     new SqlParameter("@last_name", user.LastName),
                     new SqlParameter("@email", user.Email.ToString()),
@@ -134,7 +134,7 @@ namespace LoanShark.Repository
             }
         }
 
-        public bool CNPExists(CNP cnp)
+        public bool CnpExists(Cnp cnp)
         {
             try
             {

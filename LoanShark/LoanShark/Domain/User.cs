@@ -54,11 +54,11 @@ namespace LoanShark.Domain
         }
     }
 
-    public class CNP
+    public class Cnp
     {
         private string _cnp;
 
-        public CNP(string cnp)
+        public Cnp(string cnp)
         {
             if (!IsValid(cnp))
             {
@@ -91,7 +91,7 @@ namespace LoanShark.Domain
             {
                 return false;
             }
-            return obj is CNP cnp &&
+            return obj is Cnp cnp &&
                    _cnp == cnp._cnp;
         }
 
@@ -155,17 +155,17 @@ namespace LoanShark.Domain
     public class User
     {
         public int UserID { get; set; }
-        public CNP CNP { get; set; }
+        public Cnp Cnp { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public Email Email { get; set; }
         public PhoneNumber PhoneNumber { get; set; }
         public HashedPassword HashedPassword { get; set; }
 
-        public User(int userID, CNP cnp, string firstName, string lastName, Email email, PhoneNumber phoneNumber, HashedPassword hashedPassword)
+        public User(int userID, Cnp cnp, string firstName, string lastName, Email email, PhoneNumber phoneNumber, HashedPassword hashedPassword)
         {
             UserID = userID;
-            CNP = cnp;
+            Cnp = cnp;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
