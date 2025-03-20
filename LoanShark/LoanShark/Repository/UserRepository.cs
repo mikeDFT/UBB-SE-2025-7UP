@@ -175,7 +175,7 @@ namespace LoanShark.Repository
                 {
                     new SqlParameter("@email", email.ToString())
                 };
-                DataTable dt = _dataLink.ExecuteReader("GetUserByCnp", parameters);
+                DataTable dt = _dataLink.ExecuteReader("GetUserByEmail", parameters);
                 if (dt.Rows.Count == 0)
                 {
                     return null;
@@ -206,7 +206,7 @@ namespace LoanShark.Repository
                 {
                     new SqlParameter("@phone_number", phoneNumber.ToString())
                 };
-                DataTable dt = _dataLink.ExecuteReader("GetUserByCnp", parameters);
+                DataTable dt = _dataLink.ExecuteReader("GetUserByPhoneNumber", parameters);
                 if (dt.Rows.Count == 0)
                 {
                     return null;
