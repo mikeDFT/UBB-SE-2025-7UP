@@ -11,7 +11,26 @@ namespace LoanShark.Domain
         // for the hashed_password and password_salt, we will allways fetch from the database for security reasons
         private Dictionary<string, string?>? userData;
         
-        public UserSession()
+        private static UserSession? instance;
+        private static readonly object lockObject = new object();
+        
+        public static UserSession Instance
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    if (instance == null)
+                    {
+                        instance = new UserSession();
+                    }
+                    return instance;
+                }
+            }
+        }
+        
+        // Make constructors private to prevent external instantiation
+        private UserSession()
         {
             this.userData = new Dictionary<string, string?>();
             this.userData.Add("id_user", null);
@@ -22,16 +41,21 @@ namespace LoanShark.Domain
             this.userData.Add("phone_number", null);
             Debug.Print("Null UserSession created");
         }
-
-        public UserSession(string id_user, string cnp, string first_name, string last_name, string email, string phone_number)
+        
+        // Create a method to initialize user data
+        public void Initialize(string id_user, string cnp, string first_name, string last_name, string email, string phone_number)
         {
-            this.userData = new Dictionary<string, string?>();
-            this.userData.Add("id_user", id_user);
-            this.userData.Add("cnp", cnp);
-            this.userData.Add("first_name", first_name);
-            this.userData.Add("last_name", last_name);
-            this.userData.Add("email", email);
-            this.userData.Add("phone_number", phone_number);
+            if (this.userData == null)
+            {
+                this.userData = new Dictionary<string, string?>();
+            }
+            
+            this.userData["id_user"] = id_user;
+            this.userData["cnp"] = cnp;
+            this.userData["first_name"] = first_name;
+            this.userData["last_name"] = last_name;
+            this.userData["email"] = email;
+            this.userData["phone_number"] = phone_number;
             Debug.Print("UserSession instantiated with given values");
         }
 
