@@ -117,7 +117,6 @@ namespace LoanShark.ViewModel
                 _bankAccountService = new BankAccountService();
                 LoadBankAccount(iban);
                 BankAccount bk = _bankAccount;
-                Debug.WriteLine(bk.name);
 
                 AccountName = bk.name;
                 DailyLimit = bk.dailyLimit;
