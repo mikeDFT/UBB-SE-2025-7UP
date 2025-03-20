@@ -62,6 +62,13 @@ namespace LoanShark.View
                 passwordBox.Focus(FocusState.Programmatic);
             }
         }
+        
+        public void SignUpButtonHandler(object sender, RoutedEventArgs e)
+        {
+            // navigate to the sign up window
+            // todo implementation when merging
+            return;
+        }
 
         private void OpenMainPageWindow() // opens the main page window and closes the login window
         {

@@ -21,6 +21,10 @@
                    Visibility="{x:Bind viewModel.IsErrorVisible, Mode=OneWay}" 
                    TextWrapping="Wrap" Width="250"/>
         <Button x:Name="loginButton" Click="LoginButtonHandler" HorizontalAlignment="Center" Width="100">Login</Button>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5" Margin="0,30,0,0">
+            <TextBlock Text="Don't have an account?" VerticalAlignment="Center"/>
+            <HyperlinkButton Content="Sign up" Click="SignUpButtonHandler"/>
+        </StackPanel>
     </StackPanel>
 
 </Window>
