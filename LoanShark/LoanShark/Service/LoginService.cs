@@ -34,6 +34,20 @@ namespace LoanShark.Service
                 return false;
             }
         }
+
+        public void InstantiateUserSessionAfterLogin(string email) 
+        {
+            DataTable dt = this.repo.GetUserInfoAfterLogin(email);
+
+            UserSession.Instance.Initialize(
+                dt.Rows[0]["id_user"]?.ToString() ?? string.Empty,
+                dt.Rows[0]["cnp"]?.ToString() ?? string.Empty,
+                dt.Rows[0]["first_name"]?.ToString() ?? string.Empty,
+                dt.Rows[0]["last_name"]?.ToString() ?? string.Empty,
+                dt.Rows[0]["email"]?.ToString() ?? string.Empty,
+                dt.Rows[0]["phone_number"]?.ToString() ?? string.Empty
+            );
+        }
     }
 }
 

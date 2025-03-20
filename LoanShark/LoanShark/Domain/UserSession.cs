@@ -23,7 +23,7 @@ namespace LoanShark.Domain
                     if (instance == null)
                     {
                         instance = new UserSession();
-                        Debug.Print("UserSession instance created");
+                        Debug.Print("Empty UserSession instance created");
                     }
                     return instance;
                 }
@@ -40,7 +40,6 @@ namespace LoanShark.Domain
             this.userData.Add("last_name", null);
             this.userData.Add("email", null);
             this.userData.Add("phone_number", null);
-            Debug.Print("Null UserSession created");
         }
 
         // Create a method to initialize user data

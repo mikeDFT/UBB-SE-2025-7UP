@@ -28,5 +28,21 @@ namespace LoanShark.Repository
             return dt;
         } 
 
+        public DataTable GetUserInfoAfterLogin(string email)
+        {
+            DataTable dt = new DataTable();
+            SqlParameter[] sqlParams = 
+            {
+                new SqlParameter("@email", email)
+            };
+            dt = DataLink.Instance.ExecuteReader("GetUserInfoAfterLogin", sqlParams);
+
+            if (dt.Rows.Count == 0)
+            {
+                throw new Exception($"User with the email {email} does NOT exist.");
+            }
+
+            return dt;
+        }
     }
 }

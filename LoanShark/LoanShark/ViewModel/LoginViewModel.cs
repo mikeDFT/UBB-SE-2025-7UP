@@ -87,6 +87,11 @@ namespace LoanShark.ViewModel
             return isValid;
         }
 
+        public void InstantiateUserSessionAfterLogin(string email)
+        {
+            this.loginService.InstantiateUserSessionAfterLogin(email);
+        }
+
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -50,6 +50,7 @@ namespace LoanShark.View
             {
                 // navigate to the main window
                 Debug.Print("Login successful");
+                this.viewModel.InstantiateUserSessionAfterLogin(email);
                 OpenMainPageWindow();
             }
             else
