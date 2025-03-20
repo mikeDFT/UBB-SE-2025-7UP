@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using LoanShark.Data;
 using LoanShark.Domain;
-using LoanShark.Repository;
+using LoanShark.Service;
 using Microsoft.UI.Xaml;
 
 namespace LoanShark.ViewModel
@@ -17,13 +16,13 @@ namespace LoanShark.ViewModel
     {
         private string? welcomeText;
         private ObservableCollection<BankAccount> userBankAccounts;
-        private readonly LoginRepository repository;
+        private readonly MainPageService service;
         
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public MainPageViewModel()
         {
-            repository = new LoginRepository();
+            this.service = new MainPageService();
             userBankAccounts = new ObservableCollection<BankAccount>();
             InitializeWelcomeText();
             LoadUserBankAccounts();
@@ -79,34 +78,29 @@ namespace LoanShark.ViewModel
                 }
 
                 int idUser = int.Parse(userId);
-                DataTable bankAccountsData = await repository.GetUserBankAccounts(idUser);
-
-                userBankAccounts.Clear();
-                foreach (DataRow row in bankAccountsData.Rows)
+                
+                try
                 {
-                    string iban = row["iban"]?.ToString() ?? string.Empty;
-                    string currency = row["currency"]?.ToString() ?? string.Empty;
-                    decimal amount = row["amount"] != DBNull.Value ? Convert.ToDecimal(row["amount"]) : 0;
-                    string customName = row["custom_name"]?.ToString() ?? $"Account {userBankAccounts.Count + 1}";
-                    decimal dailyLimit = row["daily_limit"] != DBNull.Value ? Convert.ToDecimal(row["daily_limit"]) : 0;
-                    decimal maxPerTransaction = row["max_per_transaction"] != DBNull.Value ? Convert.ToDecimal(row["max_per_transaction"]) : 0;
-                    int maxNrTransactionsDaily = row["max_nr_transactions_daily"] != DBNull.Value ? Convert.ToInt32(row["max_nr_transactions_daily"]) : 0;
-                    bool blocked = row["blocked"] != DBNull.Value ? Convert.ToBoolean(row["blocked"]) : false;
+                    UserBankAccounts = await this.service.GetUserBankAccounts(idUser);
                     
-                    userBankAccounts.Add(new BankAccount(iban, idUser, amount, currency, customName, dailyLimit, maxPerTransaction, maxNrTransactionsDaily, blocked));
+                    if (UserBankAccounts.Count == 0)
+                    {
+                        // Add a placeholder or default message if no accounts found
+                        UserBankAccounts.Add(new BankAccountMessage("No accounts found", "Please add a bank account"));
+                    }
                 }
-
-                if (userBankAccounts.Count == 0)
+                catch (Exception ex)
                 {
-                    // Add a placeholder or default message if no accounts found
-                    userBankAccounts.Add(new BankAccountMessage("No accounts found", "Please add a bank account"));
+                    Debug.Print($"Error loading bank accounts from service: {ex.Message}");
+                    // Add a placeholder or error message
+                    userBankAccounts.Clear();
+                    userBankAccounts.Add(new BankAccountMessage("Error", "Could not load bank accounts"));
+                    OnPropertyChanged(nameof(UserBankAccounts));
                 }
-
-                OnPropertyChanged(nameof(UserBankAccounts));
             }
             catch (Exception ex)
             {
-                Debug.Print($"Error loading bank accounts: {ex.Message}");
+                Debug.Print($"Error in LoadUserBankAccounts: {ex.Message}");
                 // Add a placeholder or error message
                 userBankAccounts.Clear();
                 userBankAccounts.Add(new BankAccountMessage("Error", "Could not load bank accounts"));
