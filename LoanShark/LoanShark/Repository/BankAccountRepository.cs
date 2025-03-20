@@ -20,6 +20,8 @@ namespace LoanShark.Repository
 
         bool addBankAccount(BankAccount bankAccount);
         bool removeBankAccount(string IBAN);
+
+        List<string> getCurrencies();
     }
 
     class BankAccountRepository : IBankAccountRepository
@@ -146,6 +148,22 @@ namespace LoanShark.Repository
                 bankAccounts.Add(ConvertDataTableRowToBankAccount(row));
             }
             return bankAccounts;
+        }
+
+        public List<string> ConvertDataTableToCurrencyList(DataTable dataTable)
+        {
+            List<string> currencies = new List<string>();
+            foreach(DataRow row in dataTable.Rows)
+            {
+                currencies.Add(Convert.ToString(row["name"]));
+            }
+            return currencies;
+        }
+
+        public List<string> getCurrencies()
+        {
+            DataTable dataTable = dataLink.ExecuteReader("GetCurrencies");
+            return ConvertDataTableToCurrencyList(dataTable);
         }
     }
 }

@@ -91,5 +91,10 @@ namespace LoanShark.Service
                     return finalIBAN;
             }
         }
+
+        public List<string> getCurrencies()
+        {
+            return this._bankAccountRepository.getCurrencies();
+        }
     }
 }
