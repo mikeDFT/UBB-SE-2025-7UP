@@ -70,7 +70,6 @@ namespace LoanShark.Data
         {
             try
             {
-                OpenConnection();
                 using (SqlCommand command = new SqlCommand(storedProcedure, sqlConnection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
@@ -93,10 +92,6 @@ namespace LoanShark.Data
             {
                 throw new Exception($"Error - ExecutingScalar: {ex.Message}");
             }
-            finally
-            {
-                CloseConnection();
-            }
         }
 
 
@@ -105,7 +100,6 @@ namespace LoanShark.Data
         {
             try
             {
-                OpenConnection();
                 using (SqlCommand command = new SqlCommand(storedProcedure, sqlConnection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
@@ -127,10 +121,6 @@ namespace LoanShark.Data
             {
                 throw new Exception($"Error - ExecuteReader: {ex.Message}");
             }
-            finally
-            {
-                CloseConnection();
-            }
         }
 
 
@@ -139,7 +129,6 @@ namespace LoanShark.Data
         {
             try
             {
-                OpenConnection();
                 using (SqlCommand command = new SqlCommand(storedProcedure, sqlConnection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
@@ -155,10 +144,6 @@ namespace LoanShark.Data
             catch (Exception ex)
             {
                 throw new Exception($"Error - ExecuteNonQuery: {ex.Message}");
-            }
-            finally
-            {
-                CloseConnection();
             }
         }
 

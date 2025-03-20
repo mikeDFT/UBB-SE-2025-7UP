@@ -40,7 +40,7 @@ namespace LoanShark.View
 
         private void ExitLoanSharkButtonHandler(object sender, RoutedEventArgs e)
         {
-            Application.Current.Exit();
+            this.Close();
         }
     }
 

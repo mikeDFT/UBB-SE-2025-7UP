@@ -33,17 +33,7 @@ namespace LoanShark
 
         private void myButton_Click(object sender, RoutedEventArgs e)
         {
-            myButton.Content = AppConfig.GetConnectionString("MyLocalDb");
-            try
-            {
-                DataLink dataLink = new DataLink();
-                dataLink.OpenConnection();
-                dataLink.CloseConnection();
-            }
-            catch (Exception ex)
-            {
-                Debug.Print(ex.Message);
-            }
+            Debug.Print("Hello World");
         }
     }
 }

@@ -7,12 +7,7 @@ namespace LoanShark.Repository
 {
     class LoginRepository
     {
-        private readonly DataLink dataLink;
-
-        public LoginRepository()
-        {
-            this.dataLink = new DataLink();
-        }
+        public LoginRepository(){}
 
         // Returns a DataTable with the user credentials, they will be accessible from dt.Rows[0]["hashed_password"] and dt.Rows[0]["passowrd_salt"]
         // If the user with the given email is not found, an exception will be thrown
@@ -23,7 +18,7 @@ namespace LoanShark.Repository
             {
                 new SqlParameter("@email", email)
             };
-            dt = dataLink.ExecuteReader("GetUserCredentials", sqlParams);
+            dt = DataLink.Instance.ExecuteReader("GetUserCredentials", sqlParams);
 
             if (dt.Rows.Count == 0)
             {

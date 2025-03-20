@@ -63,8 +63,8 @@ namespace LoanShark.View
 
         private void OpenMainPageWindow() // opens the main page window and closes the login window
         {
+            // this will trigger the LoginWindos_OnLoginSuccess event in App.xaml.cs
             this.LoginSuccess?.Invoke(this, EventArgs.Empty);
-            this.Close();
         }
 
         private void EmailBox_KeyDown(object sender, KeyRoutedEventArgs e)
