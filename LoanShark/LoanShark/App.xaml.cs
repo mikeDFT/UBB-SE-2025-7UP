@@ -18,7 +18,7 @@ using Microsoft.UI.Xaml.Shapes;
 using LoanShark.View;
 using LoanShark.Data;
 using System.Diagnostics;
-
+using LoanShark.Helper;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
@@ -49,7 +49,7 @@ namespace LoanShark
             m_loginWindow = new LoginWindow();
             
             // Register this window with MainPageWindow's tracking system
-            MainPageWindow.RegisterWindow(m_loginWindow);
+            WindowManager.RegisterWindow(m_loginWindow);
             
             m_loginWindow.LoginSuccess += LoginWindow_OnLoginSuccess;
             m_loginWindow.Activate();
