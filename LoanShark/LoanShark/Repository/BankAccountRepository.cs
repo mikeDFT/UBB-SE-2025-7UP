@@ -84,8 +84,9 @@ namespace LoanShark.Repository
 
         public bool addBankAccount(BankAccount bankAccount)
         {
-            try
-            {
+            //           try
+            //           {
+            Debug.WriteLine(bankAccount.iban);
                 var sqlParams = new SqlParameter[]
                 {
                     new SqlParameter("@iban", bankAccount.iban),
@@ -100,12 +101,12 @@ namespace LoanShark.Repository
                 };
                 dataLink.ExecuteNonQuery("AddBankAccount", sqlParams);
                 return true;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Oopsie on add bank account repo");
-                return false;
-            }
+  //          }
+  //          catch (Exception e)
+  //         {
+  //              Debug.WriteLine("Oopsie on add bank account repo");
+  //              return false;
+  //          }
         }
         
         public bool removeBankAccount(string IBAN)
@@ -155,7 +156,7 @@ namespace LoanShark.Repository
             List<string> currencies = new List<string>();
             foreach(DataRow row in dataTable.Rows)
             {
-                currencies.Add(Convert.ToString(row["name"]));
+                currencies.Add(Convert.ToString(row["currency_name"]));
             }
             return currencies;
         }

@@ -14,6 +14,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using System.Windows;
+using LoanShark.ViewModel;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -25,25 +26,20 @@ namespace LoanShark.View
     /// </summary>
     public partial class BankAccountCreateView : Window
     {
-        public ObservableCollection<ItemModel> Items { get; set; }
-
-        public BankAccountCreateView()
+        private BankAccountCreateViewModel viewModel;
+        public BankAccountCreateView(int userID)
         {
             this.InitializeComponent();
-            Items = new ObservableCollection<ItemModel>
-            {
-                new ItemModel { Name = "Item 1", IsChecked = false },
-                new ItemModel { Name = "Item 2", IsChecked = true },
-                new ItemModel { Name = "Item 3", IsChecked = false },
-                new ItemModel { Name = "Item 4", IsChecked = true },
-                new ItemModel { Name = "Item 5", IsChecked = false }
-            };
+            viewModel = new BankAccountCreateViewModel(userID);
+            MainGrid.DataContext = viewModel;
         }
-    }
 
-    public class ItemModel
-    {
-        public string Name { get; set; }
-        public bool IsChecked { get; set; }
+        public void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+           if(sender is RadioButton radioButton)
+           {
+                viewModel.SelectedItem = radioButton.Content.ToString();    
+           }
+        }
     }
 }

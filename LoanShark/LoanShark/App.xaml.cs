@@ -42,8 +42,8 @@ namespace LoanShark
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            //m_window = new BankAccountCreateView();
-            m_window = new BankAccountDeleteView();
+            m_window = new BankAccountCreateView(2);
+            //m_window = new BankAccountDeleteView();
             //m_window = new BankAccountListView();
             //m_window = new BankAccountVerifyView();
             //m_window = new BankAccountDetailsView();
