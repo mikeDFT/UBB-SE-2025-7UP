@@ -11,9 +11,28 @@ using LoanShark.Repository;
 
 namespace LoanShark.ViewModel
 {
-    class TransactionsVM
+    public class TransactionsVM
     {
-        public TransactionsVM() { }
+        string iban;
+        public TransactionsVM(string iban) {
+
+            this.iban = iban;
+        }
+
+        public ObservableCollection<string> retrieveForMenu()
+        {
+            ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
+            ObservableCollection<String> TransactionsForMenu = new ObservableCollection<string>();
+
+            foreach (var transaction in Transactions)
+            {
+                if (transaction.SenderIban == this.iban)
+                {
+                    TransactionsForMenu.Add(transaction.tostringForMenu());
+                }
+            }
+            return TransactionsForMenu;
+        }
 
         public ObservableCollection<string> FilterByTypeForMenu(string type)
         {
@@ -22,7 +41,7 @@ namespace LoanShark.ViewModel
 
             foreach (var transaction in Repo.getTransactionsNormal())
             {
-                if (transaction.TransactionType == type)
+                if (transaction.TransactionType == type && transaction.SenderIban == this.iban)
                 {
                     TransactionsForMenu.Add(transaction.tostringForMenu());
                 }
@@ -38,7 +57,7 @@ namespace LoanShark.ViewModel
 
             foreach (var transaction in Repo.getTransactionsNormal())
             {
-                if (transaction.TransactionType == type)
+                if (transaction.TransactionType == type && transaction.SenderIban == this.iban)
                 {
                     TransactionsDetailed.Add(transaction.tostringDetailed());
                 }
@@ -49,23 +68,25 @@ namespace LoanShark.ViewModel
         public ObservableCollection<string> SortByDate(string order)
         {
 
-            if (order == "ascending")
+            if (order == "Ascending")
             {
                 ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
                 ObservableCollection<String> TransactionsSorted = new ObservableCollection<string>();
                 foreach (var transaction in Repo.getTransactionsNormal().OrderBy(x => x.TransactionDate))
                 {
-                    TransactionsSorted.Add(transaction.tostringForMenu());
+                    if (transaction.SenderIban == this.iban)
+                        TransactionsSorted.Add(transaction.tostringForMenu());
                 }
                 return TransactionsSorted;
             }
-            else if (order == "descending")
+            else if (order == "Descending")
             {
                 ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
                 ObservableCollection<String> TransactionsSorted = new ObservableCollection<string>();
                 foreach (var transaction in Repo.getTransactionsNormal().OrderByDescending(x => x.TransactionDate))
                 {
-                    TransactionsSorted.Add(transaction.tostringForMenu());
+                    if (transaction.SenderIban == this.iban)
+                        TransactionsSorted.Add(transaction.tostringForMenu());
                 }
                 return TransactionsSorted;
 
@@ -85,10 +106,17 @@ namespace LoanShark.ViewModel
             csv.AppendLine("Transaction ID,Sender IBAN,Receiver IBAN,Transaction Date,Sender Currency,Receiver Currency,Sender Amount,Receiver Amount,Transaction Type,Transaction Description");
             foreach (var transaction in Transactions)
             {
-                csv.AppendLine(transaction.tostringCSV());
+                if (transaction.SenderIban == this.iban)
+                    csv.AppendLine(transaction.tostringCSV());
             }
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "transactions.csv");
             System.IO.File.WriteAllText(filePath, csv.ToString());
+        }
+
+        public Transaction GetTransactionByMenuString(string menuString)
+        {
+            ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
+            return Transactions.FirstOrDefault(t => t.tostringForMenu() == menuString);
         }
     }
 }

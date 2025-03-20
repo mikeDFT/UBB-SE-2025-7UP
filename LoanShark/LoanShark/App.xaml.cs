@@ -46,8 +46,9 @@ namespace LoanShark
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             // Create and activate the main window
-            TransactionsVM transactionsVM = new TransactionsVM();
-            transactionsVM.CreateCSV();
+            TransactionsVM tvm = new TransactionsVM("RO0000111");
+            TransactionHistory th = new TransactionHistory(tvm);
+            th.Activate();
         }
 
         private Window? m_window;

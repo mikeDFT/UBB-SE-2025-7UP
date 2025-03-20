@@ -18,6 +18,9 @@ using LoanShark.Data;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Diagnostics;
+using LoanShark.Repository;
+using LoanShark.ViewModel;
+using Microsoft.UI.Xaml.Controls;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -30,56 +33,67 @@ namespace LoanShark
     public sealed partial class TransactionHistory : Window
     {
 
-        public ObservableCollection<string> TransactionsForMenu { get; set; }
-        public ObservableCollection<string> TransactionsDetailed { get; set; }
-        public TransactionHistory()
+        public TransactionsVM transactionsViewModel;
+        public ObservableCollection<string> currentList;
+        public TransactionHistory(TransactionsVM transactionsViewModel)
         {
+            this.transactionsViewModel = transactionsViewModel;
+            currentList = transactionsViewModel.retrieveForMenu();
             this.InitializeComponent();
-
-            this.TransactionsForMenu = new ObservableCollection<string>();
-            this.TransactionsDetailed = new ObservableCollection<string>();
-            try
-            {
-                // Create an instance of the DataLink class
-                DataLink dataLink = new DataLink();
-
-                // Define the stored procedure name
-                string storedProcedure = "GetTransactionsByType";
-
-                // Define the parameters for the stored procedure, if any
-                SqlParameter[] parameters = new SqlParameter[]
-                {
-                    new SqlParameter("@TransactionType", SqlDbType.NVarChar) { Value = "Payment" }
-                };
-
-                // Call the ExecuteReader method
-                DataTable result = dataLink.ExecuteReader(storedProcedure, parameters);
-
-                // Process the result
-                foreach (DataRow row in result.Rows)
-                {
-                    Dictionary<string, object> hashMap = new Dictionary<string, object>();
-                    foreach (DataColumn column in result.Columns)
-                    {
-                        hashMap.Add(column.ColumnName, row[column]);
-                    }
-
-                    Transaction transaction = new Transaction(hashMap);
-                    this.TransactionsForMenu.Add(transaction.tostringForMenu());
-                    this.TransactionsDetailed.Add(transaction.tostringDetailed());
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-
-            this.InitializeComponent();
-
         }
 
-        
+        private void ExportToCSV_Click(object sender, RoutedEventArgs e)
+        {
+            transactionsViewModel.CreateCSV();
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Export Complete",
+                Content = "Transactions exported to CSV on Desktop.",
+                CloseButtonText = "Ok",
+                XamlRoot = this.Content.XamlRoot
+            };
+            _ = dialog.ShowAsync();
+        }
 
+        private void SortAscending_Click(object sender, RoutedEventArgs e)
+        {
+            currentList = transactionsViewModel.SortByDate("Ascending");
+            ColorListBox.ItemsSource = currentList;
+        }
+
+        private void SortDescending_Click(object sender, RoutedEventArgs e)
+        {
+            currentList = transactionsViewModel.SortByDate("Descending");
+            ColorListBox.ItemsSource = currentList;
+        }
+
+        private void TransactionTypeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string typedText = (sender as TextBox).Text;
+            if (!string.IsNullOrEmpty(typedText))
+            {
+                currentList = transactionsViewModel.FilterByTypeForMenu(typedText);
+                ColorListBox.ItemsSource = currentList;
+            }
+            else
+            {
+                currentList = transactionsViewModel.retrieveForMenu();
+                ColorListBox.ItemsSource = currentList;
+            }
+        }
+
+        private void ColorListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ColorListBox.SelectedItem != null)
+            {
+                string selectedTransactionForMenu = ColorListBox.SelectedItem as string;
+                // Retrieve the detailed information of the selected transaction
+                var selectedTransaction = transactionsViewModel.GetTransactionByMenuString(selectedTransactionForMenu);
+                string detailedTransaction = selectedTransaction.tostringDetailed();
+                TransactionDetails transactionDetailsWindow = new TransactionDetails(detailedTransaction);
+                transactionDetailsWindow.Activate();
+            }
+        }
 
     }
 }
