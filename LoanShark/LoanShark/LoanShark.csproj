@@ -39,9 +39,6 @@
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250228001" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repository\" />
-  </ItemGroup>
 
   <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
@@ -61,5 +58,37 @@
   </PropertyGroup>
   <ItemGroup>
     <PRIResource Remove="NewFolder\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="View\BankAccountCreateView.xaml" />
+    <None Remove="View\BankAccountDeleteView.xaml" />
+    <None Remove="View\BankAccountDetailsView.xaml" />
+    <None Remove="View\BankAccountListView.xaml" />
+    <None Remove="View\BankAccountVerifyView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\BankAccountVerifyView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\BankAccountListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\BankAccountDetailsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\BankAccountDeleteView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\BankAccountCreateView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>
