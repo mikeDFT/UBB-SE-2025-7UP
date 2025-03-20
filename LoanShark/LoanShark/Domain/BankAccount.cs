@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LoanShark.Domain
 {
-    class BankAccount
+    public class BankAccount
     {
         public string iban {  get; set; }
         public string currency { get; set; }

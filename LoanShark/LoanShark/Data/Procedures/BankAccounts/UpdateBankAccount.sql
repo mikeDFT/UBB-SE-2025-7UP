@@ -9,9 +9,9 @@ AS
 BEGIN
 	UPDATE bank_accounts
 	SET custom_name = @custom_name, 
-	daily_limit = @daily_limt,
+	daily_limit = @daily_limit,
 	max_per_transaction = @max_per_transaction,
-	max_nr_transaction_daily = @max_nr_transaction_daily,
+	max_nr_transactions_daily = @max_nr_transactions_daily,
 	blocked = @blocked
 	WHERE iban = @iban
 END

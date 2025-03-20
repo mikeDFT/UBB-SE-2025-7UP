@@ -64,7 +64,13 @@
     <None Remove="View\BankAccountDeleteView.xaml" />
     <None Remove="View\BankAccountDetailsView.xaml" />
     <None Remove="View\BankAccountListView.xaml" />
+    <None Remove="View\BankAccountUpdateView.xaml" />
     <None Remove="View\BankAccountVerifyView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\BankAccountUpdateView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="View\BankAccountVerifyView.xaml">

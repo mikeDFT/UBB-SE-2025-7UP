@@ -151,38 +151,25 @@ namespace LoanShark.Repository
 
         public bool updateBankAccount(string IBAN, BankAccount NBA)
         {
-            foreach(var bk in this.getAllBankAccounts())
+            try
             {
-                if(bk.iban == IBAN)
+                var sqlParams = new SqlParameter[]
                 {
-                    bk.name = NBA.name;
-                    bk.dailyLimit = NBA.dailyLimit;
-                    bk.maximumNrTransactions = NBA.maximumNrTransactions;
-                    bk.maximumPerTransaction = NBA.maximumPerTransaction;
-                    bk.blocked = NBA.blocked;
-                    try
-                    {
-                        var sqlParams = new SqlParameter[]
-                        {
                              new SqlParameter("@iban", IBAN),
                              new SqlParameter("@custom_name", NBA.name),
                              new SqlParameter("@daily_limit", NBA.dailyLimit),
                              new SqlParameter("@max_per_transaction",NBA.maximumPerTransaction),
                              new SqlParameter("@max_nr_transactions_daily",NBA.maximumNrTransactions),
                              new SqlParameter("@blocked",NBA.blocked)
-                        };
-                        dataLink.ExecuteNonQuery("UpdateBankAccount", sqlParams);
-                        return true;
-                    }
-                    catch(Exception e)
-                    {
-                        Debug.WriteLine("Could not update bank account");
-                        return false;
-                    }
-
-                }
+                };
+                dataLink.ExecuteNonQuery("UpdateBankAccount", sqlParams);
+                return true;
             }
-            return false;
+            catch (Exception e)
+            {
+                Debug.WriteLine("Could not update bank account");
+                return false;
+            }
         }
     }
 }

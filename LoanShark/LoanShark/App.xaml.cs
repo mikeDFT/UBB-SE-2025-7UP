@@ -16,6 +16,8 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Shapes;
 using LoanShark.View;
+using LoanShark.Domain;
+using System.Diagnostics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -34,6 +36,7 @@ namespace LoanShark
         public App()
         {
             this.InitializeComponent();
+            Debug.Print(BCrypt.Net.BCrypt.GenerateSalt(10));
         }
 
         /// <summary>
@@ -43,11 +46,12 @@ namespace LoanShark
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             //m_window = new BankAccountCreateView();
-            m_window = new BankAccountDeleteView();
+            //m_window = new BankAccountDeleteView();
             //m_window = new BankAccountListView();
             //m_window = new BankAccountVerifyView();
             //m_window = new BankAccountDetailsView();
             //m_window = new MainWindow();
+            m_window = new BankAccountUpdateView("RO123456789");
             m_window.Activate();
         }
 
