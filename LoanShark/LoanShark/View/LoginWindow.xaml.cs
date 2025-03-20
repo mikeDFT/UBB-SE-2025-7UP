@@ -15,6 +15,7 @@ using Microsoft.UI.Xaml.Navigation;
 using System.Diagnostics;
 using LoanShark.ViewModel;
 using System.Threading.Tasks;
+using LoanShark.Helper;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -33,6 +34,9 @@ namespace LoanShark.View
         {
             this.InitializeComponent();
             this.viewModel = new LoginViewModel();
+
+            // Register this window with the WindowManager
+            WindowManager.RegisterWindow(this);
         }
 
         public async void LoginButtonHandler(object sender, RoutedEventArgs e) 

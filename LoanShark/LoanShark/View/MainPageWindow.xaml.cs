@@ -28,6 +28,8 @@ namespace LoanShark.View
     /// </summary>
     public sealed partial class MainPageWindow : Window
     {
+        public event EventHandler? LogOut;
+
         public MainPageViewModel ViewModel { get; private set; }
         
         public MainPageWindow()
@@ -49,7 +51,11 @@ namespace LoanShark.View
 
         private void LogOutButtonHandler(object sender, RoutedEventArgs e)
         {
-            return;
+                // First, invoke the LogOut event
+                this.LogOut?.Invoke(this, EventArgs.Empty);
+
+                // Only after all handlers have completed, invalidate the session
+                UserSession.Instance.InvalidateUserSession();
         }
 
         private void ExitLoanSharkButtonHandler(object sender, RoutedEventArgs e)

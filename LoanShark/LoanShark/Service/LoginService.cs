@@ -3,6 +3,7 @@ using LoanShark.Repository;
 using System;
 using System.Data;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace LoanShark.Service
 {
@@ -30,8 +31,9 @@ namespace LoanShark.Service
 
                 return userPassword.Equals(inputPassword);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.Print($"Error validating user credentials: {ex.Message}");
                 return false;
             }
         }
