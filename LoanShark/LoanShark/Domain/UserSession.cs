@@ -7,7 +7,7 @@ namespace LoanShark.Domain
     class UserSession
     {
         // a UserSession will have the following keys stored in the dictionary:
-        // id_user, cnp, first_name, last_name, email, phone_number
+        // id_user, cnp, first_name, last_name, email, phone_number, current_bank_account_iban
         // for the hashed_password and password_salt, we will allways fetch from the database for security reasons
         private Dictionary<string, string?>? userData;
         
@@ -40,10 +40,11 @@ namespace LoanShark.Domain
             this.userData.Add("last_name", null);
             this.userData.Add("email", null);
             this.userData.Add("phone_number", null);
+            this.userData.Add("current_bank_account_iban", null);
         }
 
         // Create a method to initialize user data
-        public void Initialize(string id_user, string cnp, string first_name, string last_name, string email, string phone_number)
+        public void Initialize(string id_user, string cnp, string first_name, string last_name, string email, string phone_number, string iban)
         {
             if (this.userData == null)
             {
@@ -56,6 +57,7 @@ namespace LoanShark.Domain
             this.userData["last_name"] = last_name;
             this.userData["email"] = email;
             this.userData["phone_number"] = phone_number;
+            this.userData["current_bank_account_iban"] = iban;
             Debug.Print("UserSession instantiated with given values");
         }
 
