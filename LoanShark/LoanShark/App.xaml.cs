@@ -45,7 +45,7 @@ namespace LoanShark
         {
             //m_window = new LoanView(123); // the argument is the userID
             //m_window = new MainWindow();
-            m_window = new DeleteAccountView(123);
+            m_window = new UserInformationView(143);
             m_window.Activate();
         }
 

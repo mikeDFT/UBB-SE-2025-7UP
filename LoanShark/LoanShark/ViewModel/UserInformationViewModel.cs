@@ -1,5 +1,7 @@
 ﻿using LoanShark.Domain;
 using LoanShark.Service;
+using LoanShark.View;
+using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -234,6 +236,8 @@ namespace LoanShark.ViewModel
 
         public ICommand CloseCommand { get; }
         public ICommand UpdateCommand { get; }
+
+        public ICommand DeleteCommand { get; }
         public Action? CloseAction { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -246,6 +250,7 @@ namespace LoanShark.ViewModel
         public UserInformationViewModel(int userId)
         {
             UpdateCommand = new RelayCommand(UpdateUser);
+            DeleteCommand = new RelayCommand(DeleteUser);
             CloseCommand = new RelayCommand(() => CloseAction?.Invoke());
             user = _userService.GetUserInformation(userId);
             if (user != null)
@@ -376,6 +381,16 @@ namespace LoanShark.ViewModel
 
             // Close the window
             CloseCommand.Execute(null);
+        }
+
+        public void DeleteUser()
+        {
+            if (user == null)
+            {
+                return;
+            }
+            DeleteAccountView m_window = new DeleteAccountView(user.UserID);
+            m_window.Activate();
         }
     }
 }
