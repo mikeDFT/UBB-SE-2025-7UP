@@ -39,6 +39,7 @@ namespace LoanShark
         /// </summary>
         public App()
         {
+            Debug.Print("Application is now opening...");
             this.InitializeComponent();
             DataLink.Instance.OpenConnection();
         }
