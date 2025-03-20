@@ -84,5 +84,15 @@ namespace LoanShark.Service
             );
             _userRepository.CreateUser(user);
         }
+
+        public User? GetUserInformation(int userId)
+        {
+            return _userRepository.GetUserById(userId);
+        }    
+
+        public bool UpdateUser(User user)
+        {
+            return _userRepository.UpdateUser(user);
+        }
     }
 }
