@@ -18,6 +18,7 @@ using Microsoft.UI.Xaml.Shapes;
 using LoanShark.View;
 using LoanShark.Data;
 using System.Diagnostics;
+using LoanShark.Domain;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -45,6 +46,7 @@ namespace LoanShark
         public static void CleanupResources()
         {
             DataLink.Instance.CloseConnection();
+            UserSession.Instance.InvalidateUserSession();
             Debug.Print("Resources cleaned up successfully");
         }
 
