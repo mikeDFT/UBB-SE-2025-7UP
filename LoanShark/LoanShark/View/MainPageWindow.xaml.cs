@@ -43,6 +43,11 @@ namespace LoanShark.View
             // Set the welcome text from ViewModel
             centeredTextField.Text = this.ViewModel.WelcomeText;
         }
+
+        public void CheckBalanceButtonHandler(object sender, RoutedEventArgs e)
+        {
+            // TODO: Implement balance check
+        }
         
         private void AccountsFlipView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
