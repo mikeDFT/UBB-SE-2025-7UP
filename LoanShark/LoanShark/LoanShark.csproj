@@ -66,6 +66,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="View\LoanView.xaml" />
+    <None Remove="View\UserRegistrationView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\UserRegistrationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="View\LoanView.xaml">
