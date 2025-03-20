@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using LoanShark.Domain;
+using Microsoft.UI.Input;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace LoanShark.Service
 {
@@ -21,7 +24,7 @@ namespace LoanShark.Service
             _userRepository = new UserRepository();
         }
 
-        public void DeleteUser(int UserID, string password)
+        public string DeleteUser(int UserID, string password)
         {
             // gets the hashed password and salt from the database for the current user
             // creates a hashed password with the sald from the database for the user inputed password
@@ -30,9 +33,24 @@ namespace LoanShark.Service
             var userInputedPassword = new HashedPassword(password, listParameters[1], true);
             var dataBasePassword = new HashedPassword(listParameters[0], listParameters[1], false);
 
+            // sa il intreb pe alex ce fel de salt imi trebuie
 
-            if( userInputedPassword == dataBasePassword)
+
+            if (userInputedPassword == dataBasePassword)
+            {
                 _userRepository.DeleteUser(UserID);
+
+                // after the user is deleted from the database, he should be logged out of the session
+                // for the moment, it just just exits the whole app
+                // TODO Alex : log out functionality
+                Environment.Exit(0);
+                return "Succes";
+            }
+            else
+            {
+                Debug.WriteLine("Wrong password");
+                return "Wrong password";
+            }
 
         }
     }

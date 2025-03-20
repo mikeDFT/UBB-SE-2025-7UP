@@ -47,6 +47,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250228001" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.8.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.3" />
     <PackageReference Include="System.Security.Permissions" Version="9.0.3" />
@@ -70,7 +71,13 @@
     <PRIResource Remove="NewFolder\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="View\DeleteAccountView.xaml" />
     <None Remove="View\LoanView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\DeleteAccountView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="View\LoanView.xaml">

@@ -27,6 +27,7 @@ namespace LoanShark.Repository
     public class UserRepository: IUserRepository
     {
         private readonly DataLink _dataLink;
+        private UserSession userSession { get; }
         public UserRepository()
         {
             _dataLink = new DataLink();
@@ -113,11 +114,11 @@ namespace LoanShark.Repository
             var parameterList = new SqlParameter[]
             {
                    new SqlParameter("@id_user",userID) ,
-                   new SqlParameter("@password_hash", System.Data.SqlDbType.VarChar){Direction = ParameterDirection.Output},
-                   new SqlParameter("@password_salt", System.Data.SqlDbType.VarChar){Direction = ParameterDirection.Output}
+                   new SqlParameter("@hashed_password", System.Data.SqlDbType.VarChar,255){Direction = ParameterDirection.Output},
+                   new SqlParameter("@password_salt", System.Data.SqlDbType.VarChar,32){Direction = ParameterDirection.Output}
                };
             _dataLink.ExecuteNonQuery("GetHashedPassword", parameterList);
-            string passwordHash = (string)parameterList.First(x=>x.ParameterName == "@password_hash").Value;
+            string passwordHash = (string)parameterList.First(x=>x.ParameterName == "@hashed_password").Value;
             string salt = (string)parameterList.First(x => x.ParameterName == "@password_salt").Value;
 
             string[] list = { passwordHash, salt };
