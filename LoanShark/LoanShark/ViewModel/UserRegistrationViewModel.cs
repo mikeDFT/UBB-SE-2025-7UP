@@ -250,46 +250,37 @@ namespace LoanShark.ViewModel
 
         public void CreateUser()
         {
-            bool hasErrors = false;
             if (string.IsNullOrWhiteSpace(FirstName))
             {
                 FirstNameError = "First name is required";
-                hasErrors = true;
             }
             if (string.IsNullOrWhiteSpace(LastName))
             {
                 LastNameError = "Last name is required";
-                hasErrors = true;
             }
             if (string.IsNullOrWhiteSpace(Cnp))
             {
                 CnpError = "CNP is required";
-                hasErrors = true;
             }
             if (string.IsNullOrWhiteSpace(PhoneNumber))
             {
                 PhoneNumberError = "Phone number is required";
-                hasErrors = true;
             }
             if (string.IsNullOrWhiteSpace(Email))
             {
                 EmailError = "Email is required";
-                hasErrors = true;
             }
             if (string.IsNullOrWhiteSpace(Password))
             {
                 PasswordError = "Password is required";
-                hasErrors = true;
             }
             if (string.IsNullOrWhiteSpace(ConfirmPassword))
             {
                 ConfirmPasswordError = "Confirm password is required";
-                hasErrors = true;
             }
             if (Password != ConfirmPassword)
             {
                 ConfirmPasswordError = "Passwords do not match";
-                hasErrors = true;
             }
 
             //return [lengthOk, uppserCaseOk, lowerCaseOk, numberOk, specialCharOk];
@@ -319,23 +310,30 @@ namespace LoanShark.ViewModel
             if (cnpError != null)
             {
                 CnpError = cnpError;
-                hasErrors = true;
             }
 
             string? emailError = _userService.CheckEmail(-1, Email);
             if (emailError != null)
             {
                 EmailError = emailError;
-                hasErrors = true;
             }
 
             string? phoneNumberError = _userService.CheckPhoneNumber(-1, PhoneNumber);
             if (phoneNumberError != null)
             {
                 PhoneNumberError = phoneNumberError;
-                hasErrors = true;
             }
 
+            List<string> errors = new List<string> {
+                FirstNameError,
+                LastNameError,
+                CnpError,
+                PhoneNumberError,
+                EmailError,
+                PasswordError,
+                ConfirmPasswordError
+            };
+            bool hasErrors = errors.Any(x => x != "");
             if (hasErrors)
             {
                 return;
