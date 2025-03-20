@@ -8,10 +8,30 @@ namespace LoanShark.Data
 {
     class DataLink
     {
+        // Singleton instance
+        private static DataLink? instance;
+        private static readonly object lockObject = new object();
         private SqlConnection sqlConnection;
-        private readonly string connectionString;
+        private readonly string? connectionString;
+        
+        // Singleton accessor
+        public static DataLink Instance
+        {
+            get
+            {
+                lock (lockObject)
+                {
+                    if (instance == null)
+                    {
+                        instance = new DataLink();
+                    }
+                    return instance;
+                }
+            }
+        }
 
-        public DataLink() {
+        // Make constructor private
+        private DataLink() {
             connectionString = AppConfig.GetConnectionString("MyLocalDb");
 
             try {
