@@ -43,6 +43,25 @@ namespace LoanShark.View
             // Set the welcome text from ViewModel
             centeredTextField.Text = this.ViewModel.WelcomeText;
         }
+        
+        private void AccountsFlipView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var flipView = sender as FlipView;
+            if (flipView?.SelectedItem is BankAccount selectedAccount)
+            {
+                // Optional: You can handle the selection change here
+                Debug.Print($"Selected account: {selectedAccount.CustomName}, IBAN: {selectedAccount.IBAN}");
+                
+                try
+                {
+                    UserSession.Instance.SetUserData("current_bank_account_iban", selectedAccount.IBAN);
+                }
+                catch (Exception ex)
+                {
+                    Debug.Print($"Error setting current bank account: {ex.Message}");
+                }
+            }
+        }
 
         private void AccountSettingsButtonHandler(object sender, RoutedEventArgs e)
         {

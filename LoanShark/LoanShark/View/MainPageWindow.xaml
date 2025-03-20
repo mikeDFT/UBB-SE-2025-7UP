@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:domain="using:LoanShark.Domain"
+    xmlns:viewmodel="using:LoanShark.ViewModel"
     mc:Ignorable="d"
     Title="Loan Shark">
 
@@ -44,7 +45,37 @@
                  Width="Auto"
                  TextWrapping="Wrap"
                  TextTrimming="CharacterEllipsis"
-                 VerticalAlignment="Center"
-                 HorizontalAlignment="Center"/>
+                 VerticalAlignment="Top"
+                 HorizontalAlignment="Center"
+                 Margin="0,0,0,20"
+                 FontSize="18"/>
+
+        <!-- FlipView for bank accounts displaying name and IBAN -->
+        <FlipView x:Name="accountsFlipView"
+                  MaxWidth="400" 
+                  Height="270"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center"
+                  SelectionChanged="AccountsFlipView_SelectionChanged"
+                  ItemsSource="{x:Bind ViewModel.UserBankAccounts, Mode=OneWay}">
+            <FlipView.ItemTemplate>
+                <DataTemplate x:DataType="domain:BankAccount">
+                    <Grid Padding="20">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="{x:Bind CustomName}" 
+                                       FontSize="24" 
+                                       FontWeight="Bold"
+                                       Margin="0,0,0,20"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind IBAN}" 
+                                       FontSize="18"
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </FlipView.ItemTemplate>
+        </FlipView>
+
     </Grid>
 </Window>

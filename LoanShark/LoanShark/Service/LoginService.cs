@@ -42,6 +42,12 @@ namespace LoanShark.Service
         {
             DataTable dt_user_info = await this.repo.GetUserInfoAfterLogin(email);
             DataTable dt_bank_accounts = await this.repo.GetUserBankAccounts(int.Parse(dt_user_info.Rows[0]["id_user"]?.ToString() ?? string.Empty));
+            string iban = "";
+
+            if (dt_bank_accounts.Rows.Count > 0)
+            {
+                iban = dt_bank_accounts.Rows[0]["iban"]?.ToString() ?? string.Empty;
+            }
 
             UserSession.Instance.Initialize(
                 dt_user_info.Rows[0]["id_user"]?.ToString() ?? string.Empty,
@@ -50,7 +56,7 @@ namespace LoanShark.Service
                 dt_user_info.Rows[0]["last_name"]?.ToString() ?? string.Empty,
                 dt_user_info.Rows[0]["email"]?.ToString() ?? string.Empty,
                 dt_user_info.Rows[0]["phone_number"]?.ToString() ?? string.Empty,
-                dt_bank_accounts.Rows[0]["iban"]?.ToString() ?? string.Empty
+                iban
             );
         }
     }
