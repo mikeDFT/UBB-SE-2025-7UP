@@ -91,8 +91,18 @@ namespace LoanShark.Domain
 
         public void InvalidateUserSession()
         {
-            this.userData = null;
-            Debug.Print("UserSession invalidated");
+            // Instead of setting to null, create an empty dictionary
+            // This way, any code that accesses it won't crash with null references
+            this.userData = new Dictionary<string, string?>();
+            this.userData.Add("id_user", null);
+            this.userData.Add("cnp", null);
+            this.userData.Add("first_name", null);
+            this.userData.Add("last_name", null);
+            this.userData.Add("email", null);
+            this.userData.Add("phone_number", null);
+            this.userData.Add("current_bank_account_iban", null);
+            
+            Debug.Print("UserSession invalidated safely");
         }
     }
 }
