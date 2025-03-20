@@ -44,15 +44,13 @@ namespace LoanShark
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            //m_window = new BankAccountCreateView(2);
-            m_window = new BankAccountDeleteView("RO83SEUPHYZ57GX8KISPSYNX");
-            //m_window = new BankAccountListView();
-            //m_window = new BankAccountVerifyView();
-            //m_window = new BankAccountDetailsView();
+            m_window = new BankAccountCreateView(2);
+            //m_window = new BankAccountDeleteView("RO83SEUPHYZ57GX8KISPSYNX");
+            //m_window = new BankAccountListView(2);
             //m_window = new MainWindow();
             m_window.Activate();
         }
 
-        private Window? m_window;
+        public Window m_window { get; set; }
     }
 }

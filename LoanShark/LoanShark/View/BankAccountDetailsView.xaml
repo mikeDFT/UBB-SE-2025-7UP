@@ -24,16 +24,16 @@
 
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="Currency:"/>
-            <TextBox MinWidth="300" PlaceholderText="Placeholder" Margin="10" IsReadOnly="True" IsHitTestVisible="False"/>
+            <TextBox Text="{Binding BankAccount.currency}" MinWidth="300" PlaceholderText="Placeholder" Margin="10" IsReadOnly="True" IsHitTestVisible="False"/>
             <TextBlock Text="Custom name:"/>
-            <TextBox PlaceholderText="Placeholder" Margin="10" IsReadOnly="True" IsHitTestVisible="False"/>
+            <TextBox Text="{Binding BankAccount.name}" PlaceholderText="Placeholder" Margin="10" IsReadOnly="True" IsHitTestVisible="False"/>
             <TextBlock Text="Sold:"/>
-            <TextBox PlaceholderText="Placeholder" Margin="10" IsReadOnly="True" IsHitTestVisible="False"/>
+            <TextBox Text="{Binding BankAccount.sold}" PlaceholderText="Placeholder" Margin="10" IsReadOnly="True" IsHitTestVisible="False"/>
             <TextBlock Text="IBAN:"/>
-            <TextBox PlaceholderText="Placeholder" Margin="10" IsReadOnly="True" IsHitTestVisible="False"/>
+            <TextBox Text="{Binding BankAccount.iban}" PlaceholderText="Placeholder" Margin="10" IsReadOnly="True" IsHitTestVisible="False"/>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Currency:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <CheckBox IsEnabled="False"/>
+                <TextBlock Text="Blocked:" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <CheckBox IsEnabled="{Binding BankAccount.blocked}"/>
             </StackPanel>
         </StackPanel>
 

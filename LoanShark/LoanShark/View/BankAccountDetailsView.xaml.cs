@@ -24,10 +24,15 @@ namespace LoanShark.View
     /// </summary>
     public partial class BankAccountDetailsView : Window
     {
-        public BankAccountDetailsView()
+        BankAccountDetailsViewModel viewModel;
+        public BankAccountDetailsView(string IBAN)
         {
             this.InitializeComponent();
-            MainGrid.DataContext = new BankAccountDetailsViewModel();
+            this.Activate();
+            viewModel = new BankAccountDetailsViewModel(IBAN);
+            MainGrid.DataContext = viewModel;
+
+            viewModel.OnClose = () => this.Close();
         }
     }
 }
