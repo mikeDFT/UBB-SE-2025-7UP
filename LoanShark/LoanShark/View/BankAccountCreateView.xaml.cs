@@ -32,13 +32,15 @@ namespace LoanShark.View
             this.InitializeComponent();
             viewModel = new BankAccountCreateViewModel(userID);
             MainGrid.DataContext = viewModel;
+
+            viewModel.onClose = () => this.Close();
         }
 
         public void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
            if(sender is RadioButton radioButton)
            {
-                viewModel.SelectedItem = radioButton.Content.ToString();    
+                viewModel.SelectedItem = new CurrencyItem { Name = radioButton.Content.ToString(), IsChecked = true };    
            }
         }
     }
