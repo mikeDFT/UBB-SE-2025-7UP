@@ -45,5 +45,18 @@ namespace LoanShark.Repository
 
             return dt;
         }
+
+        public async Task<DataTable> GetUserBankAccounts(int id_user)
+        {
+            DataTable dt = new DataTable();
+            SqlParameter[] sqlParams = 
+            {
+                new SqlParameter("@id_user", id_user)
+            };
+            dt = await DataLink.Instance.ExecuteReader("GetUserBankAccounts", sqlParams);
+
+            return dt;
+        }
+        
     }
 }
