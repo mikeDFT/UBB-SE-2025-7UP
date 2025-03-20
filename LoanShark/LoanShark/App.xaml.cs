@@ -18,7 +18,6 @@ using Microsoft.UI.Xaml.Shapes;
 using LoanShark.View;
 using LoanShark.Data;
 using System.Diagnostics;
-using LoanShark.Domain;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -30,9 +29,6 @@ namespace LoanShark
     /// </summary>
     public partial class App : Application
     {
-        // Collection to track all active windows
-        private List<Window> activeWindows = new List<Window>();
-
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -44,38 +40,6 @@ namespace LoanShark
             DataLink.Instance.OpenConnection();
         }
 
-        public static void CleanupResources()
-        {
-            DataLink.Instance.CloseConnection();
-            UserSession.Instance.InvalidateUserSession();
-            Debug.Print("Resources cleaned up successfully");
-        }
-
-        // Method to register windows with the tracking system
-        public void RegisterWindow(Window window)
-        {
-            this.activeWindows.Add(window);
-            window.Closed += Window_Closed;
-            Debug.Print($"Window registered. Active windows: {this.activeWindows.Count}");
-        }
-
-        // Window closed event handler
-        private void Window_Closed(object sender, WindowEventArgs args)
-        {
-            if (sender is Window window)
-            {
-                this.activeWindows.Remove(window);
-                Debug.Print($"Window closed. Remaining windows: {this.activeWindows.Count}");
-                
-                // If this was the last window, clean up resources
-                if (this.activeWindows.Count == 0)
-                {
-                    Debug.Print("Last window closed, cleaning up resources...");
-                    CleanupResources();
-                }
-            }
-        }
-
         /// <summary>
         /// Invoked when the application is launched.
         /// </summary>
@@ -84,8 +48,8 @@ namespace LoanShark
         {
             m_loginWindow = new LoginWindow();
             
-            // Register this window with our tracking system
-            RegisterWindow(m_loginWindow);
+            // Register this window with MainPageWindow's tracking system
+            MainPageWindow.RegisterWindow(m_loginWindow);
             
             m_loginWindow.LoginSuccess += LoginWindow_OnLoginSuccess;
             m_loginWindow.Activate();
@@ -95,8 +59,7 @@ namespace LoanShark
         {
             m_mainPageWindow = new MainPageWindow();
             
-            // Register the main window with our tracking system
-            RegisterWindow(m_mainPageWindow);
+            // MainPageWindow registers itself in its constructor
             
             m_mainPageWindow.Activate();
             
