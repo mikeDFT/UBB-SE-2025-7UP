@@ -1,7 +1,8 @@
-﻿using LoanShark.Domain;
+using LoanShark.Domain;
 using LoanShark.Repository;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -93,6 +94,39 @@ namespace LoanShark.Service
         public bool UpdateUser(User user)
         {
             return _userRepository.UpdateUser(user);
+        }
+
+        public string DeleteUser(int UserID, string password)
+        {
+            User? user = GetUserInformation(UserID);
+            if (user == null)
+            {
+                return "User doesn't exist";
+            }
+            // gets the hashed password and salt from the database for the current user
+            // creates a hashed password with the sald from the database for the user inputed password
+            // if the two passwords match, proceeds to delete the user and its bank accounts from the database
+            var userInputedPassword = new HashedPassword(password, user.HashedPassword.GetSalt(), true);
+            var dataBasePassword = user.HashedPassword;
+
+            // sa il intreb pe alex ce fel de salt imi trebuie
+
+
+            if (userInputedPassword.Equals(dataBasePassword))
+            {
+                _userRepository.DeleteUser(UserID);
+
+                // after the user is deleted from the database, he should be logged out of the session
+                // for the moment, it just just exits the whole app
+                // TODO Alex : log out functionality
+                Environment.Exit(0);
+                return "Succes";
+            }
+            else
+            {
+                Debug.WriteLine("Wrong password");
+                return "Wrong password";
+            }
         }
     }
 }
