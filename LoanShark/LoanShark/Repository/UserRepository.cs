@@ -11,6 +11,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.UserDataTasks;
+using Windows.System;
+using User = LoanShark.Domain.User;
 
 namespace LoanShark.Repository
 {
@@ -20,9 +22,9 @@ namespace LoanShark.Repository
         User? GetUserById(int userId);
         bool UpdateUser(User user);
         bool DeleteUser(int userId);
-        bool CnpExists(Cnp cnp);
-        bool EmailExists(Email email);
-        bool PhoneNumberExists(PhoneNumber phoneNumber);
+        User? GetUserByCnp(Cnp cnp);
+        User? GetUserByEmail(Email email);
+        User? GetUserByPhoneNumber(PhoneNumber phoneNumber);
     }
 
     public class UserRepository: IUserRepository
@@ -134,7 +136,7 @@ namespace LoanShark.Repository
             }
         }
 
-        public bool CnpExists(Cnp cnp)
+        public User? GetUserByCnp(Cnp cnp)
         {
             try
             {
@@ -142,17 +144,30 @@ namespace LoanShark.Repository
                 {
                     new SqlParameter("@cnp", cnp.ToString())
                 };
-                DataTable dt = _dataLink.ExecuteReader("GetUserByCNP", parameters);
-                return dt.Rows.Count > 0;
+                DataTable dt = _dataLink.ExecuteReader("GetUserByCnp", parameters);
+                if (dt.Rows.Count == 0)
+                {
+                    return null;
+                }
+                DataRow dr = dt.Rows[0];
+                return new User(
+                    Convert.ToInt32(dr["id_user"]),
+                    new Cnp(dr["cnp"].ToString() ?? ""),
+                    dr["first_name"].ToString() ?? "",
+                    dr["last_name"].ToString() ?? "",
+                    new Email(dr["email"].ToString() ?? ""),
+                    new PhoneNumber(dr["phone_number"].ToString() ?? ""),
+                    new HashedPassword(dr["hashed_password"].ToString() ?? "", dr["password_salt"].ToString() ?? "", false)
+                    );
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"REPO: Error checking if CNP exists: {ex.Message}");
-                return false;
+                Debug.WriteLine($"REPO: Error getting user by cnp: {ex.Message}");
+                return null;
             }
         }
 
-        public bool EmailExists(Email email)
+        public User? GetUserByEmail(Email email)
         {
             try
             {
@@ -160,17 +175,30 @@ namespace LoanShark.Repository
                 {
                     new SqlParameter("@email", email.ToString())
                 };
-                DataTable dt = _dataLink.ExecuteReader("GetUserByEmail", parameters);
-                return dt.Rows.Count > 0;
+                DataTable dt = _dataLink.ExecuteReader("GetUserByCnp", parameters);
+                if (dt.Rows.Count == 0)
+                {
+                    return null;
+                }
+                DataRow dr = dt.Rows[0];
+                return new User(
+                    Convert.ToInt32(dr["id_user"]),
+                    new Cnp(dr["cnp"].ToString() ?? ""),
+                    dr["first_name"].ToString() ?? "",
+                    dr["last_name"].ToString() ?? "",
+                    new Email(dr["email"].ToString() ?? ""),
+                    new PhoneNumber(dr["phone_number"].ToString() ?? ""),
+                    new HashedPassword(dr["hashed_password"].ToString() ?? "", dr["password_salt"].ToString() ?? "", false)
+                    );
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"REPO: Error checking if email exists: {ex.Message}");
-                return false;
+                Debug.WriteLine($"REPO: Error getting user by email: {ex.Message}");
+                return null;
             }
         }
 
-        public bool PhoneNumberExists(PhoneNumber phoneNumber)
+        public User? GetUserByPhoneNumber(PhoneNumber phoneNumber)
         {
             try
             {
@@ -178,13 +206,26 @@ namespace LoanShark.Repository
                 {
                     new SqlParameter("@phone_number", phoneNumber.ToString())
                 };
-                DataTable dt = _dataLink.ExecuteReader("GetUserByPhoneNumber", parameters);
-                return dt.Rows.Count > 0;
+                DataTable dt = _dataLink.ExecuteReader("GetUserByCnp", parameters);
+                if (dt.Rows.Count == 0)
+                {
+                    return null;
+                }
+                DataRow dr = dt.Rows[0];
+                return new User(
+                    Convert.ToInt32(dr["id_user"]),
+                    new Cnp(dr["cnp"].ToString() ?? ""),
+                    dr["first_name"].ToString() ?? "",
+                    dr["last_name"].ToString() ?? "",
+                    new Email(dr["email"].ToString() ?? ""),
+                    new PhoneNumber(dr["phone_number"].ToString() ?? ""),
+                    new HashedPassword(dr["hashed_password"].ToString() ?? "", dr["password_salt"].ToString() ?? "", false)
+                    );
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"REPO: Error checking if phone number exists: {ex.Message}");
-                return false;
+                Debug.WriteLine($"REPO: Error getting user by phone number: {ex.Message}");
+                return null;
             }
         }
     }
