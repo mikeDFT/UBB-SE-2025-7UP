@@ -30,7 +30,7 @@ namespace LoanShark.ViewModel
 
         private async void LoadExchangeRatesAsync()
         {
-            var rates = await _transactionService.GetCurrencyExchangeRatesAsync();
+            var rates = await _transactionService.GetAllCurrencyExchangeRates();
 
             ExchangeRates.Clear();
             foreach (var rate in rates)

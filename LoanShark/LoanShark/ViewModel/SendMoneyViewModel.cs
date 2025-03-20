@@ -37,8 +37,19 @@ namespace LoanShark.ViewModel
 
         private async Task ProcessPaymentAsync()
         {
-            string result = await _transactionService.ProcessPaymentAsync(IBAN, SumOfMoney, Details);
-            ShowMessage(result);
+            decimal amount;
+            try
+            {
+                amount = Convert.ToDecimal(SumOfMoney);
+                string result = await _transactionService.AddTransaction(_transactionService.GetCurrentUserIBAN(), IBAN, Convert.ToDecimal(SumOfMoney), Details);
+                await ShowMessage(result);
+            }
+            catch (Exception)
+            {
+                await ShowMessage("Invalid amount.");
+                return;
+            }
+            
         }
 
         private void NavigateBack()
@@ -49,7 +60,7 @@ namespace LoanShark.ViewModel
             }
         }
 
-        private async void ShowMessage(string message)
+        private async Task ShowMessage(string message)
         {
             ContentDialog dialog = new ContentDialog
             {

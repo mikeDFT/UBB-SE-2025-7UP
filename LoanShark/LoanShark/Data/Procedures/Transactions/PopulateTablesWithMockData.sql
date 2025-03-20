@@ -50,3 +50,8 @@ ADD CONSTRAINT PhoneNumberConstraint CHECK (
     LEN(phone_number) = 10 AND
     phone_number NOT LIKE '%[^0-9]%'
 );
+
+select * from transactions
+select * from bank_accounts
+select * from currency_exchange_rates
+select * from users
