@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
@@ -95,6 +96,15 @@ namespace LoanShark.Service
         public List<string> getCurrencies()
         {
             return this._bankAccountRepository.getCurrencies();
+        }
+
+        public bool verifyUserCredentials(string email, string password)
+        {
+            Debug.WriteLine("Debug - verify credentials");
+            List<string> credentials = _bankAccountRepository.getCredentials(email);
+            HashedPassword inputHashedPassword = new HashedPassword(password, credentials[1], true);
+            HashedPassword hashedPassword = new HashedPassword(credentials[0], credentials[1], false);
+            return inputHashedPassword.Equals(hashedPassword);
         }
     }
 }
