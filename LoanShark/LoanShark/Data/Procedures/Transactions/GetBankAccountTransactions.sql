@@ -2,9 +2,9 @@ create or alter procedure GetBankAccountTransactions
 	@iban varchar(100)
 as
 begin
-	if @iban is null or len(@iban) <> 34
+	if @iban is null or len(@iban) <> 24
     begin
-        raiserror ('Invalid iban. It must be exactly 34 characters long.', 16, 1);
+        raiserror ('Invalid iban. It must be exactly 24 characters long.', 16, 1);
         return;
     end
 
@@ -18,4 +18,3 @@ begin
 	from transactions 
 	where sender_iban = @iban or receiver_iban = @iban
 end
-

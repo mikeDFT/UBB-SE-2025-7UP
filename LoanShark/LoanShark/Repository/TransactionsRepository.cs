@@ -31,7 +31,7 @@ namespace LoanShark.Repository
             //}
             // return _userSession.GetUserData("current_bank_account_iban") ?? string.Empty;
             // this is a temporary solution until we merge the code with the others functionalities
-            return "RO12BANK00000000000000000000000001";
+            return "RO12BANK0000000000000001";
         }
 
         public void AddTransaction(Transaction transaction)

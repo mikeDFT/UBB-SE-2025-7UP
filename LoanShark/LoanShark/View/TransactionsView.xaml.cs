@@ -16,9 +16,9 @@ namespace LoanShark.View
             this.InitializeComponent();
             _viewModel = new TransactionsViewModel();
 
-            MainGrid.DataContext = _viewModel; 
+            MainGrid.DataContext = _viewModel;
 
-            _viewModel.CloseAction = CloseWindow; 
+            _viewModel.CloseAction = CloseWindow;
 
             InitializeWindow();
         }

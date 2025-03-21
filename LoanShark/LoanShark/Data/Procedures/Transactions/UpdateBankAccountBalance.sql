@@ -3,9 +3,9 @@ create or alter procedure UpdateBankAccountBalance
 	@amount float
 as
 begin
-	if @iban is NULL OR len(@iban) <> 34
+	if @iban is NULL OR len(@iban) <> 24
     begin
-        RAISERROR ('Invalid IBAN. It must be exactly 34 characters long.', 16, 1);
+        RAISERROR ('Invalid IBAN. It must be exactly 24 characters long.', 16, 1);
         return;
     end
 

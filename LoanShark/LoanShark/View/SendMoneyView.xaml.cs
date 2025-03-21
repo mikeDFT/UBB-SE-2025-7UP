@@ -1,5 +1,5 @@
-﻿using Microsoft.UI.Xaml;
-using LoanShark.ViewModel;
+﻿using LoanShark.ViewModel;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Windowing;
 using Microsoft.UI;
 using WinRT.Interop;
@@ -15,12 +15,10 @@ namespace LoanShark.View
         {
             this.InitializeComponent();
             _viewModel = new SendMoneyViewModel();
-
             MainGrid.DataContext = _viewModel;
-
             _viewModel.CloseAction = CloseWindow;
 
-            InitializeWindow(1000, 800);
+            InitializeWindow(800, 600);
         }
 
         private void CloseWindow()

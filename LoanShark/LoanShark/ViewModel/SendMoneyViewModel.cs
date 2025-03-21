@@ -1,19 +1,33 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LoanShark.Service;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using System;
 
 namespace LoanShark.ViewModel
 {
-    public class SendMoneyViewModel : ObservableObject
+    public partial class SendMoneyViewModel : ObservableObject
     {
         private readonly TransactionsService _transactionService;
 
-        public string IBAN { get; set; }
-        public string SumOfMoney { get; set; }
-        public string Details { get; set; }
+        [ObservableProperty]
+        private string iban;
+
+        [ObservableProperty]
+        private string sumOfMoney;
+
+        [ObservableProperty]
+        private string details;
+
+        [ObservableProperty]
+        private string errorMessage;
+
+        [ObservableProperty]
+        private Visibility isErrorVisible = Visibility.Collapsed; 
 
         public ICommand PayCommand { get; }
         public ICommand CloseCommand { get; }
@@ -30,23 +44,81 @@ namespace LoanShark.ViewModel
 
         private async Task ProcessPaymentAsync()
         {
-            decimal amount;
-            try
+            Debug.WriteLine($"DEBUG: Iban = '{Iban}', SumOfMoney = '{SumOfMoney}'");
+
+            // Reset error message
+            ErrorMessage = string.Empty;
+            IsErrorVisible = Visibility.Collapsed;
+
+            if (string.IsNullOrWhiteSpace(Iban) || string.IsNullOrWhiteSpace(SumOfMoney))
             {
-                amount = Convert.ToDecimal(SumOfMoney);
-                string result = await _transactionService.AddTransaction(_transactionService.GetCurrentUserIBAN(), IBAN, amount, Details);
-                await ShowMessage(result);
-            }
-            catch (Exception)
-            {
-                await ShowMessage("Invalid amount.");
+                Debug.WriteLine("DEBUG: Empty IBAN or Amount");
+                ErrorMessage = "IBAN and Amount are required.";
+                IsErrorVisible = Visibility.Visible;
                 return;
             }
+
+            if (!decimal.TryParse(SumOfMoney, out decimal amount) || amount <= 0)
+            {
+                Debug.WriteLine($"DEBUG: Invalid amount entered: {SumOfMoney}");
+                ErrorMessage = "Invalid amount.";
+                IsErrorVisible = Visibility.Visible;
+                return;
+            }
+
+            Debug.WriteLine($"DEBUG: Sending money from {_transactionService.GetCurrentUserIBAN()} to {Iban}, Amount: {amount}");
+
+            string result = await _transactionService.AddTransaction(
+                _transactionService.GetCurrentUserIBAN(), Iban, amount, Details
+            );
+
+            if (result != "Transaction successful!")
+            {
+                Debug.WriteLine($"DEBUG: Transaction failed - {result}");
+                ErrorMessage = result;
+                IsErrorVisible = Visibility.Visible;
+                return;
+            }
+
+            Debug.WriteLine("DEBUG: Transaction successful!");
+            await ShowMessage("Payment Successful!");
+
+            ResetFields();
+        }
+
+        private void ResetFields()
+        {
+            Debug.WriteLine("DEBUG: Resetting input fields...");
+
+            Iban = string.Empty;
+            OnPropertyChanged(nameof(Iban));
+
+            SumOfMoney = string.Empty;
+            OnPropertyChanged(nameof(SumOfMoney));
+
+            Details = string.Empty;
+            OnPropertyChanged(nameof(Details));
+
+            ErrorMessage = string.Empty;
+            OnPropertyChanged(nameof(ErrorMessage));
+
+            IsErrorVisible = Visibility.Collapsed;
+            OnPropertyChanged(nameof(IsErrorVisible));
+
+            Debug.WriteLine("DEBUG: Reset complete.");
         }
 
         private async Task ShowMessage(string message)
         {
-            Console.WriteLine(message);
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Transaction Result",
+                Content = message,
+                CloseButtonText = "OK",
+                XamlRoot = App.MainWindow.Content.XamlRoot
+            };
+
+            await dialog.ShowAsync();
         }
 
         private void CloseWindow()

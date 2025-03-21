@@ -9,15 +9,15 @@ create or alter procedure AddTransaction
     @description nvarchar(255)
 as
 begin
-	if @senderIban is null or len(@senderIban) <> 34
+	if @senderIban is null or len(@senderIban) <> 24
     begin
-        raiserror ('Invalid sender iban. It must be exactly 34 characters long.', 16, 1);
+        raiserror ('Invalid sender iban. It must be exactly 24 characters long.', 16, 1);
         return;
     end
 
-	if @receiverIban is null or len(@receiverIban) <> 34
+	if @receiverIban is null or len(@receiverIban) <> 24
     begin
-        raiserror ('Invalid receiver iban. It must be exactly 34 characters long.', 16, 1);
+        raiserror ('Invalid receiver iban. It must be exactly 24 characters long.', 16, 1);
         return;
     end
 
@@ -62,3 +62,4 @@ begin
         @TransactionType, @description
     );
 end
+

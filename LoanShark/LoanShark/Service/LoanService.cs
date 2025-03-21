@@ -33,7 +33,7 @@ namespace LoanShark.Service
         }
 
         // Create a new loan with the specified parameters
-        public Loan TakeLoan(int userId, decimal amount, string currency, string accountIBAN, int months)
+        public async Task<Loan> TakeLoanAsync(int userId, decimal amount, string currency, string accountIBAN, int months)
         {
             // Validate loan parameters
             if (ValidateLoanRequest(amount, months) != "success")
@@ -45,6 +45,9 @@ namespace LoanShark.Service
             decimal taxPercentage = CalculateTaxPercentage(months);
 
             // TODO: give money
+            var transactionService = new TransactionsService();
+            await transactionService.TakeLoanTransaction(accountIBAN, amount);
+
 
             // Create a new loan
             var loan = new Loan(

@@ -379,7 +379,7 @@ namespace LoanShark.ViewModel
                 string currency = ExtractCurrencyFromBankAccount(SelectedBankAccount);
                 
                 // Create new loan using the service
-                var newLoan = _loanService.TakeLoan(userID, Amount, currency, ExtractIbanFromBankAccount(SelectedBankAccount), SelectedMonths);
+                var newLoan = _loanService.TakeLoanAsync(userID, Amount, currency, ExtractIbanFromBankAccount(SelectedBankAccount), SelectedMonths);
 
                 // Refreshing the data from the service
                 LoadData();
