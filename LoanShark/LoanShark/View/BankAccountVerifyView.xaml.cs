@@ -27,6 +27,8 @@ namespace LoanShark.View
             viewModel.OnClose = () => this.Close();
 
             CloseWindowService.CloseAllWindows += CloseWindow;
+
+            WindowManager.RegisterWindow(this);
         }
 
         private void CloseWindow()

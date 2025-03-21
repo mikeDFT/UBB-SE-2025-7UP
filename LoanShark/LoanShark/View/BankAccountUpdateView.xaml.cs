@@ -16,7 +16,7 @@ using LoanShark.ViewModel;
 using System.Diagnostics;
 using Microsoft.Data.SqlClient;
 using LoanShark.Domain;
-
+using LoanShark.Helper;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
@@ -52,6 +52,8 @@ namespace LoanShark.View
                 {
                     this.Close();
                 };
+
+                WindowManager.RegisterWindow(this);
             }
             catch (Exception ex)
             {

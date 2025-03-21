@@ -1,6 +1,7 @@
 using LoanShark.Helper;
 using LoanShark.ViewModel;
 using Microsoft.UI.Xaml;
+using LoanShark.Domain;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -20,6 +21,8 @@ namespace LoanShark.View
 
             viewModel.onClose = () => this.Close();
             CloseWindowService.CloseAllWindows += CloseWindow;
+
+            WindowManager.RegisterWindow(this);
         }
 
         ~BankAccountDeleteView()
