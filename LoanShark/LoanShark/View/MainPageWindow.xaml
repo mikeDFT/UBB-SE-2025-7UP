@@ -53,6 +53,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             
             <!-- FlipView for bank accounts displaying name and IBAN -->
@@ -84,6 +87,63 @@
                     HorizontalAlignment="Center"
                     Margin="0,20,0,0"
                     Grid.Row="1"/>
+                    
+            <!-- First row of side-by-side buttons -->
+            <Grid Grid.Row="2" Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button x:Name="transactionButton"
+                        Content="Transaction"
+                        Grid.Column="0"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,10,0"
+                        Width="150"
+                        Height="40"/>
+                        
+                <Button x:Name="betweenAccountsButton"
+                        Content="Between Accounts"
+                        Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        Margin="10,0,0,0"
+                        Width="150"
+                        Height="40"/>
+            </Grid>
+            
+            <!-- Second row of side-by-side buttons -->
+            <Grid Grid.Row="3" Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button x:Name="transactionHistoryButton"
+                        Content="Transaction History"
+                        Grid.Column="0"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,10,0"
+                        Width="150"
+                        Height="40"/>
+                        
+                <Button x:Name="loanButton"
+                        Content="Loan"
+                        Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        Margin="10,0,0,0"
+                        Width="150"
+                        Height="40"/>
+            </Grid>
+            
+            <!-- Bank Account Settings button -->
+            <Button x:Name="bankAccountSettingsButton"
+                    Content="Bank Account Settings"
+                    Grid.Row="4"
+                    HorizontalAlignment="Center"
+                    Margin="0,20,0,0"
+                    Width="310"
+                    Height="40"/>
         </Grid>
 
     </Grid>
