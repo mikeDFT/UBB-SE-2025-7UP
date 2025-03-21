@@ -100,7 +100,7 @@
                         Grid.Column="0"
                         HorizontalAlignment="Center"
                         Margin="0,0,10,0"
-                        Width="150"
+                        Width="200"
                         Height="40"/>
                         
                 <Button x:Name="betweenAccountsButton"
@@ -108,7 +108,7 @@
                         Grid.Column="1"
                         HorizontalAlignment="Center"
                         Margin="10,0,0,0"
-                        Width="150"
+                        Width="200"
                         Height="40"/>
             </Grid>
             
@@ -124,7 +124,7 @@
                         Grid.Column="0"
                         HorizontalAlignment="Center"
                         Margin="0,0,10,0"
-                        Width="150"
+                        Width="200"
                         Height="40"/>
                         
                 <Button x:Name="loanButton"
@@ -132,18 +132,35 @@
                         Grid.Column="1"
                         HorizontalAlignment="Center"
                         Margin="10,0,0,0"
-                        Width="150"
+                        Width="200"
                         Height="40"/>
             </Grid>
             
-            <!-- Bank Account Settings button -->
-            <Button x:Name="bankAccountSettingsButton"
+            <!-- Third row of side-by-side buttons -->
+            <Grid Grid.Row="4" Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="bankAccountSettingsButton"
                     Content="Bank Account Settings"
                     Grid.Row="4"
                     HorizontalAlignment="Center"
-                    Margin="0,20,0,0"
-                    Width="310"
+                    Margin="0,0,10,0"
+                    Width="200"
                     Height="40"/>
+                
+                <Button x:Name="bankAccountCreateButton"
+                    Content="Create Bank Account"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    Margin="10,0,0,0"
+                    Width="200"
+                    Height="40"
+                    Click="BankAccountCreateButtonHandler"/>
+            </Grid>
+            
         </Grid>
 
     </Grid>

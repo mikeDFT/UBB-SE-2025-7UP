@@ -17,6 +17,7 @@ using LoanShark.Data;
 using LoanShark.Domain;
 using LoanShark.ViewModel;
 using LoanShark.Helper;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -86,6 +87,24 @@ namespace LoanShark.View
         private void ExitLoanSharkButtonHandler(object sender, RoutedEventArgs e)
         {
             WindowManager.CleanupResources();
+        }
+
+        private void BankAccountCreateButtonHandler(object sender, RoutedEventArgs e)
+        {
+            var bankAccountCreateView = new BankAccountCreateView();
+            bankAccountCreateView.AccountCreated += BankAccountCreateView_AccountCreated;
+            bankAccountCreateView.Activate();
+        }
+
+        private async void BankAccountCreateView_AccountCreated(object sender, EventArgs e)
+        {
+            // Refresh the bank accounts list when a new account is created
+            await this.ViewModel.RefreshBankAccounts();
+        }
+
+        public async Task RefreshBankAccounts()
+        {
+            await this.ViewModel.RefreshBankAccounts();
         }
     }
 }

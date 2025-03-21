@@ -91,7 +91,7 @@ namespace LoanShark.ViewModel
         /// </summary>
         public BankAccountCreateViewModel()
         {
-            this.userID = int.Parse(UserSession.Instance.GetUserData("user_id") ?? "0");
+            this.userID = int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0");
             service = new BankAccountService();
             LoadData();
             ConfirmCommand = new RelayCommand(OnConfirmButtonClicked);

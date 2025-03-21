@@ -65,7 +65,7 @@ namespace LoanShark.ViewModel
         /// <param name="userID">The ID of the user whose bank accounts to display</param>
         public BankAccountListViewModel()
         {
-            this.userID = int.Parse(UserSession.Instance.GetUserData("user_id") ?? "0");
+            this.userID = int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0");
             BankAccounts = new ObservableCollection<BankAccount>();
             service = new BankAccountService();
             _ = LoadData(); // Start loading data but don't await it

@@ -81,7 +81,7 @@ namespace LoanShark.ViewModel
             }
         }
 
-        private async void LoadUserBankAccounts()
+        public async Task LoadUserBankAccounts()
         {
             try
             {
@@ -169,6 +169,11 @@ namespace LoanShark.ViewModel
                 this.BalanceButtonContent = "Check Balance";
                 this.OnPropertyChanged(nameof(BalanceButtonContent));
             }
+        }
+
+        public async Task RefreshBankAccounts()
+        {
+            await LoadUserBankAccounts();
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

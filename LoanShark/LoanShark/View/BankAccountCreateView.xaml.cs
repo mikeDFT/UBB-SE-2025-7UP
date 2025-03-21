@@ -16,6 +16,10 @@ namespace LoanShark.View
     public partial class BankAccountCreateView : Window
     {
         private BankAccountCreateViewModel viewModel;
+        
+        // Event that will be raised when an account is successfully created
+        public event EventHandler AccountCreated;
+        
         public BankAccountCreateView()
         {
             this.InitializeComponent();
@@ -47,6 +51,10 @@ namespace LoanShark.View
             };
 
             await dialog.ShowAsync().AsTask();
+            
+            // Raise the AccountCreated event before closing
+            AccountCreated?.Invoke(this, EventArgs.Empty);
+            
             this.Close();
         }
     }
