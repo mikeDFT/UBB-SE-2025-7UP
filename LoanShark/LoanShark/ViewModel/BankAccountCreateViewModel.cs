@@ -60,6 +60,20 @@ namespace LoanShark.ViewModel
             }
         }
 
+        private string _customName;
+        public string CustomName
+        {
+            get
+            {
+                return _customName;
+            }
+            set
+            {
+                _customName = value;
+                OnPropertyChanged(nameof(CustomName));
+            }
+        }
+
         private BankAccountService service;
 
         /// <summary>
@@ -83,7 +97,7 @@ namespace LoanShark.ViewModel
         {
             if (SelectedItem != null)
             {
-                service.createBankAccount(userID, SelectedItem.Name);
+                service.createBankAccount(userID, CustomName ?? "", SelectedItem.Name);
                 Debug.WriteLine($"Pressed create confirm bank account: {SelectedItem.Name}");
             }
             else

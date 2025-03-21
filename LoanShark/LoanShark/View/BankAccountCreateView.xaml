@@ -11,7 +11,8 @@
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/> <!-- Header -->
-            <RowDefinition Height="*"/>    <!-- Content (fills remaining space) -->
+            <RowDefinition Height="*"/>
+            <!-- Content (fills remaining space) -->
         </Grid.RowDefinitions>
 
         <!-- Header Section -->
@@ -19,7 +20,8 @@
             <Grid Height="50">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/> <!-- Button Column -->
-                    <ColumnDefinition Width="*"/>    <!-- Header Column -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- Header Column -->
                 </Grid.ColumnDefinitions>
 
                 <Button Command="{Binding CancelCommand}" Content="Cancel creation" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"/>
@@ -32,7 +34,7 @@
             <TextBlock Text="Select currency:" Margin="10"/>
 
             <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="5" Padding="2">
-                <ListView ItemsSource="{Binding Currencies}" SelectionMode="None" Height="300" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListView ItemsSource="{Binding Currencies}" SelectionMode="None" Height="150" ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodel:CurrencyItem">
                             <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Padding="5">
@@ -48,6 +50,8 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </Border>
+
+            <TextBox x:Name="customNameInput" MinWidth="300" PlaceholderText="Custom Name" Margin="20" Text="{Binding CustomName, Mode=TwoWay}"/>
 
             <!-- Confirm Button -->
             <Button Command="{Binding ConfirmCommand}" Margin="0,30,0,0" HorizontalAlignment="Center" Content="Confirm creation" Width="Auto" Height="Auto"/>
