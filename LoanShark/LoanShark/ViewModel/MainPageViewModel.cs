@@ -125,27 +125,37 @@ namespace LoanShark.ViewModel
 
         public async void CheckBalanceButtonHandler() 
         {
-            if (this.BalanceButtonContent != "Check Balance") 
-            {
-                this.BalanceButtonContent = "Check Balance";
-                this.OnPropertyChanged(nameof(BalanceButtonContent));
-                return;
-            }
             try 
             {
-                string? currentBankAccountIban = UserSession.Instance.GetUserData("current_bank_account_iban");
-                if (string.IsNullOrEmpty(currentBankAccountIban))
+                if (this.BalanceButtonContent == "Check Balance") 
                 {
-                    Debug.Print("Current bank account IBAN is null or empty");
-                    return;
+                    string? currentBankAccountIban = UserSession.Instance.GetUserData("current_bank_account_iban");
+                    if (string.IsNullOrEmpty(currentBankAccountIban))
+                    {
+                        Debug.Print("Current bank account IBAN is null or empty");
+                        return;
+                    }
+                    if (currentBankAccountIban == "No accounts found" || currentBankAccountIban == "Error")
+                    {
+                        // if the current bank account is not found, we will show the message "Check Balance" as if the button was not pressed
+                        this.BalanceButtonContent = "Check Balance";
+                    }
+                    else 
+                    {
+                        Tuple<decimal, string> result = await this.service.GetBankAccountBalanceByUserIban(currentBankAccountIban);
+                        decimal balance = result.Item1;
+                        string currency = result.Item2;
+                        string balanceString = balance.ToString("0.00");
+                        this.BalanceButtonContent = $"{balanceString} {currency}";
+                        Debug.Print($"Balance: {balanceString}");
+                    }
+                    this.OnPropertyChanged(nameof(BalanceButtonContent));
+                } 
+                else 
+                {
+                    this.BalanceButtonContent = "Check Balance";
+                    this.OnPropertyChanged(nameof(BalanceButtonContent));
                 }
-                Tuple<decimal, string> result = await this.service.GetBankAccountBalanceByUserIban(currentBankAccountIban);
-                decimal balance = result.Item1;
-                string currency = result.Item2;
-                string balanceString = balance.ToString("0.00");
-                this.BalanceButtonContent = $"{balanceString} {currency}";
-                this.OnPropertyChanged(nameof(BalanceButtonContent));
-                Debug.Print($"Balance: {balanceString}");
             }
             catch (Exception ex)
             {

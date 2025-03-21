@@ -36,7 +36,7 @@ namespace LoanShark.Service
                     int maxNrTransactionsDaily = row["max_nr_transactions_daily"] != DBNull.Value ? Convert.ToInt32(row["max_nr_transactions_daily"]) : 0;
                     bool blocked = row["blocked"] != DBNull.Value ? Convert.ToBoolean(row["blocked"]) : false;
                     
-                    bankAccounts.Add(new BankAccount(iban, userId, amount, currency, customName, dailyLimit, maxPerTransaction, maxNrTransactionsDaily, blocked));
+                    bankAccounts.Add(new BankAccount(iban, currency, amount, blocked, userId, customName, dailyLimit, maxPerTransaction, maxNrTransactionsDaily));
                 }
 
                 return bankAccounts;

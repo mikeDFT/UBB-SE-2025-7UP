@@ -1,0 +1,5 @@
+CREATE OR ALTER PROCEDURE GetBankAccountByIBAN @iban VARCHAR(100)
+AS
+BEGIN
+	SELECT * FROM bank_accounts WHERE iban=@iban;
+END

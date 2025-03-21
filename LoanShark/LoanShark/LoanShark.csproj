@@ -74,4 +74,42 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="View\BankAccountCreateView.xaml" />
+    <None Remove="View\BankAccountDeleteView.xaml" />
+    <None Remove="View\BankAccountDetailsView.xaml" />
+    <None Remove="View\BankAccountListView.xaml" />
+    <None Remove="View\BankAccountUpdateView.xaml" />
+    <None Remove="View\BankAccountVerifyView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\BankAccountUpdateView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\BankAccountVerifyView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\BankAccountListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\BankAccountDetailsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\BankAccountDeleteView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\BankAccountCreateView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
 </Project>

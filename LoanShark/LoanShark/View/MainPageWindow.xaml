@@ -58,7 +58,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             
-            <!-- FlipView for bank accounts displaying name and IBAN -->
+            <!-- FlipView for bank accounts displaying name and iban -->
             <FlipView x:Name="accountsFlipView"
                     MaxWidth="300"
                     MaxHeight="80"
@@ -69,10 +69,10 @@
                     <DataTemplate x:DataType="domain:BankAccount">
                         <Grid>
                             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <TextBlock Text="{x:Bind CustomName}" 
+                                <TextBlock Text="{x:Bind name}" 
                                         FontSize="20" 
                                         Margin="0,0,0,10"/>
-                                <TextBlock Text="{x:Bind IBAN}" 
+                                <TextBlock Text="{x:Bind iban}" 
                                         FontSize="14"
                                         TextWrapping="Wrap"/>
                             </StackPanel>
