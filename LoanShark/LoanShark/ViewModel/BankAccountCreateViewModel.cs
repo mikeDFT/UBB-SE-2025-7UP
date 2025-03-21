@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI.Popups;
 using Microsoft.UI.Dispatching;
+using LoanShark.Domain;
 
 namespace LoanShark.ViewModel
 {
@@ -87,10 +88,9 @@ namespace LoanShark.ViewModel
         /// <summary>
         /// Initializes a new instance of the BankAccountCreateViewModel class
         /// </summary>
-        /// <param name="userID">The ID of the user who will own the account</param>
-        public BankAccountCreateViewModel(int userID)
+        public BankAccountCreateViewModel()
         {
-            this.userID = userID;
+            this.userID = int.Parse(UserSession.Instance.GetUserData("user_id") ?? "0");
             service = new BankAccountService();
             LoadData();
             ConfirmCommand = new RelayCommand(OnConfirmButtonClicked);

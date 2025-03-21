@@ -4,6 +4,7 @@ using LoanShark.View;
 using System;
 using System.Diagnostics;
 using System.Windows.Input;
+using LoanShark.Domain;
 
 namespace LoanShark.ViewModel
 {
@@ -25,7 +26,7 @@ namespace LoanShark.ViewModel
         /// <summary>
         /// Action to be invoked when the view should be closed
         /// </summary>
-        public Action onClose { get; set; }
+        public Action? onClose { get; set; }
 
         private BankAccountService service;
         private string _iban;
@@ -33,11 +34,10 @@ namespace LoanShark.ViewModel
         /// <summary>
         /// Initializes a new instance of the BankAccountDeleteViewModel class
         /// </summary>
-        /// <param name="IBAN">The IBAN of the bank account to be deleted</param>
-        public BankAccountDeleteViewModel(string IBAN)
+        public BankAccountDeleteViewModel()
         {
             service = new BankAccountService();
-            _iban = IBAN;
+            _iban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
             NoCommand = new RelayCommand(OnNoButtonClicked);
             YesCommand = new RelayCommand(OnYesButtonClicked);
         }
