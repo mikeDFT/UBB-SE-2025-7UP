@@ -49,16 +49,18 @@
                  HorizontalAlignment="Center"
                  Margin="0,50,0,20"
                  FontSize="24"/>
-        <Grid>
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
             <!-- FlipView for bank accounts displaying name and IBAN -->
             <FlipView x:Name="accountsFlipView"
                     MaxWidth="300"
                     MaxHeight="80"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
                     SelectionChanged="AccountsFlipView_SelectionChanged"
                     ItemsSource="{x:Bind ViewModel.UserBankAccounts, Mode=OneWay}"
-                    Grid.Column="1"
                     Grid.Row="0">
                 <FlipView.ItemTemplate>
                     <DataTemplate x:DataType="domain:BankAccount">
@@ -77,12 +79,10 @@
             </FlipView>
 
             <Button x:Name="checkBalanceButton"
-                    Content="Check Balance"
+                    Content="{x:Bind ViewModel.BalanceButtonContent, Mode=OneWay}"
                     Click="CheckBalanceButtonHandler"
-                    VerticalAlignment="Top"
                     HorizontalAlignment="Center"
                     Margin="0,20,0,0"
-                    Grid.Column="1"
                     Grid.Row="1"/>
         </Grid>
 

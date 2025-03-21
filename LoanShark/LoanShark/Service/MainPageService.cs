@@ -47,5 +47,10 @@ namespace LoanShark.Service
                 throw;
             }
         }
+
+        public async Task<Tuple<decimal, string>> GetBankAccountBalanceByUserIban(string iban)
+        {
+            return await this.repo.GetBankAccountBalanceByUserIban(iban);
+        }
     }
 }

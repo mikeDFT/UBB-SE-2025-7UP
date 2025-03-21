@@ -16,6 +16,7 @@ namespace LoanShark.ViewModel
     {
         private string? welcomeText;
         private ObservableCollection<BankAccount> userBankAccounts;
+        private string balanceButtonContent;
         private readonly MainPageService service;
         
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -24,6 +25,7 @@ namespace LoanShark.ViewModel
         {
             this.service = new MainPageService();
             userBankAccounts = new ObservableCollection<BankAccount>();
+            this.balanceButtonContent = "Check Balance";
             InitializeWelcomeText();
             LoadUserBankAccounts();
         }
@@ -49,6 +51,19 @@ namespace LoanShark.ViewModel
                 if (userBankAccounts != value)
                 {
                     userBankAccounts = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string BalanceButtonContent
+        {
+            get => this.balanceButtonContent;
+            set
+            {
+                if (this.balanceButtonContent != value)
+                {
+                    this.balanceButtonContent = value;
                     OnPropertyChanged();
                 }
             }
@@ -105,6 +120,44 @@ namespace LoanShark.ViewModel
                 userBankAccounts.Clear();
                 userBankAccounts.Add(new BankAccountMessage("Error", "Could not load bank accounts"));
                 OnPropertyChanged(nameof(UserBankAccounts));
+            }
+        }
+
+        public async void CheckBalanceButtonHandler() 
+        {
+            if (this.BalanceButtonContent != "Check Balance") 
+            {
+                this.BalanceButtonContent = "Check Balance";
+                this.OnPropertyChanged(nameof(BalanceButtonContent));
+                return;
+            }
+            try 
+            {
+                string? currentBankAccountIban = UserSession.Instance.GetUserData("current_bank_account_iban");
+                if (string.IsNullOrEmpty(currentBankAccountIban))
+                {
+                    Debug.Print("Current bank account IBAN is null or empty");
+                    return;
+                }
+                Tuple<decimal, string> result = await this.service.GetBankAccountBalanceByUserIban(currentBankAccountIban);
+                decimal balance = result.Item1;
+                string currency = result.Item2;
+                string balanceString = balance.ToString("0.00");
+                this.BalanceButtonContent = $"{balanceString} {currency}";
+                this.OnPropertyChanged(nameof(BalanceButtonContent));
+                Debug.Print($"Balance: {balanceString}");
+            }
+            catch (Exception ex)
+            {
+                Debug.Print($"Error in CheckBalanceButtonHandler: {ex.Message}");
+            }
+        }
+
+        public void ResetBalanceButtonContent()
+        {
+            if (this.BalanceButtonContent != "Check Balance") {
+                this.BalanceButtonContent = "Check Balance";
+                this.OnPropertyChanged(nameof(BalanceButtonContent));
             }
         }
 

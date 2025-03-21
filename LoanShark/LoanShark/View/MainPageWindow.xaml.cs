@@ -46,11 +46,12 @@ namespace LoanShark.View
 
         public void CheckBalanceButtonHandler(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement balance check
+            this.ViewModel.CheckBalanceButtonHandler();
         }
         
         private void AccountsFlipView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            this.ViewModel.ResetBalanceButtonContent();
             var flipView = sender as FlipView;
             if (flipView?.SelectedItem is BankAccount selectedAccount)
             {
