@@ -10,14 +10,14 @@
     Title="TransactionHistory">
 
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Background="DimGray">
             <StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10" Background="DarkGray">
-                    <Button Content="Export to CSV" Click="ExportToCSV_Click" Margin="5"/>
-                    <Button Content="Date Ascending" Click="SortAscending_Click" Margin="5"/>
-                    <Button Content="Date Descending" Click="SortDescending_Click" Margin="5"/>
-                    <Button Content="View Graphics" Click="ViewGraphics_Click" Margin="5"/>
-                    <TextBox x:Name="TransactionTypeTextBox" PlaceholderText="Type to filter" Margin="10" Width="200" TextChanged="TransactionTypeTextBox_TextChanged"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                    <Button Style="{StaticResource AccentButtonStyle}" Content="Export to CSV" Click="ExportToCSV_Click" Margin="5"/>
+                    <ToggleButton x:Name="SortAscendingButton" Content="Date Ascending" Click="SortAscending_Click" Margin="5"/>
+                    <ToggleButton x:Name="SortDescendingButton" Content="Date Descending" Click="SortDescending_Click" Margin="5"/>
+                    <Button Style="{StaticResource AccentButtonStyle}" Content="View Graphics" Click="ViewGraphics_Click" Margin="5"/>
+                    <TextBox x:Name="TransactionTypeTextBox" PlaceholderText="Filter by type" Margin="10" Width="200" TextChanged="TransactionTypeTextBox_TextChanged"/>
                 </StackPanel>
                 <ListBox x:Name="ColorListBox" MinWidth="200" ItemsSource="{x:Bind currentList}" SelectionChanged="ColorListBox_SelectionChanged"/>
             </StackPanel>

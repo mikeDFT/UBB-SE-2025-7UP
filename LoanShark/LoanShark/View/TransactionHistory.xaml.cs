@@ -35,11 +35,13 @@ namespace LoanShark
 
         public TransactionsVM transactionsViewModel;
         public ObservableCollection<string> currentList;
+        private bool isSortedAscending = true;
         public TransactionHistory(TransactionsVM transactionsViewModel)
         {
             this.transactionsViewModel = transactionsViewModel;
             currentList = transactionsViewModel.retrieveForMenu();
             this.InitializeComponent();
+            SortAscendingButton.IsChecked = true;
         }
 
         private void ExportToCSV_Click(object sender, RoutedEventArgs e)
@@ -57,14 +59,37 @@ namespace LoanShark
 
         private void SortAscending_Click(object sender, RoutedEventArgs e)
         {
-            currentList = transactionsViewModel.SortByDate("Ascending");
-            ColorListBox.ItemsSource = currentList;
+            if (isSortedAscending == false)
+            {
+                isSortedAscending = true;
+                SortAscendingButton.IsChecked = true;
+                SortDescendingButton.IsChecked = false;
+                currentList = transactionsViewModel.SortByDate("Ascending");
+                ColorListBox.ItemsSource = currentList;
+            }
+            else
+            {
+                SortAscendingButton.IsChecked = true;
+            }
+
         }
 
         private void SortDescending_Click(object sender, RoutedEventArgs e)
         {
-            currentList = transactionsViewModel.SortByDate("Descending");
-            ColorListBox.ItemsSource = currentList;
+            if (isSortedAscending == true)
+            {
+                isSortedAscending = false;
+                SortAscendingButton.IsChecked = false;
+                SortDescendingButton.IsChecked = true;
+                currentList = transactionsViewModel.SortByDate("Descending");
+                ColorListBox.ItemsSource = currentList;
+            }
+            else
+            {
+                SortDescendingButton.IsChecked = true;
+            }
+
+
         }
 
         private void TransactionTypeTextBox_TextChanged(object sender, TextChangedEventArgs e)
