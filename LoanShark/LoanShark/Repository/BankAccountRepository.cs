@@ -12,29 +12,78 @@ using Windows.Networking.NetworkOperators;
 
 namespace LoanShark.Repository
 {
+    /// <summary>
+    /// Interface for bank account data access operations
+    /// </summary>
     interface IBankAccountRepository
     {
+        /// <summary>
+        /// Retrieves all bank accounts from the database
+        /// </summary>
+        /// <returns>A list of all bank accounts</returns>
         List<BankAccount> getAllBankAccounts();
+
+        /// <summary>
+        /// Retrieves all bank accounts for a specific user
+        /// </summary>
+        /// <param name="userID">The ID of the user</param>
+        /// <returns>A list of bank accounts belonging to the user</returns>
         List<BankAccount> getBankAccountsByUserId(int userID);
 
+        /// <summary>
+        /// Retrieves a bank account by its IBAN
+        /// </summary>
+        /// <param name="IBAN">The IBAN of the bank account to retrieve</param>
+        /// <returns>The bank account with the specified IBAN, or null if not found</returns>
         BankAccount getBankAccountByIBAN(string IBAN);
 
+        /// <summary>
+        /// Adds a new bank account to the database
+        /// </summary>
+        /// <param name="bankAccount">The bank account to add</param>
+        /// <returns>True if the bank account was added successfully, false otherwise</returns>
         bool addBankAccount(BankAccount bankAccount);
+
+        /// <summary>
+        /// Removes a bank account from the database
+        /// </summary>
+        /// <param name="IBAN">The IBAN of the bank account to remove</param>
+        /// <returns>True if the bank account was removed successfully, false otherwise</returns>
         bool removeBankAccount(string IBAN);
 
+        /// <summary>
+        /// Retrieves all available currencies from the database
+        /// </summary>
+        /// <returns>A list of currency names as strings</returns>
         List<string> getCurrencies();
+
+        /// <summary>
+        /// Retrieves user credentials for the specified email
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <returns>A list containing the user's hashed password and salt</returns>
         List<string> getCredentials(string email);
     }
 
+    /// <summary>
+    /// Repository class for bank account data access
+    /// </summary>
     class BankAccountRepository : IBankAccountRepository
     {
         private readonly DataLink dataLink;
         
+        /// <summary>
+        /// Initializes a new instance of the BankAccountRepository class
+        /// </summary>
         public BankAccountRepository()
         {
             dataLink = new DataLink();
         }
 
+        /// <summary>
+        /// Retrieves all bank accounts from the database
+        /// </summary>
+        /// <returns>A list of all bank accounts, or null if an error occurs</returns>
         public List<BankAccount> getAllBankAccounts()
         {
             try
@@ -48,6 +97,11 @@ namespace LoanShark.Repository
             }
         }
 
+        /// <summary>
+        /// Retrieves all bank accounts for a specific user
+        /// </summary>
+        /// <param name="userID">The ID of the user</param>
+        /// <returns>A list of bank accounts belonging to the user, or null if an error occurs</returns>
         public List<BankAccount> getBankAccountsByUserId(int userID)
         {
             try
@@ -66,6 +120,11 @@ namespace LoanShark.Repository
             }
         }
 
+        /// <summary>
+        /// Retrieves a bank account by its IBAN
+        /// </summary>
+        /// <param name="IBAN">The IBAN of the bank account to retrieve</param>
+        /// <returns>The bank account with the specified IBAN, or null if not found or an error occurs</returns>
         public BankAccount getBankAccountByIBAN(string IBAN)
         {
             try
@@ -84,6 +143,11 @@ namespace LoanShark.Repository
             }
         }
 
+        /// <summary>
+        /// Adds a new bank account to the database
+        /// </summary>
+        /// <param name="bankAccount">The bank account to add</param>
+        /// <returns>True if the bank account was added successfully, false otherwise</returns>
         public bool addBankAccount(BankAccount bankAccount)
         {
            try
@@ -111,6 +175,11 @@ namespace LoanShark.Repository
             }
         }
         
+        /// <summary>
+        /// Removes a bank account from the database
+        /// </summary>
+        /// <param name="IBAN">The IBAN of the bank account to remove</param>
+        /// <returns>True if the bank account was removed successfully, false otherwise</returns>
         public bool removeBankAccount(string IBAN)
         {
             try
@@ -130,7 +199,11 @@ namespace LoanShark.Repository
             }
         }
 
-
+        /// <summary>
+        /// Converts a DataRow to a BankAccount object
+        /// </summary>
+        /// <param name="row">The DataRow to convert</param>
+        /// <returns>A BankAccount object with data from the row</returns>
         public BankAccount ConvertDataTableRowToBankAccount(DataRow row)
         {
             return new BankAccount(
@@ -145,6 +218,12 @@ namespace LoanShark.Repository
                          Convert.ToInt32(row["max_nr_transactions_daily"])
                     );
         }
+
+        /// <summary>
+        /// Converts a DataTable to a list of BankAccount objects
+        /// </summary>
+        /// <param name="dataTable">The DataTable to convert</param>
+        /// <returns>A list of BankAccount objects</returns>
         public List<BankAccount> ConvertDataTableToBankAccountList(DataTable dataTable) {
             List<BankAccount> bankAccounts = new List<BankAccount>();
             foreach (DataRow row in dataTable.Rows)
@@ -154,6 +233,11 @@ namespace LoanShark.Repository
             return bankAccounts;
         }
 
+        /// <summary>
+        /// Converts a DataTable to a list of currency strings
+        /// </summary>
+        /// <param name="dataTable">The DataTable to convert</param>
+        /// <returns>A list of currency names as strings</returns>
         public List<string> ConvertDataTableToCurrencyList(DataTable dataTable)
         {
             List<string> currencies = new List<string>();
@@ -164,12 +248,21 @@ namespace LoanShark.Repository
             return currencies;
         }
 
+        /// <summary>
+        /// Retrieves all available currencies from the database
+        /// </summary>
+        /// <returns>A list of currency names as strings</returns>
         public List<string> getCurrencies()
         {
             DataTable dataTable = dataLink.ExecuteReader("GetCurrencies");
             return ConvertDataTableToCurrencyList(dataTable);
         }
 
+        /// <summary>
+        /// Retrieves user credentials for the specified email
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <returns>A list containing the user's hashed password and salt</returns>
         public List<string> getCredentials(string email)
         {
             var sqlParams = new SqlParameter[] { new SqlParameter("@email", email) };

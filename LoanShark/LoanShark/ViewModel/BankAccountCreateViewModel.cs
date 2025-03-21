@@ -10,15 +10,41 @@ using LoanShark.Helper;
 
 namespace LoanShark.ViewModel
 {
+    /// <summary>
+    /// ViewModel for creating a new bank account
+    /// </summary>
     class BankAccountCreateViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Action to be invoked when the view should be closed
+        /// </summary>
         public Action onClose;
+
+        /// <summary>
+        /// Collection of available currencies for the new bank account
+        /// </summary>
         public ObservableCollection<CurrencyItem> Currencies { get; set; } = new ObservableCollection<CurrencyItem>();
+
+        /// <summary>
+        /// Command to cancel the bank account creation
+        /// </summary>
         public ICommand CancelCommand { get; }
+
+        /// <summary>
+        /// Command to confirm the bank account creation
+        /// </summary>
         public ICommand ConfirmCommand { get; }
+
+        /// <summary>
+        /// ID of the user who will own the new bank account
+        /// </summary>
         public int userID;
 
         private CurrencyItem _selectedItem;
+
+        /// <summary>
+        /// The currently selected currency for the new bank account
+        /// </summary>
         public CurrencyItem SelectedItem
         {
             get => _selectedItem;
@@ -36,6 +62,10 @@ namespace LoanShark.ViewModel
 
         private BankAccountService service;
 
+        /// <summary>
+        /// Initializes a new instance of the BankAccountCreateViewModel class
+        /// </summary>
+        /// <param name="userID">The ID of the user who will own the account</param>
         public BankAccountCreateViewModel(int userID)
         {
             this.userID = userID;
@@ -45,6 +75,10 @@ namespace LoanShark.ViewModel
             CancelCommand = new RelayCommand(OnCancelButtonClicked);
         }
 
+        /// <summary>
+        /// Handler for the confirm button click
+        /// Creates a new bank account with the selected currency
+        /// </summary>
         public void OnConfirmButtonClicked()
         {
             if (SelectedItem != null)
@@ -58,12 +92,19 @@ namespace LoanShark.ViewModel
             }
         }
 
+        /// <summary>
+        /// Handler for the cancel button click
+        /// Closes the view without creating a bank account
+        /// </summary>
         public void OnCancelButtonClicked()
         {
             Debug.WriteLine("Pressed cancel create bank account");
             onClose?.Invoke();
         }
 
+        /// <summary>
+        /// Loads currency data from the service
+        /// </summary>
         public void LoadData()
         {
             List<string> currencyList = service.getCurrencies();
@@ -79,16 +120,34 @@ namespace LoanShark.ViewModel
             }
         }
 
-
+        /// <summary>
+        /// Event that is raised when a property value changes
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Raises the PropertyChanged event
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed</param>
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
+    /// <summary>
+    /// Represents a currency item in the currency selection list
+    /// </summary>
     public class CurrencyItem : INotifyPropertyChanged
     {
+        /// <summary>
+        /// The name of the currency
+        /// </summary>
         public string Name { get; set; }
+
         private bool _isChecked;
+
+        /// <summary>
+        /// Indicates whether this currency is currently selected
+        /// </summary>
         public bool IsChecked
         {
             get => _isChecked;
@@ -102,7 +161,15 @@ namespace LoanShark.ViewModel
             }
         }
 
+        /// <summary>
+        /// Event that is raised when a property value changes
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Raises the PropertyChanged event
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed</param>
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
