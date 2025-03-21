@@ -11,6 +11,9 @@ using LoanShark.Repository;
 
 namespace LoanShark.ViewModel
 {
+
+    //transactions View Model class needs an iban to be passed in the constructor
+    //this iban is used to filter the transactions by the sender iban or receiver iban
     public class TransactionsVM
     {
         string iban;
@@ -19,6 +22,7 @@ namespace LoanShark.ViewModel
             this.iban = iban;
         }
 
+        // retrieveForMenu() returns a list of transactions formatted for the menu
         public ObservableCollection<string> retrieveForMenu()
         {
             ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
@@ -26,7 +30,7 @@ namespace LoanShark.ViewModel
 
             foreach (var transaction in Transactions)
             {
-                if (transaction.SenderIban == this.iban)
+                if (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban)
                 {
                     TransactionsForMenu.Add(transaction.tostringForMenu());
                 }
@@ -34,6 +38,7 @@ namespace LoanShark.ViewModel
             return TransactionsForMenu;
         }
 
+        // FilterByTypeForMenu() returns a list of transactions formatted for the menu filtered by the transaction type
         public ObservableCollection<string> FilterByTypeForMenu(string type)
         {
             ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
@@ -41,7 +46,7 @@ namespace LoanShark.ViewModel
 
             foreach (var transaction in Repo.getTransactionsNormal())
             {
-                if (transaction.TransactionType == type && transaction.SenderIban == this.iban)
+                if (transaction.TransactionType == type && (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban))
                 {
                     TransactionsForMenu.Add(transaction.tostringForMenu());
                 }
@@ -50,6 +55,7 @@ namespace LoanShark.ViewModel
             return TransactionsForMenu;
         }
 
+        // FilterByTypeDetailed() returns a list of transactions formatted in detail filtered by the transaction type
         public ObservableCollection<string> FilterByTypeDetailed(string type)
         {
             ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
@@ -57,7 +63,7 @@ namespace LoanShark.ViewModel
 
             foreach (var transaction in Repo.getTransactionsNormal())
             {
-                if (transaction.TransactionType == type && transaction.SenderIban == this.iban)
+                if (transaction.TransactionType == type && (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban))
                 {
                     TransactionsDetailed.Add(transaction.tostringDetailed());
                 }
@@ -65,6 +71,7 @@ namespace LoanShark.ViewModel
             return TransactionsDetailed;
         }
 
+        // SortByDate() returns a list of transactions formatted for the menu sorted by date
         public ObservableCollection<string> SortByDate(string order)
         {
 
@@ -99,6 +106,7 @@ namespace LoanShark.ViewModel
             }
         }
 
+        // CreateCSV() creates a CSV file with the transactions 
         public void CreateCSV()
         {
             ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
@@ -113,10 +121,28 @@ namespace LoanShark.ViewModel
             System.IO.File.WriteAllText(filePath, csv.ToString());
         }
 
+        // GetTransactionByMenuString() returns a transaction object based on the menu string
         public Transaction GetTransactionByMenuString(string menuString)
         {
             ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
             return Transactions.FirstOrDefault(t => t.tostringForMenu() == menuString);
+        }
+
+        // UpdateTransactionDescription() updates the transaction description
+        public static void UpdateTransactionDescription(int transactionId, string newDescription)
+        {
+            Repo.UpdateTransactionDescription(transactionId, newDescription);
+        }
+
+
+        // GetTransactionTypeCounts() returns a dictionary with the transaction type counts
+        public Dictionary<string, int> GetTransactionTypeCounts()
+        {
+            ObservableCollection<Transaction> transactions = Repo.getTransactionsNormal();
+            return transactions
+                .Where(t => t.SenderIban == this.iban)
+                .GroupBy(t => t.TransactionType)
+                .ToDictionary(g => g.Key, g => g.Count());
         }
     }
 }

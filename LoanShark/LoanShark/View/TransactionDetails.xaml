@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Window
     x:Class="LoanShark.TransactionDetails"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -12,7 +11,11 @@
     <Grid>
         <StackPanel Margin="20">
             <TextBlock x:Name="TransactionDetailsTextBlock" TextWrapping="Wrap" Margin="0,0,0,20"/>
-            <Button Content="Done" Click="DoneButton_Click" HorizontalAlignment="Center"/>
+            <TextBox x:Name="DescriptionTextBox" PlaceholderText="Change description" Margin="0,0,0,20"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Done" Click="DoneButton_Click" Margin="5"/>
+                <Button Content="Update Description" Click="UpdateDescriptionButton_Click" Margin="5"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

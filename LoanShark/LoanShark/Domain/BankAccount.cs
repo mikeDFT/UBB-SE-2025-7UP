@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Globalization;
 
+
+//DELETE THIS FILE, SHOULD BE GOOD AS LONG AS IT HAS THE SAME ATTRIBUTES
+
 namespace LoanShark.Domain
 {
     public class BankAccount

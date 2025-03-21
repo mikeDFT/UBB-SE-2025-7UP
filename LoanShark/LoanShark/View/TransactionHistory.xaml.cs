@@ -90,9 +90,16 @@ namespace LoanShark
                 // Retrieve the detailed information of the selected transaction
                 var selectedTransaction = transactionsViewModel.GetTransactionByMenuString(selectedTransactionForMenu);
                 string detailedTransaction = selectedTransaction.tostringDetailed();
-                TransactionDetails transactionDetailsWindow = new TransactionDetails(detailedTransaction);
+                TransactionDetails transactionDetailsWindow = new TransactionDetails(detailedTransaction, selectedTransaction);
                 transactionDetailsWindow.Activate();
             }
+        }
+
+        private void ViewGraphics_Click(object sender, RoutedEventArgs e)
+        {
+            var transactionTypeCounts = transactionsViewModel.GetTransactionTypeCounts();
+            TransactionGraphics transactionGraphicsWindow = new TransactionGraphics(transactionTypeCounts);
+            transactionGraphicsWindow.Activate();
         }
 
     }

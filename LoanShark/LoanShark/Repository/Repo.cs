@@ -11,24 +11,23 @@ using LoanShark.Domain;
 
 namespace LoanShark.Repository
 {
+
+    //repo class is static but it should be fine as long as the methods are static, you dont need to change anything 
+    //about the functions
     static class Repo
     {
 
+        // this retrieves all the transactions from the database, creeates a hashmap
+        // for each row and then creates a transaction object from the hashmap
+        // that is what the transaction has a constructor that takes a hashmap
         public static ObservableCollection<Transaction> getTransactionsNormal()
         {
             ObservableCollection<Transaction> TransactionsNormal = new ObservableCollection<Transaction>();
             try
             {
-                // Create an instance of the DataLink class
                 DataLink dataLink = new DataLink();
-
-                // Define the stored procedure name
                 string storedProcedure = "GetTransactions";
-
-                // Call the ExecuteReader method
                 DataTable result = dataLink.ExecuteReader(storedProcedure);
-
-                // Process the result
                 foreach (DataRow row in result.Rows)
                 {
                     Dictionary<string, object> hashMap = new Dictionary<string, object>();
@@ -45,26 +44,39 @@ namespace LoanShark.Repository
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
-
             return TransactionsNormal;
         }
 
+
+        //this is ok, no need to change anything
+        public static void UpdateTransactionDescription(int transactionId, string newDescription)
+        {
+            try
+            {
+                DataLink dataLink = new DataLink();
+                string storedProcedure = "UpdateTransactionDescription";
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                new SqlParameter("@TransactionID", transactionId),
+                new SqlParameter("@NewDescription", newDescription)
+                };
+                dataLink.ExecuteNonQuery(storedProcedure, parameters);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        //gets transactions formatted for the menu
         public static ObservableCollection<string> getTransactionsForMenu()
         {
-
             ObservableCollection<string> TransactionsForMenu = new ObservableCollection<string>();
             try
             {
-                // Create an instance of the DataLink class
                 DataLink dataLink = new DataLink();
-
-                // Define the stored procedure name
                 string storedProcedure = "GetTransactions";
-
-                // Call the ExecuteReader method
                 DataTable result = dataLink.ExecuteReader(storedProcedure);
-
-                // Process the result
                 foreach (DataRow row in result.Rows)
                 {
                     Dictionary<string, object> hashMap = new Dictionary<string, object>();
@@ -85,22 +97,16 @@ namespace LoanShark.Repository
             return TransactionsForMenu;
         }
 
-         public static ObservableCollection<string> getTransactionsDetailed()
+        //gets transactions formatted for the detailed view
+        public static ObservableCollection<string> getTransactionsDetailed()
         {
 
             ObservableCollection<string> TransactionsDetailed = new ObservableCollection<string>();
             try
             {
-                // Create an instance of the DataLink class
                 DataLink dataLink = new DataLink();
-
-                // Define the stored procedure name
                 string storedProcedure = "GetTransactions";
-
-                // Call the ExecuteReader method
                 DataTable result = dataLink.ExecuteReader(storedProcedure);
-
-                // Process the result
                 foreach (DataRow row in result.Rows)
                 {
                     Dictionary<string, object> hashMap = new Dictionary<string, object>();

@@ -20,6 +20,9 @@ namespace LoanShark.Domain
 
         public string TransactionDescription { get;  set; }
 
+        // i don't care about any of the constuctors as long as the transaction
+        // objects have the same attributes(names and data types and accessibility)
+
         public Transaction(int TransactionID, string SenderIban, string ReceiverIban, DateTime TransferDate,
                             string SenderCurrency, string ReceiverCurrency, double SenderAmount,
                             double ReceiverAmount, string transactionType)
@@ -49,6 +52,8 @@ namespace LoanShark.Domain
             this.TransactionDescription = hashMap["transaction_description"].ToString();
         }
 
+
+        //tostringDetailed() and tostringForMenu() format the transaction to be displayed in the UI
         public string tostringDetailed()
         {
             return "Transaction ID: " + TransactionID + "\n" +
@@ -73,6 +78,8 @@ namespace LoanShark.Domain
                    "Type: " + TransactionType;
         }
 
+
+        // this formats the transaction to be written to a CSV file
         public string tostringCSV()
         {
             return $"{TransactionID},{SenderIban},{ReceiverIban},{TransactionDate},{SenderCurrency},{ReceiverCurrency},{SenderAmount},{ReceiverAmount},{TransactionType},{TransactionDescription}";

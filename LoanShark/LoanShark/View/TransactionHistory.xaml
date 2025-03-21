@@ -16,6 +16,7 @@
                     <Button Content="Export to CSV" Click="ExportToCSV_Click" Margin="5"/>
                     <Button Content="Date Ascending" Click="SortAscending_Click" Margin="5"/>
                     <Button Content="Date Descending" Click="SortDescending_Click" Margin="5"/>
+                    <Button Content="View Graphics" Click="ViewGraphics_Click" Margin="5"/>
                     <TextBox x:Name="TransactionTypeTextBox" PlaceholderText="Type to filter" Margin="10" Width="200" TextChanged="TransactionTypeTextBox_TextChanged"/>
                 </StackPanel>
                 <ListBox x:Name="ColorListBox" MinWidth="200" ItemsSource="{x:Bind currentList}" SelectionChanged="ColorListBox_SelectionChanged"/>
