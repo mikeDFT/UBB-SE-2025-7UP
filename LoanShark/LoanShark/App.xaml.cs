@@ -36,7 +36,6 @@ namespace LoanShark
         public App()
         {
             this.InitializeComponent();
-            Debug.Print(BCrypt.Net.BCrypt.GenerateSalt(10));
         }
 
         /// <summary>
