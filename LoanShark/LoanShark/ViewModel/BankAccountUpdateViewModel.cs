@@ -105,6 +105,7 @@ namespace LoanShark.ViewModel
         public Action OnUpdateSuccess { get; set; }
         public Action OnClose { get; set; }
 
+        // initializes the view model and loads the bank account for which the settings are to be updated
         public BankAccountUpdateViewModel(string iban)
         {
             if (string.IsNullOrEmpty(iban))
@@ -131,7 +132,7 @@ namespace LoanShark.ViewModel
                 throw;
             }
         }
-
+        // loads the bank account with the given iban from the database
         private void LoadBankAccount(string iban)
         {
             if (string.IsNullOrEmpty(iban))
@@ -163,7 +164,8 @@ namespace LoanShark.ViewModel
                 throw;
             }
         }
-
+        // checks for the inputs to be valid and be changed from the initial ones and updates the database
+        // with the new settings, otherwise returns a message according to the error
         public string UpdateBankAccount()
         {
             try
@@ -192,6 +194,11 @@ namespace LoanShark.ViewModel
                 {
                     return "Maximum number of transactions cannot be negative";
                 }
+                if (AccountName == _bankAccount.name && DailyLimit==_bankAccount.dailyLimit &&
+                    MaximumPerTransaction == _bankAccount.maximumPerTransaction &&
+                    MaximumNrTransactions == _bankAccount.maximumNrTransactions &&
+                    IsBlocked == _bankAccount.blocked)
+                    return "Failed to update bank account. No settings were changed";
 
                 bool result = _bankAccountService.updateBankAccount(
                     AccountIBAN,
@@ -219,11 +226,6 @@ namespace LoanShark.ViewModel
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public BankAccount GetBankAccount()
-        {
-            return _bankAccount;
         }
 
     }

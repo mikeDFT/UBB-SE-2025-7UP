@@ -149,6 +149,8 @@ namespace LoanShark.Repository
             return bankAccounts;
         }
 
+        // updates the bank account with the given iban with the new attributes by calling 
+        // the sql procedure UpdateBankAccount
         public bool updateBankAccount(string IBAN, BankAccount NBA)
         {
             try

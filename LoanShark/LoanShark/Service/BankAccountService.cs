@@ -91,6 +91,8 @@ namespace LoanShark.Service
                     return finalIBAN;
             }
         }
+        //generates a default bank account with the attributes to be updated and passes it to repository
+        // to update the database
         public bool updateBankAccount(string IBAN , string name, float daily_limit, float max_per_trans, int max_nr_trans, bool blocked)
         {
             var NBA = new BankAccount(IBAN, "RON", 0, blocked, 123, name, daily_limit, max_per_trans, max_nr_trans);

@@ -29,6 +29,7 @@ namespace LoanShark.View
     {
         private BankAccountUpdateViewModel _viewModel;
 
+        // Initializes the view and makes the window size be 800*1400
         public BankAccountUpdateView(string iban)
         {
             try
@@ -59,6 +60,7 @@ namespace LoanShark.View
             }
         }
 
+        // handles the Update Button Click
         private async void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
             try
