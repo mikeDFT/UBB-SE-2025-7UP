@@ -23,12 +23,13 @@ namespace LoanShark.ViewModel
         /// <summary>
         /// Action to be invoked when the view should be closed
         /// </summary>
-        public Action OnClose { get; set; }
+        public Action? OnClose { get; set; }
 
         /// <summary>
         /// Action to be invoked when the bank account creation was successful
         /// </summary>
-        public Action OnSuccess { get; set; }
+        public Action? OnSuccess { get; set; }
+
         /// <summary>
         /// Collection of available currencies for the new bank account
         /// </summary>
@@ -49,12 +50,12 @@ namespace LoanShark.ViewModel
         /// </summary>
         public int userID;
 
-        private CurrencyItem _selectedItem;
+        private CurrencyItem? _selectedItem;
 
         /// <summary>
         /// The currently selected currency for the new bank account
         /// </summary>
-        public CurrencyItem SelectedItem
+        public CurrencyItem? SelectedItem
         {
             get => _selectedItem;
             set
@@ -69,12 +70,12 @@ namespace LoanShark.ViewModel
             }
         }
 
-        private string _customName;
-        public string CustomName
+        private string? _customName;
+        public string? CustomName
         {
             get
             {
-                return _customName;
+                return _customName ?? string.Empty;
             }
             set
             {
@@ -104,7 +105,7 @@ namespace LoanShark.ViewModel
         public async void OnConfirmButtonClicked()
         {
             
-            Debug.WriteLine($"Pressed create confirm bank account: {SelectedItem.Name}");
+            Debug.WriteLine($"Pressed create confirm bank account: {SelectedItem?.Name}");
             if (SelectedItem != null)
             {
                 await service.CreateBankAccount(userID, CustomName ?? "", SelectedItem.Name);
