@@ -1,9 +1,6 @@
 ﻿namespace LoanShark.Domain
 {
-    /// <summary>
-    /// Represents a bank account entity with its properties and operations
-    /// </summary>
-    class BankAccount
+    public class BankAccount
     {
         /// <summary>
         /// The International Bank Account Number (IBAN) of the account
@@ -82,5 +79,6 @@
         {
             blocked = !blocked;
         }
+
     }
 }

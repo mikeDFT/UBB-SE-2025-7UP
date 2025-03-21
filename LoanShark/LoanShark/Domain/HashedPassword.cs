@@ -31,7 +31,6 @@ namespace LoanShark.Domain
             }
             this.salt = BCrypt.Net.BCrypt.GenerateSalt(10); // this will generate a 29 character string
             this.hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, this.salt); // this will hash the password with the generated salt
-            Debug.Print("Salt: " + this.salt + " | HashedPassword: " + this.hashedPassword);
         }
 
         // this constructor will be used to create a HashedPassword object with the data retrieved

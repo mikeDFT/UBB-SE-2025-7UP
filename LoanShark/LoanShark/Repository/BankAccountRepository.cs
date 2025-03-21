@@ -46,6 +46,7 @@ namespace LoanShark.Repository
         /// <param name="IBAN">The IBAN of the bank account to remove</param>
         /// <returns>True if the bank account was removed successfully, false otherwise</returns>
         bool removeBankAccount(string IBAN);
+        bool updateBankAccount(string IBAN, BankAccount NBA);
 
         /// <summary>
         /// Retrieves all available currencies from the database
@@ -269,6 +270,31 @@ namespace LoanShark.Repository
             credentials.Add(dataTable.Rows[0]["hashed_password"].ToString());
             credentials.Add(dataTable.Rows[0]["password_salt"].ToString());
             return credentials;
+        }
+
+        // updates the bank account with the given iban with the new attributes by calling 
+        // the sql procedure UpdateBankAccount
+        public bool updateBankAccount(string IBAN, BankAccount NBA)
+        {
+            try
+            {
+                var sqlParams = new SqlParameter[]
+                {
+                             new SqlParameter("@iban", IBAN),
+                             new SqlParameter("@custom_name", NBA.name),
+                             new SqlParameter("@daily_limit", NBA.dailyLimit),
+                             new SqlParameter("@max_per_transaction",NBA.maximumPerTransaction),
+                             new SqlParameter("@max_nr_transactions_daily",NBA.maximumNrTransactions),
+                             new SqlParameter("@blocked",NBA.blocked)
+                };
+                dataLink.ExecuteNonQuery("UpdateBankAccount", sqlParams);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Could not update bank account");
+                return false;
+            }
         }
     }
 }
