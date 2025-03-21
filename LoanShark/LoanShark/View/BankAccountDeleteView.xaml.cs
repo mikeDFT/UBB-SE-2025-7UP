@@ -20,19 +20,8 @@ namespace LoanShark.View
             MainGrid.DataContext = viewModel;
 
             viewModel.onClose = () => this.Close();
-            CloseWindowService.CloseAllWindows += CloseWindow;
 
             WindowManager.RegisterWindow(this);
-        }
-
-        ~BankAccountDeleteView()
-        {
-            CloseWindowService.CloseAllWindows -= CloseWindow;
-        }
-
-        private void CloseWindow()
-        {
-            this.Close();
         }
     }
 }

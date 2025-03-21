@@ -26,19 +26,7 @@ namespace LoanShark.View
             viewModel.OnSuccess = async () => await ShowSuccessMessage();
             viewModel.OnClose = () => this.Close();
 
-            CloseWindowService.CloseAllWindows += CloseWindow;
-
             WindowManager.RegisterWindow(this);
-        }
-
-        private void CloseWindow()
-        {
-            this.Close();
-        }
-
-        ~BankAccountVerifyView()
-        {
-            CloseWindowService.CloseAllWindows -= CloseWindow;
         }
 
         private async Task ShowSuccessMessage()
@@ -53,7 +41,7 @@ namespace LoanShark.View
 
             await dialog.ShowAsync().AsTask();
 
-            CloseWindowService.RequestCloseAllWindows();
+            // TODO alex
         }
     }
 }
