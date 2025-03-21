@@ -1,3 +1,4 @@
+using LoanShark.Helper;
 using LoanShark.ViewModel;
 using Microsoft.UI.Xaml;
 
@@ -18,6 +19,17 @@ namespace LoanShark.View
             MainGrid.DataContext = viewModel;
 
             viewModel.onClose = () => this.Close();
+            CloseWindowService.CloseAllWindows += CloseWindow;
+        }
+
+        ~BankAccountDeleteView()
+        {
+            CloseWindowService.CloseAllWindows -= CloseWindow;
+        }
+
+        private void CloseWindow()
+        {
+            this.Close();
         }
     }
 }

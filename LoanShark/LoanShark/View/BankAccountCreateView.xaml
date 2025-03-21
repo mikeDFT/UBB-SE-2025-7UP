@@ -15,6 +15,13 @@
             <!-- Content (fills remaining space) -->
         </Grid.RowDefinitions>
 
+        <ContentDialog x:Name="AutoCloseDialog"
+                       Title="Notification"
+                       Content="This message will close automatically in 2 seconds."
+                       PrimaryButtonText="OK"
+                       DefaultButton="Primary"
+                       Visibility="Collapsed"/>
+        
         <!-- Header Section -->
         <Border Padding="20" Grid.Row="0" Margin="0,0,0,30" BorderBrush="Gray" BorderThickness="0,0,0,4">
             <Grid Height="50">

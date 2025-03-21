@@ -1,6 +1,8 @@
 using LoanShark.ViewModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System.Threading.Tasks;
+using System;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -19,7 +21,8 @@ namespace LoanShark.View
             viewModel = new BankAccountCreateViewModel(userID);
             MainGrid.DataContext = viewModel;
 
-            viewModel.onClose = () => this.Close();
+            viewModel.OnClose = () => this.Close();
+            viewModel.OnSuccess = async () => this.ShowSuccessMessage();
         }
 
         public void RadioButton_Checked(object sender, RoutedEventArgs e)
@@ -28,6 +31,20 @@ namespace LoanShark.View
             {
                 viewModel.SelectedItem = new CurrencyItem { Name = radioButton.Content.ToString(), IsChecked = true };
             }
+        }
+
+        private async Task ShowSuccessMessage()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Success",
+                Content = "Bank account creation was successful!",
+                CloseButtonText = "OK",
+                XamlRoot = this.Content.XamlRoot
+            };
+
+            await dialog.ShowAsync().AsTask();
+            this.Close();
         }
     }
 }

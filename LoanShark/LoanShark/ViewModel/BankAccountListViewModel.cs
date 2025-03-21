@@ -20,6 +20,8 @@ namespace LoanShark.ViewModel
         /// </summary>
         public Action OnClose { get; set; }
 
+        public Action OnSuccess { get; set; }
+
         /// <summary>
         /// Command to navigate back to the main page
         /// </summary>

@@ -12,6 +12,8 @@ namespace LoanShark.ViewModel
     /// </summary>
     class BankAccountVerifyViewModel : INotifyPropertyChanged
     {
+        public Action OnSuccess { get; set; }
+
         /// <summary>
         /// Command for the back button to return to the previous view
         /// </summary>
@@ -29,8 +31,8 @@ namespace LoanShark.ViewModel
 
         private BankAccountService service;
         private string _iban;
-        private string _emailInput;
         private string _passwordInput;
+        private string _email;
 
         /// <summary>
         /// The password entered by the user for verification
@@ -49,28 +51,13 @@ namespace LoanShark.ViewModel
         }
 
         /// <summary>
-        /// The email entered by the user for verification
-        /// </summary>
-        public string Email
-        {
-            get
-            {
-                return _emailInput;
-            }
-            set
-            {
-                _emailInput = value;
-                OnPropertyChanged(nameof(Email));
-            }
-        }
-
-        /// <summary>
         /// Initializes a new instance of the BankAccountVerifyViewModel class
         /// </summary>
         /// <param name="IBAN">The IBAN of the bank account to be deleted after verification</param>
-        public BankAccountVerifyViewModel(string IBAN)
+        public BankAccountVerifyViewModel(string IBAN, string email)
         {
             service = new BankAccountService();
+            _email = email;
             _iban = IBAN;
             BackCommand = new RelayCommand(OnBackButtonClicked);
             ConfirmCommand = new RelayCommand(OnConfirmButtonClicked);
@@ -93,10 +80,10 @@ namespace LoanShark.ViewModel
         public void OnConfirmButtonClicked()
         {
             Debug.WriteLine("Confirm button");
-            if (service.verifyUserCredentials(Email, Password))
+            if (service.verifyUserCredentials(_email, Password))
             {
-                service.removeBankAccount(_iban);
-                Debug.WriteLine("User entered correct credentials");
+                if (service.removeBankAccount(_iban))
+                    OnSuccess?.Invoke();
             }
             else
                 Debug.WriteLine("User entered wrong credentials");

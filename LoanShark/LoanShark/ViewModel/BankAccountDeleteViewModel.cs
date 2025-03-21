@@ -59,7 +59,8 @@ namespace LoanShark.ViewModel
         public void OnYesButtonClicked()
         {
             Debug.WriteLine("Yes button");
-            var window = new BankAccountVerifyView(_iban);
+            // this is hardcoded, when merging with the main branch, the email should be retrieved from the UserSession data
+            var window = new BankAccountVerifyView(_iban, "alupeidan218@gmail.com");
             window.Activate();
         }
 

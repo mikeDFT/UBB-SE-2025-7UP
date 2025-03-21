@@ -1,12 +1,16 @@
 ﻿using LoanShark.Helper;
 using LoanShark.Service;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Popups;
+using Microsoft.UI.Dispatching;
 
 namespace LoanShark.ViewModel
 {
@@ -18,8 +22,12 @@ namespace LoanShark.ViewModel
         /// <summary>
         /// Action to be invoked when the view should be closed
         /// </summary>
-        public Action onClose;
+        public Action OnClose { get; set; }
 
+        /// <summary>
+        /// Action to be invoked when the bank account creation was successful
+        /// </summary>
+        public Action OnSuccess { get; set; }
         /// <summary>
         /// Collection of available currencies for the new bank account
         /// </summary>
@@ -93,12 +101,14 @@ namespace LoanShark.ViewModel
         /// Handler for the confirm button click
         /// Creates a new bank account with the selected currency
         /// </summary>
-        public void OnConfirmButtonClicked()
+        public async void OnConfirmButtonClicked()
         {
+            
+            Debug.WriteLine($"Pressed create confirm bank account: {SelectedItem.Name}");
             if (SelectedItem != null)
             {
                 service.createBankAccount(userID, CustomName ?? "", SelectedItem.Name);
-                Debug.WriteLine($"Pressed create confirm bank account: {SelectedItem.Name}");
+                OnSuccess?.Invoke();
             }
             else
             {
@@ -113,7 +123,7 @@ namespace LoanShark.ViewModel
         public void OnCancelButtonClicked()
         {
             Debug.WriteLine("Pressed cancel create bank account");
-            onClose?.Invoke();
+            OnClose?.Invoke();
         }
 
         /// <summary>
@@ -129,7 +139,7 @@ namespace LoanShark.ViewModel
 
             if (Currencies.Count > 0)
             {
-                SelectedItem = Currencies.FirstOrDefault(c => c.Name == "Dolar") ?? Currencies[0];
+                SelectedItem = Currencies.FirstOrDefault(c => c.Name == "RON") ?? Currencies[0];
                 OnPropertyChanged(nameof(SelectedItem));
             }
         }
