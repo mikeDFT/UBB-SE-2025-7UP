@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE GetBankAccountBalanceByUserIban
+CREATE OR ALTER PROCEDURE GetBankAccountBalanceByIban
     @iban NVARCHAR(50)
 AS
 BEGIN
