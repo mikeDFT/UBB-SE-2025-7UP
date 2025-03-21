@@ -1,11 +1,6 @@
 ﻿using LoanShark.Domain;
 using Microsoft.UI.Xaml.Data;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LoanShark.Domain;
 
 namespace LoanShark.Helper
 {

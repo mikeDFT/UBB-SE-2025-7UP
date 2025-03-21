@@ -1,13 +1,8 @@
 ﻿using LoanShark.Helper;
 using LoanShark.Service;
 using LoanShark.View;
-using Microsoft.UI.Input;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace LoanShark.ViewModel
@@ -21,20 +16,20 @@ namespace LoanShark.ViewModel
         /// Command for the No button to cancel deletion
         /// </summary>
         public ICommand NoCommand { get; }
-        
+
         /// <summary>
         /// Command for the Yes button to proceed with deletion
         /// </summary>
         public ICommand YesCommand { get; }
-        
+
         /// <summary>
         /// Action to be invoked when the view should be closed
         /// </summary>
         public Action onClose { get; set; }
-        
+
         private BankAccountService service;
         private string _iban;
-        
+
         /// <summary>
         /// Initializes a new instance of the BankAccountDeleteViewModel class
         /// </summary>

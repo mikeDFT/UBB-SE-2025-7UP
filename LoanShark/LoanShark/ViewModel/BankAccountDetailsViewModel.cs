@@ -1,14 +1,10 @@
-﻿using LoanShark.Helper;
+﻿using LoanShark.Domain;
+using LoanShark.Helper;
+using LoanShark.Service;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using LoanShark.Domain;
-using LoanShark.Service;
 
 namespace LoanShark.ViewModel
 {

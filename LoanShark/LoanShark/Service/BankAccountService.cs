@@ -1,13 +1,11 @@
-﻿using System;
+﻿using LoanShark.Domain;
+using LoanShark.Repository;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Text;
-using System.Threading.Tasks;
-using LoanShark.Domain;
-using LoanShark.Repository;
 
 namespace LoanShark.Service
 {
@@ -87,7 +85,7 @@ namespace LoanShark.Service
         {
             List<string> listIBAN = _bankAccountRepository.getAllBankAccounts().Select(account => account.iban).ToList();
             return listIBAN.Any(x => x == IBAN);
-        } 
+        }
 
         /// <summary>
         /// Generates a unique IBAN for a new bank account

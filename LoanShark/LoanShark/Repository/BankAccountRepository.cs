@@ -1,14 +1,10 @@
-﻿using System;
+﻿using LoanShark.Data;
+using LoanShark.Domain;
+using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LoanShark.Data;
-using LoanShark.Domain;
-using Microsoft.Data.SqlClient;
-using Windows.Networking.NetworkOperators;
 
 namespace LoanShark.Repository
 {
@@ -71,7 +67,7 @@ namespace LoanShark.Repository
     class BankAccountRepository : IBankAccountRepository
     {
         private readonly DataLink dataLink;
-        
+
         /// <summary>
         /// Initializes a new instance of the BankAccountRepository class
         /// </summary>
@@ -90,7 +86,8 @@ namespace LoanShark.Repository
             {
                 DataTable dataTable = dataLink.ExecuteReader("GetAllBankAccounts");
                 return ConvertDataTableToBankAccountList(dataTable);
-            } catch(Exception)
+            }
+            catch (Exception)
             {
                 Debug.WriteLine("Oopsie on get all bank accounts repo");
                 return null;
@@ -150,9 +147,9 @@ namespace LoanShark.Repository
         /// <returns>True if the bank account was added successfully, false otherwise</returns>
         public bool addBankAccount(BankAccount bankAccount)
         {
-           try
-           {
-            Debug.WriteLine(bankAccount.iban);
+            try
+            {
+                Debug.WriteLine(bankAccount.iban);
                 var sqlParams = new SqlParameter[]
                 {
                     new SqlParameter("@iban", bankAccount.iban),
@@ -167,14 +164,14 @@ namespace LoanShark.Repository
                 };
                 dataLink.ExecuteNonQuery("AddBankAccount", sqlParams);
                 return true;
-           }
+            }
             catch (Exception e)
-           {
+            {
                 Debug.WriteLine("Oopsie on add bank account repo");
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Removes a bank account from the database
         /// </summary>
@@ -185,9 +182,9 @@ namespace LoanShark.Repository
             try
             {
                 Debug.WriteLine(IBAN);
-                var sqlParams = new SqlParameter[] 
-                { 
-                    new SqlParameter("@iban", IBAN) 
+                var sqlParams = new SqlParameter[]
+                {
+                    new SqlParameter("@iban", IBAN)
                 };
                 dataLink.ExecuteNonQuery("RemoveBankAccount", sqlParams);
                 return true;
@@ -224,7 +221,8 @@ namespace LoanShark.Repository
         /// </summary>
         /// <param name="dataTable">The DataTable to convert</param>
         /// <returns>A list of BankAccount objects</returns>
-        public List<BankAccount> ConvertDataTableToBankAccountList(DataTable dataTable) {
+        public List<BankAccount> ConvertDataTableToBankAccountList(DataTable dataTable)
+        {
             List<BankAccount> bankAccounts = new List<BankAccount>();
             foreach (DataRow row in dataTable.Rows)
             {
@@ -241,7 +239,7 @@ namespace LoanShark.Repository
         public List<string> ConvertDataTableToCurrencyList(DataTable dataTable)
         {
             List<string> currencies = new List<string>();
-            foreach(DataRow row in dataTable.Rows)
+            foreach (DataRow row in dataTable.Rows)
             {
                 currencies.Add(Convert.ToString(row["currency_name"]));
             }

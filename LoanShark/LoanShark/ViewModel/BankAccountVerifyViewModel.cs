@@ -1,12 +1,8 @@
 ﻿using LoanShark.Helper;
 using LoanShark.Service;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace LoanShark.ViewModel
@@ -20,17 +16,17 @@ namespace LoanShark.ViewModel
         /// Command for the back button to return to the previous view
         /// </summary>
         public ICommand BackCommand { get; }
-        
+
         /// <summary>
         /// Command for the confirm button to verify credentials and delete the account
         /// </summary>
         public ICommand ConfirmCommand { get; }
-        
+
         /// <summary>
         /// Action to be invoked when the view should be closed
         /// </summary>
         public Action OnClose { get; set; }
-        
+
         private BankAccountService service;
         private string _iban;
         private string _emailInput;
@@ -67,7 +63,7 @@ namespace LoanShark.ViewModel
                 OnPropertyChanged(nameof(Email));
             }
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the BankAccountVerifyViewModel class
         /// </summary>
@@ -113,16 +109,16 @@ namespace LoanShark.ViewModel
         {
             OnClose?.Invoke();
         }
-        
+
         /// <summary>
         /// Event that is raised when a property value changes
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         /// <summary>
         /// Raises the PropertyChanged event
         /// </summary>
         /// <param name="propertyName">The name of the property that changed</param>
-        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));   
+        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

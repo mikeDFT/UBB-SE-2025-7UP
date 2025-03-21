@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LoanShark.Domain
+﻿namespace LoanShark.Domain
 {
     /// <summary>
     /// Represents a bank account entity with its properties and operations
@@ -14,7 +8,7 @@ namespace LoanShark.Domain
         /// <summary>
         /// The International Bank Account Number (IBAN) of the account
         /// </summary>
-        public string iban {  get; set; }
+        public string iban { get; set; }
 
         /// <summary>
         /// The currency of the account (e.g., USD, EUR, RON)
@@ -24,7 +18,7 @@ namespace LoanShark.Domain
         /// <summary>
         /// The account balance (amount of money in the account)
         /// </summary>
-        public double sold {  get; set; }
+        public double sold { get; set; }
 
         /// <summary>
         /// Indicates whether the account is blocked/frozen
@@ -39,17 +33,17 @@ namespace LoanShark.Domain
         /// <summary>
         /// The custom name assigned to the account
         /// </summary>
-        public string name {  get; set; }
+        public string name { get; set; }
 
         /// <summary>
         /// The maximum amount that can be transacted in a day
         /// </summary>
-        public double dailyLimit {  get; set; }
+        public double dailyLimit { get; set; }
 
         /// <summary>
         /// The maximum amount that can be transacted in a single transaction
         /// </summary>
-        public double maximumPerTransaction {  get; set; }
+        public double maximumPerTransaction { get; set; }
 
         /// <summary>
         /// The maximum number of transactions allowed per day

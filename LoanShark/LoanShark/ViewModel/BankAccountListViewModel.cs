@@ -1,16 +1,12 @@
-﻿using LoanShark.Helper;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using LoanShark.Domain;
-using System.ComponentModel;
+﻿using LoanShark.Domain;
+using LoanShark.Helper;
 using LoanShark.Service;
 using LoanShark.View;
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows.Input;
 
 namespace LoanShark.ViewModel
 {
@@ -22,7 +18,7 @@ namespace LoanShark.ViewModel
         /// <summary>
         /// Action to be invoked when the view should be closed
         /// </summary>
-        public Action OnClose {  get; set; }
+        public Action OnClose { get; set; }
 
         /// <summary>
         /// Command to navigate back to the main page
@@ -68,7 +64,7 @@ namespace LoanShark.ViewModel
         {
             this.userID = userID;
             BankAccounts = new ObservableCollection<BankAccount>();
-            service = new BankAccountService(); 
+            service = new BankAccountService();
             LoadData();
             MainPageCommand = new RelayCommand(ToMainPage);
             SelectCommand = new RelayCommand(ViewDetails);
