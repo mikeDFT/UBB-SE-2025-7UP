@@ -22,20 +22,66 @@
             <TextBlock Text="Bank Account Details" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Grid.ColumnSpan="2"/>
         </Border>
 
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Currency:"/>
-            <TextBox Text="{Binding BankAccount.currency}" MinWidth="300" PlaceholderText="Placeholder" Margin="10" IsReadOnly="True" IsHitTestVisible="False"/>
-            <TextBlock Text="Custom name:"/>
-            <TextBox Text="{Binding BankAccount.name}" PlaceholderText="Placeholder" Margin="10" IsReadOnly="True" IsHitTestVisible="False"/>
-            <TextBlock Text="Sold:"/>
-            <TextBox Text="{Binding BankAccount.sold}" PlaceholderText="Placeholder" Margin="10" IsReadOnly="True" IsHitTestVisible="False"/>
-            <TextBlock Text="IBAN:"/>
-            <TextBox Text="{Binding BankAccount.iban}" PlaceholderText="Placeholder" Margin="10" IsReadOnly="True" IsHitTestVisible="False"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Blocked:" VerticalAlignment="Center" Margin="0,0,20,0"/>
-                <CheckBox IsEnabled="{Binding BankAccount.blocked}"/>
+        <Grid Grid.Row="1" VerticalAlignment="Center" MaxWidth="600">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <!-- Row for the centered bottom TextBox -->
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- First Column, First Row -->
+            <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
+                <TextBlock Text="IBAN:"/>
+                <TextBox Text="{Binding BankAccount.iban}" PlaceholderText="IBAN" IsReadOnly="True" IsHitTestVisible="False"/>
             </StackPanel>
-        </StackPanel>
+
+            <!-- First Column, Second Row -->
+            <StackPanel Grid.Row="0" Grid.Column="1" Margin="10">
+                <TextBlock Text="Daily Limit:"/>
+                <TextBox Text="{Binding BankAccount.dailyLimit}" PlaceholderText="Daily Limit" IsReadOnly="True" IsHitTestVisible="False"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
+                <TextBlock Text="Maximum Amount Per Transaction:"/>
+                <TextBox Text="{Binding BankAccount.maximumPerTransaction}" PlaceholderText="Daily Limit" IsReadOnly="True" IsHitTestVisible="False"/>
+            </StackPanel>
+
+            <!-- Second Column, First Row -->
+            <StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
+                <TextBlock Text="Currency:"/>
+                <TextBox Text="{Binding BankAccount.currency}" PlaceholderText="Currency" IsReadOnly="True" IsHitTestVisible="False"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="2" Margin="10">
+                <TextBlock Text="Maximum Number of Transactions Per Day:"/>
+                <TextBox Text="{Binding BankAccount.maximumNrTransactions}" PlaceholderText="Maximum Nr Transactions" IsReadOnly="True" IsHitTestVisible="False"/>
+            </StackPanel>
+
+            <!-- Second Column, Second Row -->
+            <StackPanel Grid.Row="2" Grid.Column="0" Margin="10">
+                <TextBlock Text="Custom name:"/>
+                <TextBox Text="{Binding BankAccount.name}" PlaceholderText="Custom Name" IsReadOnly="True" IsHitTestVisible="False"/>
+            </StackPanel>
+
+            <!-- Second Column, Third Row (left empty to match structure) -->
+            <StackPanel Grid.Row="2" Grid.Column="1" Margin="10">
+                <!-- This row is empty but maintains the grid structure -->
+            </StackPanel>
+
+            <!-- Bottom Center TextBox spanning both columns -->
+            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Status: " Margin="0,20,10,0"  VerticalAlignment="Center"/>  
+                    <TextBlock VerticalAlignment="Center" Margin="0,20,0,0"  Text="{Binding BankAccountStatus}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
 
         <Button Grid.Row="2" Command="{Binding ButtonCommand}" Content="Back" Width="100" BorderBrush="AliceBlue" Margin="0,0,0,30" HorizontalAlignment="Center"/>
     </Grid>

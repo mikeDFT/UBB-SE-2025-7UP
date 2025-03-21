@@ -28,6 +28,17 @@ namespace LoanShark.ViewModel
         /// </summary>
         public BankAccount BankAccount { get; set; }
 
+        public string BankAccountStatus
+        {
+            get
+            {
+                if (BankAccount.blocked)
+                    return "Blocked";
+                else
+                    return "Active";
+            }
+        }
+
         private BankAccountService service;
 
         /// <summary>
