@@ -50,7 +50,7 @@ namespace LoanShark.Service
         /// <param name="userID">The ID of the user who will own the account</param>
         /// <param name="currency">The currency for the new bank account</param>
         /// <returns>True if the bank account was created successfully, false otherwise</returns>
-        public bool createBankAccount(int userID, string currency)
+        public bool createBankAccount(int userID, string customName, string currency)
         {
             string IBAN = generateIBAN();
             BankAccount newBankAccount = new BankAccount(IBAN,
@@ -58,7 +58,7 @@ namespace LoanShark.Service
                 0.0,
                 false,
                 userID,
-                "",
+                customName,
                 1000.0,
                 200.0,
                 10
