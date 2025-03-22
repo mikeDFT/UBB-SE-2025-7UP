@@ -13,7 +13,8 @@ namespace LoanShark.ViewModel
     /// </summary>
     class BankAccountVerifyViewModel : INotifyPropertyChanged
     {
-        public Action? OnSuccess { get; set; }
+        public Action OnSuccess { get; set; }
+        public Action OnFailure { get; set; }
 
         /// <summary>
         /// Command for the back button to return to the previous view
@@ -81,7 +82,7 @@ namespace LoanShark.ViewModel
         public async void OnConfirmButtonClicked()
         {
             Debug.WriteLine("Confirm button");
-            if (await service.verifyUserCredentials(_email, Password))
+            if (Password != null && await service.verifyUserCredentials(_email, Password))
             {
                 if (await service.RemoveBankAccount(_iban))
                 {
@@ -90,7 +91,9 @@ namespace LoanShark.ViewModel
                 }
             }
             else
-                Debug.WriteLine("User entered wrong credentials");
+            {
+                OnFailure?.Invoke();
+            }
         }
 
         /// <summary>

@@ -26,6 +26,7 @@ namespace LoanShark.View
 
             viewModel.OnSuccess = async () => await ShowSuccessMessage();
             viewModel.OnClose = () => this.Close();
+            viewModel.OnFailure = async () => await ShowFailureMessage();
 
             WindowManager.RegisterWindow(this);
         }
@@ -53,6 +54,19 @@ namespace LoanShark.View
             {
                 viewModel.OnConfirmButtonClicked();
             }
+        }
+
+        private async Task ShowFailureMessage()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Failure",
+                Content = "Wrong credentials. Try again.",
+                CloseButtonText = "OK",
+                XamlRoot = this.Content.XamlRoot
+            };
+
+            await dialog.ShowAsync().AsTask();
         }
     }
 }
