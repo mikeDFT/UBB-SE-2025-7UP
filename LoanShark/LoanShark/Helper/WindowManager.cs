@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml;
 using System.Diagnostics;
 using LoanShark.Data;
 using LoanShark.Domain;
+using LoanShark.View;
 
 namespace LoanShark.Helper
 {
@@ -14,6 +15,7 @@ namespace LoanShark.Helper
     {
         // Track all active windows
         private static List<Window> activeWindows = new List<Window>();
+        public static bool shouldReloadBankAccounts = false;
 
         // Static method to register windows with the tracking system
         public static void RegisterWindow(Window window)
@@ -24,7 +26,7 @@ namespace LoanShark.Helper
         }
 
         // Static window closed event handler
-        private static void Window_Closed(object sender, WindowEventArgs args)
+        private static async void Window_Closed(object sender, WindowEventArgs args)
         {
             if (sender is Window window)
             {
@@ -37,6 +39,14 @@ namespace LoanShark.Helper
                     Debug.Print("Last window closed, cleaning up resources...");
                     CleanupResources();
                 }
+
+                // after closing any window, if the only window is the main page window, refresh the bank accounts flip view
+                if (activeWindows.Count == 1 && activeWindows.First() is MainPageWindow mainWindow && shouldReloadBankAccounts)
+                {
+                    await RefreshBankAccounts(mainWindow);
+                }
+
+                shouldReloadBankAccounts = false;
             }
         }
 
@@ -47,6 +57,11 @@ namespace LoanShark.Helper
             UserSession.Instance.InvalidateUserSession();
             Debug.Print("Resources cleaned up successfully");
             Application.Current.Exit();
+        }
+
+        public static async Task RefreshBankAccounts(MainPageWindow mp_window) 
+        {
+            await mp_window.RefreshBankAccounts();
         }
     }
 }

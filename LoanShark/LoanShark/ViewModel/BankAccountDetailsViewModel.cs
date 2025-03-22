@@ -77,6 +77,7 @@ namespace LoanShark.ViewModel
         public void OnBackButtonClicked()
         {
             Debug.WriteLine("Back button clicked in bank account details page");
+            WindowManager.shouldReloadBankAccounts = false;
             OnClose?.Invoke();
         }
 

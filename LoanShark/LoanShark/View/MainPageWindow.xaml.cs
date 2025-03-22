@@ -92,20 +92,19 @@ namespace LoanShark.View
         private void BankAccountCreateButtonHandler(object sender, RoutedEventArgs e)
         {
             var bankAccountCreateView = new BankAccountCreateView();
-            bankAccountCreateView.AccountCreated += BankAccountCreateView_AccountCreated;
             bankAccountCreateView.Activate();
-        }
-
-        private async void BankAccountCreateView_AccountCreated(object? sender, EventArgs e)
-        {
-            // Refresh the bank accounts list when a new account is created
-            await this.ViewModel.RefreshBankAccounts();
         }
 
         private void BankAccountDetailsViewButtonHandler(object sender, RoutedEventArgs e)
         {
             var bankAccountDetailsView = new BankAccountDetailsView();
             bankAccountDetailsView.Activate();
+        }
+
+        private void BankAccountSettingsButtonHandler(object sender, RoutedEventArgs e)
+        {
+            var bankAccountUpdateView = new BankAccountUpdateView();
+            bankAccountUpdateView.Activate();
         }
 
         public async Task RefreshBankAccounts()

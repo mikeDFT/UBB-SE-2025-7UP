@@ -109,6 +109,7 @@ namespace LoanShark.ViewModel
             if (SelectedItem != null)
             {
                 await service.CreateBankAccount(userID, CustomName ?? "", SelectedItem.Name);
+                WindowManager.shouldReloadBankAccounts = true;
                 OnSuccess?.Invoke();
             }
             else
@@ -124,6 +125,7 @@ namespace LoanShark.ViewModel
         public void OnCancelButtonClicked()
         {
             Debug.WriteLine("Pressed cancel create bank account");
+            WindowManager.shouldReloadBankAccounts = false;
             OnClose?.Invoke();
         }
 

@@ -41,7 +41,9 @@ namespace LoanShark.View
 
             await dialog.ShowAsync().AsTask();
 
-            // TODO alex
+            viewModel.OnClose?.Invoke();
+            // update main page view model
+
         }
     }
 }

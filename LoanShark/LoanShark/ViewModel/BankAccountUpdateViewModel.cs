@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using LoanShark.Domain;
 using LoanShark.Service;
+using LoanShark.View;
 
 namespace LoanShark.ViewModel
 {
@@ -46,8 +47,9 @@ namespace LoanShark.ViewModel
             }
         }
 
-        private decimal _dailyLimit = 1000.0m;
-        public decimal DailyLimit
+        // left those two as double because the NumberBox expects a double to display the value
+        private double _dailyLimit = 1000.0;
+        public double DailyLimit
         {
             get => _dailyLimit;
             set
@@ -60,8 +62,8 @@ namespace LoanShark.ViewModel
             }
         }
 
-        private decimal _maximumPerTransaction = 200.0m;
-        public decimal MaximumPerTransaction
+        private double _maximumPerTransaction = 200.0;
+        public double MaximumPerTransaction
         {
             get => _maximumPerTransaction;
             set
@@ -116,15 +118,8 @@ namespace LoanShark.ViewModel
             try
             {
                 _bankAccountService = new BankAccountService();
-                _ = LoadBankAccount(); // Start loading data but don't await it
-                BankAccount bk = _bankAccount;
-
-                AccountName = bk.name;
-                DailyLimit = bk.dailyLimit;
-                MaximumPerTransaction = bk.maximumPerTransaction;
-                MaximumNrTransactions = bk.maximumNrTransactions;
-                IsBlocked = bk.blocked;
-
+                // Note: Async initialization will be done by calling InitializeAsync()
+                _ = InitializeAsync();
             }
             catch (Exception ex)
             {
@@ -132,6 +127,19 @@ namespace LoanShark.ViewModel
                 throw;
             }
         }
+
+        public async Task InitializeAsync()
+        {
+            await LoadBankAccount();
+            BankAccount bk = _bankAccount;
+
+            AccountName = bk.name;
+            DailyLimit = Decimal.ToDouble(bk.dailyLimit);
+            MaximumPerTransaction = Decimal.ToDouble(bk.maximumPerTransaction);
+            MaximumNrTransactions = bk.maximumNrTransactions;
+            IsBlocked = bk.blocked;
+        }
+
         // loads the bank account with the given iban from the database
         private async Task LoadBankAccount()
         {
@@ -148,8 +156,8 @@ namespace LoanShark.ViewModel
                 {
                     AccountIBAN = _bankAccount.iban ?? string.Empty;
                     AccountName = _bankAccount.name ?? string.Empty;
-                    DailyLimit = _bankAccount.dailyLimit;
-                    MaximumPerTransaction = _bankAccount.maximumPerTransaction;
+                    DailyLimit = Decimal.ToDouble(_bankAccount.dailyLimit);
+                    MaximumPerTransaction = Decimal.ToDouble(_bankAccount.maximumPerTransaction);
                     MaximumNrTransactions = _bankAccount.maximumNrTransactions;
                     IsBlocked = _bankAccount.blocked;
                 }
@@ -195,8 +203,8 @@ namespace LoanShark.ViewModel
                 {
                     return "Maximum number of transactions cannot be negative";
                 }
-                if (AccountName == _bankAccount.name && DailyLimit==_bankAccount.dailyLimit &&
-                    MaximumPerTransaction == _bankAccount.maximumPerTransaction &&
+                if (AccountName == _bankAccount.name && DailyLimit==Decimal.ToDouble(_bankAccount.dailyLimit) &&
+                    MaximumPerTransaction == Decimal.ToDouble(_bankAccount.maximumPerTransaction) &&
                     MaximumNrTransactions == _bankAccount.maximumNrTransactions &&
                     IsBlocked == _bankAccount.blocked)
                     return "Failed to update bank account. No settings were changed";
@@ -204,14 +212,13 @@ namespace LoanShark.ViewModel
                 bool result = await _bankAccountService.UpdateBankAccount(
                     AccountIBAN,
                     AccountName,
-                    DailyLimit,
-                    MaximumPerTransaction,
+                    (decimal)DailyLimit, // converting back from double to decimal
+                    (decimal)MaximumPerTransaction,
                     MaximumNrTransactions,
                     IsBlocked);
 
                 if (result)
                 {
-                    OnUpdateSuccess?.Invoke();
                     return "Success";
                 }
                 
@@ -221,6 +228,20 @@ namespace LoanShark.ViewModel
             {
                 Debug.WriteLine($"Error updating bank account: {ex.Message}");
                 return $"Error: {ex.Message}";
+            }
+        }
+
+        public void DeleteBankAccount()
+        {
+            try {
+                BankAccountDeleteView deleteBankAccountView = new BankAccountDeleteView();
+                deleteBankAccountView.Activate();
+                OnClose?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error deleting bank account: {ex.Message}");
+                throw new Exception("Error deleting bank account", ex);
             }
         }
 

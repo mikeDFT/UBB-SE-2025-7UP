@@ -70,7 +70,8 @@ namespace LoanShark.ViewModel
         public void OnBackButtonClicked()
         {
             Debug.WriteLine("Back button");
-            CloseWindowAction();
+            WindowManager.shouldReloadBankAccounts = false;
+            OnClose?.Invoke();
         }
 
         /// <summary>
@@ -83,18 +84,13 @@ namespace LoanShark.ViewModel
             if (await service.verifyUserCredentials(_email, Password))
             {
                 if (await service.RemoveBankAccount(_iban))
+                {
+                    WindowManager.shouldReloadBankAccounts = true;
                     OnSuccess?.Invoke();
+                }
             }
             else
                 Debug.WriteLine("User entered wrong credentials");
-        }
-
-        /// <summary>
-        /// Closes the current view
-        /// </summary>
-        public void CloseWindowAction()
-        {
-            OnClose?.Invoke();
         }
 
         /// <summary>

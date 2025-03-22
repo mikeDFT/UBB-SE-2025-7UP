@@ -63,6 +63,10 @@
                         Click="UpdateButton_Click" 
                         Background="{ThemeResource SystemAccentColor}"
                         Foreground="White"/>
+                <Button x:Name="DeleteButton" Content="Delete Account" 
+                        Click="DeleteButton_Click" 
+                        Background="{ThemeResource SystemAccentColor}"
+                        Foreground="White"/>
             </StackPanel>
         </StackPanel>
     </Grid>

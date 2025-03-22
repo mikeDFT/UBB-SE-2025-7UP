@@ -160,7 +160,9 @@
                     HorizontalAlignment="Center"
                     Margin="0,0,10,0"
                     Width="200"
-                    Height="40"/>
+                    Height="40"
+                    Click="BankAccountSettingsButtonHandler"/>
+
                 
                 <Button x:Name="bankAccountCreateButton"
                     Content="Create Bank Account"

@@ -210,12 +210,12 @@ namespace LoanShark.Repository
             return new BankAccount(
                          Convert.ToString(row["iban"]) ?? "",
                          Convert.ToString(row["currency"]) ?? "",
-                         Convert.ToDecimal(row["amount"]),
+                         Decimal.Parse(row["amount"].ToString() ?? "0"),
                          Convert.ToBoolean(row["blocked"]),
                          Convert.ToInt32(row["id_user"]),
                          Convert.ToString(row["custom_name"]) ?? "",
-                         Convert.ToDecimal(row["daily_limit"]),
-                         Convert.ToDecimal(row["max_per_transaction"]),
+                         Decimal.Parse(row["daily_limit"].ToString() ?? "0"),
+                         Decimal.Parse(row["max_per_transaction"].ToString() ?? "0"),
                          Convert.ToInt32(row["max_nr_transactions_daily"])
                     );
         }

@@ -78,7 +78,7 @@ namespace LoanShark.View
                 if (result == "Success")
                 {
                     await ShowDialog("Success", "Bank account updated successfully.", "OK");
-                    this.Close();
+                    _viewModel.OnUpdateSuccess?.Invoke();
                 }
                 else
                 {
@@ -88,6 +88,18 @@ namespace LoanShark.View
             catch (Exception ex)
             {
                 await ShowDialog("Error", $"Failed to update bank account: {ex.Message}", "OK");
+            }
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _viewModel.DeleteBankAccount();
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialog("Error", $"Failed to delete bank account: {ex.Message}");
             }
         }
 

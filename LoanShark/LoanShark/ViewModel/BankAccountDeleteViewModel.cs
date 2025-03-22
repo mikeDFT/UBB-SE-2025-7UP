@@ -49,7 +49,8 @@ namespace LoanShark.ViewModel
         public void OnNoButtonClicked()
         {
             Debug.WriteLine("Back button");
-            CloseWindowAction();
+            WindowManager.shouldReloadBankAccounts = false;
+            onClose?.Invoke();
         }
 
         /// <summary>
@@ -59,15 +60,9 @@ namespace LoanShark.ViewModel
         public void OnYesButtonClicked()
         {
             Debug.WriteLine("Yes button");
-            var window = new BankAccountVerifyView();
+            BankAccountVerifyView window = new BankAccountVerifyView();
             window.Activate();
-        }
-
-        /// <summary>
-        /// Closes the current view
-        /// </summary>
-        public void CloseWindowAction()
-        {
+            WindowManager.shouldReloadBankAccounts = false;
             onClose?.Invoke();
         }
     }
