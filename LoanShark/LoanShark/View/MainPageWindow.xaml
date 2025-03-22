@@ -59,27 +59,38 @@
             </Grid.RowDefinitions>
             
             <!-- FlipView for bank accounts displaying name and iban -->
-            <FlipView x:Name="accountsFlipView"
-                    MaxWidth="300"
-                    MaxHeight="80"
-                    SelectionChanged="AccountsFlipView_SelectionChanged"
-                    ItemsSource="{x:Bind ViewModel.UserBankAccounts, Mode=OneWay}"
-                    Grid.Row="0">
-                <FlipView.ItemTemplate>
-                    <DataTemplate x:DataType="domain:BankAccount">
-                        <Grid>
-                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <TextBlock Text="{x:Bind name}" 
-                                        FontSize="20" 
-                                        Margin="0,0,0,10"/>
-                                <TextBlock Text="{x:Bind iban}" 
-                                        FontSize="14"
-                                        TextWrapping="Wrap"/>
-                            </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                </FlipView.ItemTemplate>
-            </FlipView>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <FlipView x:Name="accountsFlipView"
+                        Width="300"
+                        MaxHeight="80"
+                        HorizontalAlignment="Center"
+                        Margin="65,0,0,0"
+                        SelectionChanged="AccountsFlipView_SelectionChanged"
+                        ItemsSource="{x:Bind ViewModel.UserBankAccounts, Mode=OneWay}">
+                    <FlipView.ItemTemplate>
+                        <DataTemplate x:DataType="domain:BankAccount">
+                            <Grid>
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock Text="{x:Bind name}" 
+                                            FontSize="20" 
+                                            Margin="0,0,0,10"/>
+                                    <TextBlock Text="{x:Bind iban}" 
+                                            FontSize="14"
+                                            TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </FlipView.ItemTemplate>
+                </FlipView>
+                
+                <Button x:Name="accountDetailsButton"
+                        Margin="20,0,0,0"
+                        Click="BankAccountDetailsViewButtonHandler">
+                    <Button.Content>
+                        <FontIcon Glyph="&#xE946;" FontSize="20"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
 
             <Button x:Name="checkBalanceButton"
                     Content="{x:Bind ViewModel.BalanceButtonContent, Mode=OneWay}"
