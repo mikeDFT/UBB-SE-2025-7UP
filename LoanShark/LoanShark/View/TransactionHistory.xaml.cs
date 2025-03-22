@@ -33,10 +33,10 @@ namespace LoanShark
     public sealed partial class TransactionHistory : Window
     {
 
-        public TransactionsHistoryVM transactionsViewModel;
+        public TransactionsHistoryViewModel transactionsViewModel;
         public ObservableCollection<string> currentList;
         private bool isSortedAscending = true;
-        public TransactionHistory(TransactionsHistoryVM transactionsViewModel)
+        public TransactionHistory(TransactionsHistoryViewModel transactionsViewModel)
         {
             this.transactionsViewModel = transactionsViewModel;
             currentList = transactionsViewModel.retrieveForMenu();
@@ -65,7 +65,7 @@ namespace LoanShark
                 SortAscendingButton.IsChecked = true;
                 SortDescendingButton.IsChecked = false;
                 currentList = transactionsViewModel.SortByDate("Ascending");
-                ColorListBox.ItemsSource = currentList;
+                TransactionList.ItemsSource = currentList;
             }
             else
             {
@@ -82,7 +82,7 @@ namespace LoanShark
                 SortAscendingButton.IsChecked = false;
                 SortDescendingButton.IsChecked = true;
                 currentList = transactionsViewModel.SortByDate("Descending");
-                ColorListBox.ItemsSource = currentList;
+                TransactionList.ItemsSource = currentList;
             }
             else
             {
@@ -98,20 +98,20 @@ namespace LoanShark
             if (!string.IsNullOrEmpty(typedText))
             {
                 currentList = transactionsViewModel.FilterByTypeForMenu(typedText);
-                ColorListBox.ItemsSource = currentList;
+                TransactionList.ItemsSource = currentList;
             }
             else
             {
                 currentList = transactionsViewModel.retrieveForMenu();
-                ColorListBox.ItemsSource = currentList;
+                TransactionList.ItemsSource = currentList;
             }
         }
 
-        private void ColorListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void TransactionList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ColorListBox.SelectedItem != null)
+            if (TransactionList.SelectedItem != null)
             {
-                string selectedTransactionForMenu = ColorListBox.SelectedItem as string;
+                string selectedTransactionForMenu = TransactionList.SelectedItem as string;
                 // Retrieve the detailed information of the selected transaction
                 var selectedTransaction = transactionsViewModel.GetTransactionByMenuString(selectedTransactionForMenu);
                 string detailedTransaction = selectedTransaction.tostringDetailed();
@@ -123,7 +123,7 @@ namespace LoanShark
         private void ViewGraphics_Click(object sender, RoutedEventArgs e)
         {
             var transactionTypeCounts = transactionsViewModel.GetTransactionTypeCounts();
-            TransactionGraphics transactionGraphicsWindow = new TransactionGraphics(transactionTypeCounts);
+            TransactionHistoryGraphicalRepresentation transactionGraphicsWindow = new TransactionHistoryGraphicalRepresentation(transactionTypeCounts);
             transactionGraphicsWindow.Activate();
         }
 

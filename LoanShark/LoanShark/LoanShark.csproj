@@ -63,7 +63,7 @@
     <None Remove="TransactionHistory.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="View\Graphics.xaml">
+    <Page Update="View\TransactionHistoryGraphicalRepresentation.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

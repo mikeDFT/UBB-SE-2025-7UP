@@ -26,7 +26,7 @@ namespace LoanShark.Service
         // retrieveForMenu() returns a list of transactions formatted for the menu
         public ObservableCollection<string> retrieveForMenu()
         {
-            ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
+            ObservableCollection<Transaction> Transactions = TransactionHistoryRepository.getTransactionsNormal();
             ObservableCollection<String> TransactionsForMenu = new ObservableCollection<string>();
 
             foreach (var transaction in Transactions)
@@ -42,10 +42,10 @@ namespace LoanShark.Service
         // FilterByTypeForMenu() returns a list of transactions formatted for the menu filtered by the transaction type
         public ObservableCollection<string> FilterByTypeForMenu(string type)
         {
-            ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
+            ObservableCollection<Transaction> Transactions = TransactionHistoryRepository.getTransactionsNormal();
             ObservableCollection<String> TransactionsForMenu = new ObservableCollection<string>();
 
-            foreach (var transaction in Repo.getTransactionsNormal())
+            foreach (var transaction in TransactionHistoryRepository.getTransactionsNormal())
             {
                 if (transaction.TransactionType == type && (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban))
                 {
@@ -59,7 +59,7 @@ namespace LoanShark.Service
         // FilterByTypeDetailed() returns a list of transactions formatted in detail filtered by the transaction type
         public ObservableCollection<string> FilterByTypeDetailed(string type)
         {
-            ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
+            ObservableCollection<Transaction> Transactions = TransactionHistoryRepository.getTransactionsNormal();
             ObservableCollection<String> TransactionsDetailed = new ObservableCollection<string>();
 
             foreach (var transaction in Transactions)
@@ -78,9 +78,9 @@ namespace LoanShark.Service
 
             if (order == "Ascending")
             {
-                ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
+                ObservableCollection<Transaction> Transactions = TransactionHistoryRepository.getTransactionsNormal();
                 ObservableCollection<String> TransactionsSorted = new ObservableCollection<string>();
-                foreach (var transaction in Repo.getTransactionsNormal().OrderBy(x => x.TransactionDate))
+                foreach (var transaction in TransactionHistoryRepository.getTransactionsNormal().OrderBy(x => x.TransactionDate))
                 {
                     if (transaction.SenderIban == this.iban)
                         TransactionsSorted.Add(transaction.tostringForMenu());
@@ -89,9 +89,9 @@ namespace LoanShark.Service
             }
             else if (order == "Descending")
             {
-                ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
+                ObservableCollection<Transaction> Transactions = TransactionHistoryRepository.getTransactionsNormal();
                 ObservableCollection<String> TransactionsSorted = new ObservableCollection<string>();
-                foreach (var transaction in Repo.getTransactionsNormal().OrderByDescending(x => x.TransactionDate))
+                foreach (var transaction in TransactionHistoryRepository.getTransactionsNormal().OrderByDescending(x => x.TransactionDate))
                 {
                     if (transaction.SenderIban == this.iban)
                         TransactionsSorted.Add(transaction.tostringForMenu());
@@ -110,7 +110,7 @@ namespace LoanShark.Service
         // CreateCSV() creates a CSV file with the transactions 
         public void CreateCSV()
         {
-            ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
+            ObservableCollection<Transaction> Transactions = TransactionHistoryRepository.getTransactionsNormal();
             StringBuilder csv = new StringBuilder();
             csv.AppendLine("Transaction ID,Sender IBAN,Receiver IBAN,Transaction Date,Sender Currency,Receiver Currency,Sender Amount,Receiver Amount,Transaction Type,Transaction Description");
             foreach (var transaction in Transactions)
@@ -125,7 +125,7 @@ namespace LoanShark.Service
         // GetTransactionByMenuString() returns a transaction object based on the menu string
         public Transaction GetTransactionByMenuString(string menuString)
         {
-            ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
+            ObservableCollection<Transaction> Transactions = TransactionHistoryRepository.getTransactionsNormal();
             return Transactions.FirstOrDefault(t => t.tostringForMenu() == menuString);
         }
 
@@ -133,7 +133,7 @@ namespace LoanShark.Service
             // GetTransactionTypeCounts() returns a dictionary with the transaction type counts
             public Dictionary<string, int> GetTransactionTypeCounts()
             {
-                ObservableCollection<Transaction> transactions = Repo.getTransactionsNormal();
+                ObservableCollection<Transaction> transactions = TransactionHistoryRepository.getTransactionsNormal();
                 return transactions
                     .Where(t => t.SenderIban == this.iban)
                     .GroupBy(t => t.TransactionType)

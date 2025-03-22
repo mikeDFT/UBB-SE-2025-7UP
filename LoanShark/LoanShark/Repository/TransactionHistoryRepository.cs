@@ -14,7 +14,7 @@ namespace LoanShark.Repository
 
     //repo class is static but it should be fine as long as the methods are static, you dont need to change anything 
     //about the functions
-    static class Repo
+    static class TransactionHistoryRepository
     {
 
         // this retrieves all the transactions from the database, creeates a hashmap

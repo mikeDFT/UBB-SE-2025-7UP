@@ -12,12 +12,12 @@ namespace LoanShark
 {
 
     // i got cancer implementing this, i hope you are happy, don't touch anything
-    public sealed partial class TransactionGraphics : Window
+    public sealed partial class TransactionHistoryGraphicalRepresentation : Window
     {
         private static Random _random = new Random();
         private Dictionary<string, Windows.UI.Color> _legendColors = new Dictionary<string, Windows.UI.Color>();
 
-        public TransactionGraphics(Dictionary<string, int> transactionTypeCounts)
+        public TransactionHistoryGraphicalRepresentation(Dictionary<string, int> transactionTypeCounts)
         {
             this.InitializeComponent();
             ResizeWindow(600, 600);

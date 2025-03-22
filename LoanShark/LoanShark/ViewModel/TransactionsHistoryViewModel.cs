@@ -15,11 +15,11 @@ namespace LoanShark.ViewModel
 
     //transactions View Model class needs an iban to be passed in the constructor
     //this iban is used to filter the transactions by the sender iban or receiver iban
-    public class TransactionsHistoryVM
+    public class TransactionsHistoryViewModel
     {
         private TransactionHistoryService service;
 
-        public TransactionsHistoryVM(TransactionHistoryService service) {
+        public TransactionsHistoryViewModel(TransactionHistoryService service) {
 
             this.service = service;
         }
@@ -63,7 +63,7 @@ namespace LoanShark.ViewModel
         // UpdateTransactionDescription() updates the transaction description
         public static void UpdateTransactionDescription(int transactionId, string newDescription)
         {
-            Repo.UpdateTransactionDescription(transactionId, newDescription);
+            TransactionHistoryRepository.UpdateTransactionDescription(transactionId, newDescription);
         }
 
 

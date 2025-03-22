@@ -39,9 +39,11 @@ namespace LoanShark
             if (!string.IsNullOrEmpty(newDescription))
             {
                 _transaction.TransactionDescription = newDescription;
-                TransactionsHistoryVM.UpdateTransactionDescription(_transaction.TransactionID, newDescription);
+                TransactionsHistoryViewModel.UpdateTransactionDescription(_transaction.TransactionID, newDescription);
                 TransactionDetailsTextBlock.Text = _transaction.tostringDetailed();
             }
+
+            DescriptionTextBox.Text = string.Empty;
         }
 
         public void ResizeWindow(int width, int height)

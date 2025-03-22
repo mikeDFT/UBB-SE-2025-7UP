@@ -48,7 +48,7 @@ namespace LoanShark
         {
             // Create and activate the main window
             TransactionHistoryService service = new TransactionHistoryService("RO0000111");
-            TransactionsHistoryVM tvm = new TransactionsHistoryVM(service);
+            TransactionsHistoryViewModel tvm = new TransactionsHistoryViewModel(service);
             TransactionHistory th = new TransactionHistory(tvm);
             th.Activate();
         }

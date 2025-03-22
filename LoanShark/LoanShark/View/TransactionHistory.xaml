@@ -19,7 +19,7 @@
                     <Button Style="{StaticResource AccentButtonStyle}" Content="View Graphics" Click="ViewGraphics_Click" Margin="5"/>
                     <TextBox x:Name="TransactionTypeTextBox" PlaceholderText="Filter by type" Margin="10" Width="200" TextChanged="TransactionTypeTextBox_TextChanged"/>
                 </StackPanel>
-                <ListBox x:Name="ColorListBox" MinWidth="200" ItemsSource="{x:Bind currentList}" SelectionChanged="ColorListBox_SelectionChanged"/>
+                <ListBox x:Name="TransactionList" MinWidth="200" ItemsSource="{x:Bind currentList}" SelectionChanged="TransactionList_SelectionChanged"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>
