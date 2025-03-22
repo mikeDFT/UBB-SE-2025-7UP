@@ -78,6 +78,7 @@ namespace LoanShark.View
                 if (result == "Success")
                 {
                     await ShowDialog("Success", "Bank account updated successfully.", "OK");
+                    WindowManager.shouldReloadBankAccounts = true;
                     _viewModel.OnUpdateSuccess?.Invoke();
                 }
                 else
