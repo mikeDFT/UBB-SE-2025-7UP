@@ -1,23 +1,24 @@
-﻿using System;
+﻿using LoanShark.Repository;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LoanShark.Domain;
-using LoanShark.Repository;
+using System.IO;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.Service
 {
-
-    //transactions View Model class needs an iban to be passed in the constructor
-    //this iban is used to filter the transactions by the sender iban or receiver iban
-    public class TransactionsVM
+    public class TransactionHistoryService
     {
+
+        //transactions history service class needs an iban to be passed in the constructor
+        //this iban is used to filter the transactions by the sender iban or receiver iban
         string iban;
-        public TransactionsVM(string iban) {
+        public TransactionHistoryService(string iban)
+        {
 
             this.iban = iban;
         }
@@ -61,7 +62,7 @@ namespace LoanShark.ViewModel
             ObservableCollection<Transaction> Transactions = Repo.getTransactionsNormal();
             ObservableCollection<String> TransactionsDetailed = new ObservableCollection<string>();
 
-            foreach (var transaction in Repo.getTransactionsNormal())
+            foreach (var transaction in Transactions)
             {
                 if (transaction.TransactionType == type && (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban))
                 {
@@ -128,21 +129,15 @@ namespace LoanShark.ViewModel
             return Transactions.FirstOrDefault(t => t.tostringForMenu() == menuString);
         }
 
-        // UpdateTransactionDescription() updates the transaction description
-        public static void UpdateTransactionDescription(int transactionId, string newDescription)
-        {
-            Repo.UpdateTransactionDescription(transactionId, newDescription);
-        }
 
-
-        // GetTransactionTypeCounts() returns a dictionary with the transaction type counts
-        public Dictionary<string, int> GetTransactionTypeCounts()
-        {
-            ObservableCollection<Transaction> transactions = Repo.getTransactionsNormal();
-            return transactions
-                .Where(t => t.SenderIban == this.iban)
-                .GroupBy(t => t.TransactionType)
-                .ToDictionary(g => g.Key, g => g.Count());
+            // GetTransactionTypeCounts() returns a dictionary with the transaction type counts
+            public Dictionary<string, int> GetTransactionTypeCounts()
+            {
+                ObservableCollection<Transaction> transactions = Repo.getTransactionsNormal();
+                return transactions
+                    .Where(t => t.SenderIban == this.iban)
+                    .GroupBy(t => t.TransactionType)
+                    .ToDictionary(g => g.Key, g => g.Count());
+            }
         }
-    }
 }

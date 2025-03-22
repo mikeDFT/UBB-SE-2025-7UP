@@ -33,10 +33,10 @@ namespace LoanShark
     public sealed partial class TransactionHistory : Window
     {
 
-        public TransactionsVM transactionsViewModel;
+        public TransactionsHistoryVM transactionsViewModel;
         public ObservableCollection<string> currentList;
         private bool isSortedAscending = true;
-        public TransactionHistory(TransactionsVM transactionsViewModel)
+        public TransactionHistory(TransactionsHistoryVM transactionsViewModel)
         {
             this.transactionsViewModel = transactionsViewModel;
             currentList = transactionsViewModel.retrieveForMenu();

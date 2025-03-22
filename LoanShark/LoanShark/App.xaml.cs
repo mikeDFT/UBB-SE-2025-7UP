@@ -19,6 +19,7 @@ using LoanShark.Data;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using LoanShark.ViewModel;
+using LoanShark.Service;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -46,7 +47,8 @@ namespace LoanShark
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             // Create and activate the main window
-            TransactionsVM tvm = new TransactionsVM("RO0000111");
+            TransactionHistoryService service = new TransactionHistoryService("RO0000111");
+            TransactionsHistoryVM tvm = new TransactionsHistoryVM(service);
             TransactionHistory th = new TransactionHistory(tvm);
             th.Activate();
         }

@@ -2,10 +2,10 @@ using LoanShark.ViewModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using LoanShark.Domain;
-using Microsoft.UI.Windowing; 
+using Microsoft.UI.Windowing;
 using WinRT.Interop;
 using Microsoft.UI;
-using System; 
+using System;
 
 namespace LoanShark
 {
@@ -39,7 +39,7 @@ namespace LoanShark
             if (!string.IsNullOrEmpty(newDescription))
             {
                 _transaction.TransactionDescription = newDescription;
-                TransactionsVM.UpdateTransactionDescription(_transaction.TransactionID, newDescription);
+                TransactionsHistoryVM.UpdateTransactionDescription(_transaction.TransactionID, newDescription);
                 TransactionDetailsTextBlock.Text = _transaction.tostringDetailed();
             }
         }
