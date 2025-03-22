@@ -49,6 +49,18 @@ namespace LoanShark.View
         {
             this.ViewModel.CheckBalanceButtonHandler();
         }
+
+        public void LoanButtonHandler(object sender, RoutedEventArgs e)
+        {
+            var loanView = new LoanView();
+            loanView.Activate();
+        }
+
+        private void TransactionButtonHandler(object sender, RoutedEventArgs e)
+        {
+            var transactionView = new TransactionsView();
+            transactionView.Activate();
+        }
         
         private void AccountsFlipView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

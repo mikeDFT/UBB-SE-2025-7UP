@@ -15,6 +15,7 @@ using Microsoft.UI.Xaml.Navigation;
 using System.Diagnostics;
 using LoanShark.Data;
 using LoanShark.Helper;
+using LoanShark.View;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -29,6 +30,7 @@ namespace LoanShark
         public MainWindow()
         {
             this.InitializeComponent();
+       
         }
 
         private void myButton_Click(object sender, RoutedEventArgs e)

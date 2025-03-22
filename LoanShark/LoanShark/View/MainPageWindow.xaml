@@ -112,43 +112,20 @@
                         HorizontalAlignment="Center"
                         Margin="0,0,10,0"
                         Width="200"
-                        Height="40"/>
-                        
-                <Button x:Name="betweenAccountsButton"
-                        Content="Between Accounts"
-                        Grid.Column="1"
-                        HorizontalAlignment="Center"
-                        Margin="10,0,0,0"
-                        Width="200"
-                        Height="40"/>
-            </Grid>
-            
-            <!-- Second row of side-by-side buttons -->
-            <Grid Grid.Row="3" Margin="0,20,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                        Height="40"
+                        Click="TransactionButtonHandler"/>
                 
                 <Button x:Name="transactionHistoryButton"
                         Content="Transaction History"
-                        Grid.Column="0"
-                        HorizontalAlignment="Center"
-                        Margin="0,0,10,0"
-                        Width="200"
-                        Height="40"/>
-                        
-                <Button x:Name="loanButton"
-                        Content="Loan"
                         Grid.Column="1"
                         HorizontalAlignment="Center"
                         Margin="10,0,0,0"
                         Width="200"
                         Height="40"/>
             </Grid>
-            
+
             <!-- Third row of side-by-side buttons -->
-            <Grid Grid.Row="4" Margin="0,20,0,0">
+            <Grid Grid.Row="3" Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -174,7 +151,15 @@
                     Click="BankAccountCreateButtonHandler"/>
             </Grid>
             
+            <!-- Fourth row with loan button -->
+            <Button x:Name="loanButton"
+                    Content="Loan"
+                    Grid.Row="4"
+                    HorizontalAlignment="Center"
+                    Margin="0,20,0,0"
+                    Width="200"
+                    Height="40"
+                    Click="LoanButtonHandler"/>
         </Grid>
-
     </Grid>
 </Window>

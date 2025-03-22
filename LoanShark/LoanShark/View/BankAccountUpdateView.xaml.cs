@@ -17,6 +17,8 @@ using System.Diagnostics;
 using Microsoft.Data.SqlClient;
 using LoanShark.Domain;
 using LoanShark.Helper;
+using System.Threading.Tasks;
+using Windows.UI.Notifications;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
@@ -109,7 +111,7 @@ namespace LoanShark.View
             this.Close();
         }
 
-        private async System.Threading.Tasks.Task ShowDialog(string title, string content, string closeButtonText)
+        private async Task ShowDialog(string title, string content, string closeButtonText)
         {
             try
             {
