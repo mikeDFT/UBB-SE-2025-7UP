@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using LoanShark.Helper;
 using Windows.UI.Core;
+using Microsoft.UI.Xaml.Input;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -44,6 +45,14 @@ namespace LoanShark.View
             viewModel.OnClose?.Invoke();
             // update main page view model
 
+        }
+
+        private void PasswordBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                viewModel.OnConfirmButtonClicked();
+            }
         }
     }
 }
