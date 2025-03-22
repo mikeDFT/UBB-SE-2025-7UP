@@ -6,7 +6,8 @@
     xmlns:local="using:LoanShark.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodel="using:LoanShark.ViewModel"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Title="Loan Shark - Create Bank Account">
 
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
@@ -31,8 +32,8 @@
                     <!-- Header Column -->
                 </Grid.ColumnDefinitions>
 
-                <Button Command="{Binding CancelCommand}" Content="Cancel creation" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"/>
-                <TextBlock Text="Create Bank Account" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Grid.ColumnSpan="2"/>
+                <Button Command="{Binding CancelCommand}" Content="&#x2190;" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0"/>
+                <TextBlock Text="Create Bank Account" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" Grid.ColumnSpan="2"/>
             </Grid>
         </Border>
 
