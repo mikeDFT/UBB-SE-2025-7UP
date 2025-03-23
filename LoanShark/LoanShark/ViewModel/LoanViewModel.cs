@@ -350,7 +350,7 @@ namespace LoanShark.ViewModel
                 
                 TaxPercentage = $"Tax Percentage: {taxPercentageValue}%";
                 AmountToPay = $"Amount to Pay: {amountToPayValue:F2}";}
-            catch (Exception ex)
+            catch (Exception)
             {
                 TaxPercentage = "Tax Percentage: Error";
                 AmountToPay = "Amount to Pay: Error";

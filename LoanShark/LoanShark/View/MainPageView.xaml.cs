@@ -27,13 +27,13 @@ namespace LoanShark.View
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPageWindow : Window
+    public sealed partial class MainPageView : Window
     {
         public event EventHandler? LogOut;
 
         public MainPageViewModel ViewModel { get; private set; }
         
-        public MainPageWindow()
+        public MainPageView()
         {
             this.InitializeComponent();
             this.ViewModel = new MainPageViewModel();
@@ -89,11 +89,11 @@ namespace LoanShark.View
 
         private void LogOutButtonHandler(object sender, RoutedEventArgs e)
         {
-                // First, invoke the LogOut event
-                this.LogOut?.Invoke(this, EventArgs.Empty);
-
-                // Only after all handlers have completed, invalidate the session
-                UserSession.Instance.InvalidateUserSession();
+            LoginView logInWindow = new LoginView();
+            logInWindow.Activate();
+            // Only after all handlers have completed, invalidate the session
+            UserSession.Instance.InvalidateUserSession();
+            this.Close();
         }
 
         private void ExitLoanSharkButtonHandler(object sender, RoutedEventArgs e)

@@ -29,34 +29,10 @@ namespace LoanShark
 
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            m_loginWindow = new LoginWindow();
-            m_loginWindow.LoginSuccess += LoginWindow_OnLoginSuccess; // event handler
+            m_loginWindow = new LoginView();
             m_loginWindow.Activate();
         }
 
-        private void LoginWindow_OnLoginSuccess(object? sender, EventArgs e)
-        {
-            m_mainPageWindow = new MainPageWindow();
-            m_mainPageWindow.LogOut += MainPageWindow_OnLogOut; // event handler
-            
-            // MainPageWindow registers itself in its constructor
-            m_mainPageWindow.Activate();
-            
-            // Close the login window after successful login
-            m_loginWindow?.Close();
-        }
-        
-        private void MainPageWindow_OnLogOut(object? sender, EventArgs e)
-        {
-            m_loginWindow = new LoginWindow();
-            m_loginWindow.LoginSuccess += LoginWindow_OnLoginSuccess; // event handler
-            m_loginWindow.Activate();
-
-            // Close the main page window after logging out
-            m_mainPageWindow?.Close();
-        }
-
-        private LoginWindow? m_loginWindow;
-        private MainPageWindow? m_mainPageWindow;
+        private LoginView? m_loginWindow;
     }
 }

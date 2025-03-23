@@ -25,12 +25,12 @@ namespace LoanShark.View
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class LoginWindow : Window
+    public sealed partial class LoginView : Window
     {
         public LoginViewModel viewModel { get; private set; }
         public event EventHandler? LoginSuccess;
         
-        public LoginWindow()
+        public LoginView()
         {
             this.InitializeComponent();
             this.viewModel = new LoginViewModel();
@@ -76,8 +76,10 @@ namespace LoanShark.View
 
         private void OpenMainPageWindow() // opens the main page window and closes the login window
         {
-            // this will trigger the LoginWindos_OnLoginSuccess event in App.xaml.cs
-            this.LoginSuccess?.Invoke(this, EventArgs.Empty);
+            WindowManager.shouldReloadBankAccounts = false; // bank accounts are loaded by the constructor of the main page window
+            MainPageView mainPageWindow = new MainPageView();
+            mainPageWindow.Activate();
+            this.Close();
         }
 
         private void EmailBox_KeyDown(object sender, KeyRoutedEventArgs e)

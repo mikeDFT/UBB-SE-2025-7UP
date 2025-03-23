@@ -8,6 +8,7 @@ using System.Diagnostics;
 using LoanShark.Data;
 using LoanShark.Domain;
 using LoanShark.View;
+using Windows.System.Profile;
 
 namespace LoanShark.Helper
 {
@@ -38,15 +39,15 @@ namespace LoanShark.Helper
                 {
                     Debug.Print("Last window closed, cleaning up resources...");
                     CleanupResources();
+                    return;
                 }
 
                 // after closing any window, if the only window is the main page window, refresh the bank accounts flip view
-                if (activeWindows.Count == 1 && activeWindows.First() is MainPageWindow mainWindow && shouldReloadBankAccounts)
+                if (activeWindows.Count == 1 && activeWindows.First() is MainPageView mainWindow && shouldReloadBankAccounts)
                 {
                     await RefreshBankAccounts(mainWindow);
+                    shouldReloadBankAccounts = false;
                 }
-
-                shouldReloadBankAccounts = false;
             }
         }
 
@@ -59,7 +60,7 @@ namespace LoanShark.Helper
             Application.Current.Exit();
         }
 
-        public static async Task RefreshBankAccounts(MainPageWindow mp_window) 
+        public static async Task RefreshBankAccounts(MainPageView mp_window) 
         {
             await mp_window.RefreshBankAccounts();
         }
