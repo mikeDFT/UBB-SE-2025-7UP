@@ -30,7 +30,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Command="{Binding BackCommand}" Content="Back" Margin="0,0,60,100" Width="100" BorderBrush="AliceBlue" HorizontalAlignment="Center"/>
+            <Button Command="{Binding BackCommand}" Content="Cancel" Margin="0,0,60,100" Width="100" BorderBrush="AliceBlue" HorizontalAlignment="Center"/>
             <Button Command="{Binding ConfirmCommand}"  Content="Confirm" Width="100" BorderBrush="AliceBlue" Margin="0,0,0,100" HorizontalAlignment="Center"/>
         </StackPanel>
     </Grid>

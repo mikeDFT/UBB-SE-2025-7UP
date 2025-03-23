@@ -14,7 +14,6 @@ namespace LoanShark.ViewModel
         public ICommand SendMoneyCommand { get; }
         public ICommand PayLoanCommand { get; }
         public ICommand CurrencyExchangeCommand { get; }
-        public ICommand TransactionsHistoryCommand { get; }
 
         public Action CloseAction { get; set; }
 
@@ -24,7 +23,6 @@ namespace LoanShark.ViewModel
             SendMoneyCommand = new RelayCommand(OpenSendMoneyWindow);
             PayLoanCommand = new RelayCommand(OpenPayLoanWindow);
             CurrencyExchangeCommand = new RelayCommand(OpenCurrencyExchangeWindow);
-            TransactionsHistoryCommand = new RelayCommand(() => { /* Implement Transactions History */ });
         }
 
         private void OpenSendMoneyWindow()
@@ -44,6 +42,7 @@ namespace LoanShark.ViewModel
 
         private void OpenChildWindow(Window childWindow)
         {
+            CloseWindow();
             childWindow.Activate();
         }
 
