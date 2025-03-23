@@ -5,7 +5,7 @@ using BCrypt.Net;
 
 namespace LoanShark.Domain
 {
-    class HashedPassword
+    public class HashedPassword
     {
         private string hashedPassword;
         private string salt;
