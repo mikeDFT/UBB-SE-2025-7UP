@@ -8,35 +8,37 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Title="Loan Shark - Account Settings">
-    <StackPanel x:Name="MainPanel"  Margin ="40" Spacing="20" MaxWidth="400">
-        <TextBlock Text="Account Settings" FontSize="32"/>
-        <StackPanel>
-            <TextBox Text="{Binding FirstName, Mode=TwoWay}" Header="First Name:" MaxLength="50" Margin="0,20,0,0"/>
-            <TextBlock Text="{Binding FirstNameError}" Foreground="Red"/>
+    <ScrollViewer>
+        <StackPanel x:Name="MainPanel"  Margin ="40" Spacing="20" MaxWidth="400">
+            <TextBlock Text="Account Settings" FontSize="32"/>
+            <StackPanel>
+                <TextBox Text="{Binding FirstName, Mode=TwoWay}" Header="First Name:" MaxLength="50" Margin="0,20,0,0"/>
+                <TextBlock Text="{Binding FirstNameError}" Foreground="Red"/>
 
-            <TextBox Text="{Binding LastName, Mode=TwoWay}" Header="Last Name:" MaxLength="50" Margin="0,20,0,0" />
-            <TextBlock Text="{Binding LastNameError}" Foreground="Red"/>
+                <TextBox Text="{Binding LastName, Mode=TwoWay}" Header="Last Name:" MaxLength="50" Margin="0,20,0,0" />
+                <TextBlock Text="{Binding LastNameError}" Foreground="Red"/>
 
-            <TextBox Text="{Binding PhoneNumber, Mode=TwoWay}" Header="Phone Number:" MaxLength="10" Margin="0,20,0,0" />
-            <TextBlock Text="{Binding PhoneNumberError}" Foreground="Red"/>
+                <TextBox Text="{Binding PhoneNumber, Mode=TwoWay}" Header="Phone Number:" MaxLength="10" Margin="0,20,0,0" />
+                <TextBlock Text="{Binding PhoneNumberError}" Foreground="Red"/>
 
-            <TextBox Text="{Binding Email, Mode=TwoWay}" Header="E-mail:" MaxLength="100"  Margin="0,20,0,0" />
-            <TextBlock Text="{Binding EmailError}" Foreground="Red"/>
+                <TextBox Text="{Binding Email, Mode=TwoWay}" Header="E-mail:" MaxLength="100"  Margin="0,20,0,0" />
+                <TextBlock Text="{Binding EmailError}" Foreground="Red"/>
 
-            <PasswordBox Password="{Binding CurrentPassword, Mode=TwoWay}" Header="Current Password:" Margin="0,20,0,0" />
-            <TextBlock Text="{Binding CurrentPasswordError}" Foreground="Red"/>
+                <PasswordBox Password="{Binding CurrentPassword, Mode=TwoWay}" Header="Current Password:" Margin="0,20,0,0" />
+                <TextBlock Text="{Binding CurrentPasswordError}" Foreground="Red"/>
 
-            <PasswordBox Password="{Binding NewPassword, Mode=TwoWay}" Header="New Password:" Margin="0,20,0,0" />
-            <TextBlock Text="{Binding NewPasswordError}" Foreground="Red"/>
+                <PasswordBox Password="{Binding NewPassword, Mode=TwoWay}" Header="New Password:" Margin="0,20,0,0" />
+                <TextBlock Text="{Binding NewPasswordError}" Foreground="Red"/>
 
-            <PasswordBox Password="{Binding ConfirmNewPassword, Mode=TwoWay}" Header="Confirm New Password:" Margin="0,20,0,0" />
-            <TextBlock Text="{Binding ConfirmNewPasswordError}" Foreground="Red"/>
+                <PasswordBox Password="{Binding ConfirmNewPassword, Mode=TwoWay}" Header="Confirm New Password:" Margin="0,20,0,0" />
+                <TextBlock Text="{Binding ConfirmNewPasswordError}" Foreground="Red"/>
+            </StackPanel>
+            <StackPanel Spacing="20" Orientation="Horizontal" Margin="0,20,0,0">
+                <Button Content="Update" Command="{Binding UpdateCommand}"/>
+                <Button Content="Cancel" Command="{Binding CloseCommand}" />
+                <Button Content="Delete User Account" Command="{Binding DeleteCommand}" Background="Red"/>
+            </StackPanel>
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red"/>
         </StackPanel>
-        <StackPanel Spacing="20" Orientation="Horizontal" Margin="0,20,0,0">
-            <Button Content="Update" Command="{Binding UpdateCommand}"/>
-            <Button Content="Cancel" Command="{Binding CloseCommand}" />
-            <Button Content="Delete User Account" Command="{Binding DeleteCommand}" Background="Red"/>
-        </StackPanel>
-        <TextBlock Text="{Binding ErrorMessage}" Foreground="Red"/>
-    </StackPanel>
+    </ScrollViewer>
 </Window>
