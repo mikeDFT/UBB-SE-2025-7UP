@@ -36,9 +36,9 @@ namespace LoanShark
         public ObservableCollection<string> currentList;
         private bool isSortedAscending = true;
         
-        public TransactionHistoryView(TransactionsHistoryViewModel transactionsViewModel)
+        public TransactionHistoryView()
         {
-            this.transactionsViewModel = transactionsViewModel;
+            this.transactionsViewModel = new TransactionsHistoryViewModel();
             this.InitializeComponent();
             SortAscendingButton.IsChecked = true;
             InitializeDataAsync();

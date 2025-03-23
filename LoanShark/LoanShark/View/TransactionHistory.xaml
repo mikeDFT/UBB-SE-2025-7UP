@@ -10,7 +10,7 @@
     Title="Loan Shark - Transaction History">
 
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Background="DimGray">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                     <Button Style="{StaticResource AccentButtonStyle}" Content="Export to CSV" Click="ExportToCSV_Click" Margin="5"/>

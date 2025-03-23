@@ -92,37 +92,6 @@ namespace LoanShark.Repository
             }
         }
 
-        public async Task<List<Transaction>> GetAllTransactions()
-        {
-            try
-            {
-                List<Transaction> transactions = new List<Transaction>();
-                DataTable result = await DataLink.Instance.ExecuteReader("GetAllTransactions");
-
-                foreach (DataRow row in result.Rows)
-                {
-                    transactions.Add(new Transaction(
-                        Convert.ToInt32(row["transaction_id"]),
-                        row["sender_iban"].ToString() ?? "",
-                        row["receiver_iban"].ToString() ?? "",
-                        Convert.ToDateTime(row["transaction_datetime"]),
-                        row["sender_currency"].ToString() ?? "",
-                        row["receiver_currency"].ToString() ?? "",
-                        Convert.ToDecimal(row["sender_amount"]),
-                        Convert.ToDecimal(row["receiver_amount"]),
-                        row["transaction_type"].ToString() ?? "",
-                        row["transaction_description"].ToString() ?? ""
-                    ));
-                }
-
-                return transactions;
-            }
-            catch (SqlException ex)
-            {
-                throw new Exception($"Database error in GetAllTransactions: {ex.Message}", ex);
-            }
-        }
-
         public async Task<BankAccount?> GetBankAccountByIBAN(string iban)
         {
             try

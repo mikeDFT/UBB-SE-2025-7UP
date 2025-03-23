@@ -19,9 +19,8 @@ namespace LoanShark.ViewModel
     {
         private TransactionHistoryService service;
 
-        public TransactionsHistoryViewModel(TransactionHistoryService service) {
-
-            this.service = service;
+        public TransactionsHistoryViewModel() {
+            this.service = new TransactionHistoryService();
         }
 
         // retrieveForMenu() returns a list of transactions formatted for the menu

@@ -122,7 +122,8 @@
                         HorizontalAlignment="Center"
                         Margin="10,0,0,0"
                         Width="200"
-                        Height="40"/>
+                        Height="40"
+                        Click="TransactionHistoryButtonHandler"/>
             </Grid>
 
             <!-- Third row of side-by-side buttons -->

@@ -191,7 +191,9 @@ namespace LoanShark.ViewModel
             {
                 return "Transaction history is not available, please create a bank account first";
             }
-            // TODO: Implement transaction history from marius
+
+            TransactionHistoryView transactionHistoryView = new TransactionHistoryView();
+            transactionHistoryView.Activate();
             return null;
         }
 

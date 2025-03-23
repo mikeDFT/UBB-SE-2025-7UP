@@ -74,16 +74,16 @@ namespace LoanShark.Domain
         // Constructor that accepts a Dictionary mapping column names to values
         public Transaction(Dictionary<string, object> data)
         {
-            TransactionId = Convert.ToInt32(data["TransactionID"]);
-            SenderIban = data["SenderIBAN"].ToString() ?? string.Empty;
-            ReceiverIban = data["ReceiverIBAN"].ToString() ?? string.Empty;
-            TransactionDatetime = Convert.ToDateTime(data["TransactionDatetime"]);
-            SenderCurrency = data["SenderCurrency"].ToString() ?? string.Empty;
-            ReceiverCurrency = data["ReceiverCurrency"].ToString() ?? string.Empty;
-            SenderAmount = Convert.ToDecimal(data["SenderAmount"]);
-            ReceiverAmount = Convert.ToDecimal(data["ReceiverAmount"]);
-            TransactionType = data["TransactionType"].ToString() ?? string.Empty;
-            TransactionDescription = data["TransactionDescription"].ToString() ?? string.Empty;
+            TransactionId = Convert.ToInt32(data["transaction_id"]);
+            SenderIban = data["sender_iban"].ToString() ?? string.Empty;
+            ReceiverIban = data["receiver_iban"].ToString() ?? string.Empty;
+            TransactionDatetime = Convert.ToDateTime(data["transaction_datetime"]);
+            SenderCurrency = data["sender_currency"].ToString() ?? string.Empty;
+            ReceiverCurrency = data["receiver_currency"].ToString() ?? string.Empty;
+            SenderAmount = Convert.ToDecimal(data["sender_amount"]);
+            ReceiverAmount = Convert.ToDecimal(data["receiver_amount"]);
+            TransactionType = data["transaction_type"].ToString() ?? string.Empty;
+            TransactionDescription = data["transaction_description"].ToString() ?? string.Empty;
         }
     }
 }

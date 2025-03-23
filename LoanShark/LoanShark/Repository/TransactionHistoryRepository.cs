@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LoanShark.Domain;
+using System.Diagnostics;
 
 namespace LoanShark.Repository
 {
@@ -17,6 +18,9 @@ namespace LoanShark.Repository
     public class TransactionHistoryRepository
     {
 
+        public TransactionHistoryRepository() {}
+
+
         // this retrieves all the transactions from the database, creeates a hashmap
         // for each row and then creates a transaction object from the hashmap
         // that is what the transaction has a constructor that takes a hashmap
@@ -25,9 +29,11 @@ namespace LoanShark.Repository
             ObservableCollection<Transaction> TransactionsNormal = new ObservableCollection<Transaction>();
             try
             {
-                string storedProcedure = "GetTransactions";
-                DataTable result = await DataLink.Instance.ExecuteReader(storedProcedure);
-
+                SqlParameter[] parameters =
+                {
+                    new SqlParameter("@Iban", UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty)
+                };
+                DataTable result = await DataLink.Instance.ExecuteReader("GetAllTransactionsByIban", parameters);
                 foreach (DataRow row in result.Rows)
                 {
                     Dictionary<string, object> hashMap = new Dictionary<string, object>();
@@ -35,6 +41,8 @@ namespace LoanShark.Repository
                     {
                         hashMap.Add(column.ColumnName, row[column]);
                     }
+
+                    Debug.WriteLine("hashMap: " + hashMap);
 
                     Transaction transaction = new Transaction(hashMap);
                     TransactionsNormal.Add(transaction);
@@ -54,7 +62,7 @@ namespace LoanShark.Repository
             try
             {
                 string storedProcedure = "UpdateTransactionDescription";
-                SqlParameter[] parameters = new SqlParameter[]
+                SqlParameter[] parameters =
                 {
                     new SqlParameter("@TransactionID", transactionId),
                     new SqlParameter("@NewDescription", newDescription)
@@ -73,8 +81,11 @@ namespace LoanShark.Repository
             ObservableCollection<string> TransactionsForMenu = new ObservableCollection<string>();
             try
             {
-                string storedProcedure = "GetTransactions";
-                DataTable result = await DataLink.Instance.ExecuteReader(storedProcedure);
+                SqlParameter[] parameters =
+                {
+                    new SqlParameter("@Iban", UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty)
+                };
+                DataTable result = await DataLink.Instance.ExecuteReader("GetAllTransactionsByIban", parameters);
                 foreach (DataRow row in result.Rows)
                 {
                     Dictionary<string, object> hashMap = new Dictionary<string, object>();
@@ -101,8 +112,11 @@ namespace LoanShark.Repository
             ObservableCollection<string> TransactionsDetailed = new ObservableCollection<string>();
             try
             {
-                string storedProcedure = "GetTransactions";
-                DataTable result = await DataLink.Instance.ExecuteReader(storedProcedure);
+                SqlParameter[] parameters =
+                {
+                    new SqlParameter("@Iban", UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty)
+                };
+                DataTable result = await DataLink.Instance.ExecuteReader("GetAllTransactionsByIban", parameters);
                 foreach (DataRow row in result.Rows)
                 {
                     Dictionary<string, object> hashMap = new Dictionary<string, object>();

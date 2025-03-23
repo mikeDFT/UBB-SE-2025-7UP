@@ -11,7 +11,6 @@ using Microsoft.UI;
 namespace LoanShark
 {
 
-    // i got cancer implementing this, i hope you are happy, don't touch anything
     public sealed partial class TransactionHistoryGraphicalRepresentation : Window
     {
         private static Random _random = new Random();

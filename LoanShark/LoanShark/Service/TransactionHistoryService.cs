@@ -20,7 +20,7 @@ namespace LoanShark.Service
         public TransactionHistoryRepository repo;
         public TransactionHistoryService()
         {
-
+            this.repo = new TransactionHistoryRepository();
             this.iban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
         }
 
@@ -46,11 +46,21 @@ namespace LoanShark.Service
             ObservableCollection<Transaction> Transactions = await repo.getTransactionsNormal();
             ObservableCollection<String> TransactionsForMenu = new ObservableCollection<string>();
 
-            foreach (var transaction in Transactions)
+            if (string.IsNullOrWhiteSpace(type)) 
             {
-                if (transaction.TransactionType == type && (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban))
+                foreach (var transaction in Transactions)
                 {
                     TransactionsForMenu.Add(transaction.tostringForMenu());
+                }
+            }
+            else
+            {
+                foreach (var transaction in Transactions)
+                {
+                    if (transaction.TransactionType.Contains(type, StringComparison.OrdinalIgnoreCase))
+                    {
+                        TransactionsForMenu.Add(transaction.tostringForMenu());
+                    }
                 }
             }
 
@@ -63,13 +73,24 @@ namespace LoanShark.Service
             ObservableCollection<Transaction> Transactions = await repo.getTransactionsNormal();
             ObservableCollection<String> TransactionsDetailed = new ObservableCollection<string>();
 
-            foreach (var transaction in Transactions)
+            if (string.IsNullOrWhiteSpace(type))
             {
-                if (transaction.TransactionType == type && (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban))
+                foreach (var transaction in Transactions)
                 {
                     TransactionsDetailed.Add(transaction.tostringDetailed());
                 }
             }
+            else
+            {
+                foreach (var transaction in Transactions)
+                {
+                    if (transaction.TransactionType.Contains(type, StringComparison.OrdinalIgnoreCase) && (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban))
+                    {
+                        TransactionsDetailed.Add(transaction.tostringDetailed());
+                    }
+                }
+            }
+
             return TransactionsDetailed;
         }
 

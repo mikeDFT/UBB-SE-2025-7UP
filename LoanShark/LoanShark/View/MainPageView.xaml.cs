@@ -65,6 +65,14 @@ namespace LoanShark.View
                 await this.ShowDialog(errorMessage);
             }
         }
+
+        private async void TransactionHistoryButtonHandler(object sender, RoutedEventArgs e)
+        {
+            var errorMessage = await this.ViewModel.TransactionHistoryButtonHandler();
+            if (errorMessage != null) {
+                await this.ShowDialog(errorMessage);
+            }
+        }
         
         private void AccountsFlipView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
