@@ -17,6 +17,7 @@ namespace LoanShark.Helper
         // Track all active windows
         private static List<Window> activeWindows = new List<Window>();
         public static bool shouldReloadBankAccounts = false;
+        public static bool shouldReloadWelcomeText = false;
 
         // Static method to register windows with the tracking system
         public static void RegisterWindow(Window window)
@@ -47,6 +48,32 @@ namespace LoanShark.Helper
                 {
                     await RefreshBankAccounts(mainWindow);
                     shouldReloadBankAccounts = false;
+                }
+
+                // after updating the user data, refresh the welcome text
+                if (activeWindows.Count == 1 && activeWindows.First() is MainPageView mainWindow2 && shouldReloadWelcomeText)
+                {
+                    mainWindow2.ViewModel.InitializeWelcomeText();
+                    shouldReloadWelcomeText = false;
+                }
+            }
+        }
+
+        public static void LogOut()
+        {
+            UserSession.Instance.InvalidateUserSession();
+            LoginView loginView = new LoginView();
+            loginView.Activate();
+            
+            // Create a copy of the active windows collection to safely iterate
+            List<Window> windowsToClose = activeWindows.ToList();
+            
+            // close all windows except the login window
+            foreach (Window window in windowsToClose)
+            {
+                if (window != loginView)
+                {
+                    window.Close();
                 }
             }
         }

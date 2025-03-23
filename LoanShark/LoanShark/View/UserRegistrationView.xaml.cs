@@ -17,6 +17,7 @@ using LoanShark.Repository;
 using LoanShark.Domain;
 using LoanShark.ViewModel;
 using Windows.System;
+using LoanShark.Helper;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -32,8 +33,14 @@ namespace LoanShark.View
         {
             this.InitializeComponent();
             var viewModel = new UserRegistrationViewModel();
-            viewModel.CloseAction = () => this.Close();
+            viewModel.CloseAction = () => 
+            {
+                LoginView loginWindow = new LoginView();
+                loginWindow.Activate();
+                this.Close();
+            };
             MainPanel.DataContext = viewModel;
+            WindowManager.RegisterWindow(this);
         }
     }
 }

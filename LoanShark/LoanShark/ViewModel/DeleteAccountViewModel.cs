@@ -10,12 +10,10 @@ namespace LoanShark.ViewModel
     public class DeleteAccountViewModel
     {
         private readonly UserService _userService;
-        private readonly int _currentUserId;
 
-        public DeleteAccountViewModel(int currentUserId)
+        public DeleteAccountViewModel()
         {
             _userService = new UserService();
-            _currentUserId = currentUserId;
         }
 
         public async Task<string> DeleteAccount(string password)

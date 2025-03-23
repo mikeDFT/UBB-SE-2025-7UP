@@ -48,7 +48,8 @@
                  VerticalAlignment="Top"
                  HorizontalAlignment="Center"
                  Margin="0,50,0,20"
-                 FontSize="24"/>
+                 FontSize="24"
+                 Text="{x:Bind ViewModel.WelcomeText, Mode=OneWay}"/>
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

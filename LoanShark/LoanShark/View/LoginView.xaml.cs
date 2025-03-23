@@ -16,9 +16,7 @@ using System.Diagnostics;
 using LoanShark.ViewModel;
 using System.Threading.Tasks;
 using LoanShark.Helper;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using LoanShark.Domain;
 
 namespace LoanShark.View
 {
@@ -37,6 +35,8 @@ namespace LoanShark.View
 
             // Register this window with the WindowManager
             WindowManager.RegisterWindow(this);
+
+            UserSession.Instance.InvalidateUserSession();
         }
 
         public async void LoginButtonHandler(object sender, RoutedEventArgs e) 
@@ -70,8 +70,9 @@ namespace LoanShark.View
         public void SignUpButtonHandler(object sender, RoutedEventArgs e)
         {
             // navigate to the sign up window
-            // todo implementation when merging
-            return;
+            UserRegistrationView userRegistrationWindow = new UserRegistrationView();
+            userRegistrationWindow.Activate();
+            this.Close();
         }
 
         private void OpenMainPageWindow() // opens the main page window and closes the login window

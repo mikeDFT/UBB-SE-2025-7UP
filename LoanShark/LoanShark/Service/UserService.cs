@@ -127,9 +127,6 @@ namespace LoanShark.Service
                 await _userRepository.DeleteUser();
 
                 // after the user is deleted from the database, he should be logged out of the session
-                // for the moment, it just just exits the whole app
-                // TODO Alex : log out functionality
-                Environment.Exit(0);
                 return "Succes";
             }
             else
@@ -137,6 +134,11 @@ namespace LoanShark.Service
                 Debug.WriteLine("Wrong password");
                 return "Wrong password";
             }
+        }
+
+        public async Task<string[]> GetUserPasswordHashSalt()
+        {
+            return await _userRepository.GetUserPasswordHashSalt();
         }
     }
 }

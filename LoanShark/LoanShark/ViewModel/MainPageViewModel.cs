@@ -9,6 +9,10 @@ using LoanShark.Data;
 using LoanShark.Domain;
 using LoanShark.Service;
 using Microsoft.UI.Xaml;
+using LoanShark.View;   
+using Microsoft.UI.Xaml.Controls;
+using Windows.ApplicationModel.Background;
+using LoanShark.Helper;
 
 namespace LoanShark.ViewModel
 {
@@ -69,7 +73,7 @@ namespace LoanShark.ViewModel
             }
         }
 
-        private void InitializeWelcomeText()
+        public void InitializeWelcomeText()
         {
             try {
                 string? firstName = UserSession.Instance.GetUserData("first_name");
@@ -123,7 +127,13 @@ namespace LoanShark.ViewModel
             }
         }
 
-        public async void CheckBalanceButtonHandler() 
+        public void AccountSettingsButtonHandler()
+        {
+            UserInformationView userInformationView = new UserInformationView();
+            userInformationView.Activate();
+        }
+
+        public async Task CheckBalanceButtonHandler() 
         {
             try 
             {
@@ -138,6 +148,7 @@ namespace LoanShark.ViewModel
                     if (currentBankAccountIban == "No accounts found" || currentBankAccountIban == "Error")
                     {
                         // if the current bank account is not found, we will show the message "Check Balance" as if the button was not pressed
+                        Debug.Print("There are no accounts for the current user");
                         this.BalanceButtonContent = "Check Balance";
                     }
                     else 
@@ -161,6 +172,66 @@ namespace LoanShark.ViewModel
             {
                 Debug.Print($"Error in CheckBalanceButtonHandler: {ex.Message}");
             }
+        }
+
+        public async Task<string?> TransactionButtonHandler()
+        {
+            if (UserBankAccounts.Count == 1 && UserBankAccounts[0] is BankAccountMessage)
+            {
+                return "Please create a bank account to initiate any type of transaction";
+            }
+            TransactionsView transactionView = new TransactionsView();
+            transactionView.Activate();
+            return null;
+        }
+
+        public async Task<string?> TransactionHistoryButtonHandler()
+        {
+            if (UserBankAccounts.Count == 1 && UserBankAccounts[0] is BankAccountMessage)
+            {
+                return "Transaction history is not available, please create a bank account first";
+            }
+            // TODO: Implement transaction history from marius
+            return null;
+        }
+
+        public async Task<string?> BankAccountDetailsButtonHandler()
+        {
+            if (UserBankAccounts.Count == 1 && UserBankAccounts[0] is BankAccountMessage)
+            {
+                return "Please create a bank account to view details";
+            }
+            BankAccountDetailsView bankAccountDetailsView = new BankAccountDetailsView();
+            bankAccountDetailsView.Activate();
+            return null;
+        }
+
+        public async Task<string?> BankAccountSettingsButtonHandler()
+        {
+            if (UserBankAccounts.Count == 1 && UserBankAccounts[0] is BankAccountMessage)
+            {
+                return "Please create a bank account to update settings";
+            }
+            BankAccountUpdateView bankAccountUpdateView = new BankAccountUpdateView();
+            bankAccountUpdateView.Activate();
+            return null;
+        }
+
+        public async Task<string?> LoanButtonHandler()
+        {
+            if (UserBankAccounts.Count == 1 && UserBankAccounts[0] is BankAccountMessage)
+            {
+                return "Please create a bank account to initiate a loan";
+            }
+            LoanView loanView = new LoanView();
+            loanView.Activate();
+            return null;
+        }
+
+        public void BankAccountCreateButtonHandler()
+        {
+            BankAccountCreateView bankAccountCreateView = new BankAccountCreateView();
+            bankAccountCreateView.Activate();
         }
 
         public void ResetBalanceButtonContent()

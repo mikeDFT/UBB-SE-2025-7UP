@@ -9,13 +9,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using LoanShark.Helper;
 
 namespace LoanShark.ViewModel
 {
     public class UserInformationViewModel : INotifyPropertyChanged
     {
         private UserService _userService = new UserService();
-        private User? user;
         private string _firstName = "";
         private string _lastName = "";
         private string _phoneNumber = "";
@@ -261,61 +261,67 @@ namespace LoanShark.ViewModel
         // validates all fields and updates user information
         public async Task UpdateUser()
         {
-            if (user  == null)
+            if (string.IsNullOrWhiteSpace(CurrentPassword))
             {
+                CurrentPasswordError = "Password required in order to update user information";
                 return;
             }
+
             if (string.IsNullOrWhiteSpace(FirstName))
             {
                 FirstNameError = "First name is required";
             }
+
             if (string.IsNullOrWhiteSpace(LastName))
             {
                 LastNameError = "Last name is required";
             }
+
             if (string.IsNullOrWhiteSpace(PhoneNumber))
             {
                 PhoneNumberError = "Phone number is required";
             }
+
+            string[] userCredentialsFromDB = await _userService.GetUserPasswordHashSalt();
             if (string.IsNullOrWhiteSpace(Email))
             {
                 EmailError = "Email is required";
             }
-            if (CurrentPassword == null || CurrentPassword.Length == 0)
-            {
-                CurrentPasswordError = "Enter your current password";
-            }
             else
             {
-                HashedPassword hashedPassword = new HashedPassword(CurrentPassword, user.HashedPassword.GetSalt(), true);
-                if (!hashedPassword.Equals(user.HashedPassword))
+                HashedPassword hashedPassword = new HashedPassword(CurrentPassword, userCredentialsFromDB[1], true);
+                HashedPassword hashedPasswordFromDB = new HashedPassword(userCredentialsFromDB[0], userCredentialsFromDB[1], false);
+                if (!hashedPassword.Equals(hashedPasswordFromDB))
                 {
-                    CurrentPasswordError = "Wrong password";
+                    CurrentPasswordError = "Invalid password";
+                    return;
                 }
             }
+
             if (NewPassword != "")
             {
                 // [lengthOk, uppserCaseOk, lowerCaseOk, numberOk, specialCharOk];
                 bool[] result = HashedPassword.VerifyPasswordStrength(NewPassword);
+                NewPasswordError = "";
                 if (!result[0])
                 {
-                    NewPasswordError = "Password must have at least 8 characters";
+                    NewPasswordError += "Password must have at least 8 characters\n";
                 }
                 if (!result[1])
                 {
-                    NewPasswordError = "Password must contain at least one uppercase letter";
+                    NewPasswordError += "Password must contain at least one uppercase letter\n";
                 }
                 if (!result[2])
                 {
-                    NewPasswordError = "Password must contain at least one lowercase letter";
+                    NewPasswordError += "Password must contain at least one lowercase letter\n";
                 }
                 if (!result[3])
                 {
-                    NewPasswordError = "Password must contain at least one number";
+                    NewPasswordError += "Password must contain at least one number\n";
                 }
                 if (!result[4])
                 {
-                    NewPasswordError = "Password must contain at least one special character";
+                    NewPasswordError += "Password must contain at least one special character\n";
                 }
             }
             if (NewPassword != ConfirmNewPassword)
@@ -355,20 +361,46 @@ namespace LoanShark.ViewModel
             // Update user
             try
             {
-                user.FirstName = FirstName;
-                user.LastName = LastName;
-                user.PhoneNumber = new PhoneNumber(PhoneNumber);
-                user.Email = new Email(Email);
-                if (NewPassword != "")
+                User user;
+                if (string.IsNullOrWhiteSpace(NewPassword)) 
                 {
-                    user.HashedPassword = new HashedPassword(NewPassword);
+                    // if new password is not provided, use the old one
+                    user = new User(
+                        int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0"),
+                        new Cnp(UserSession.Instance.GetUserData("cnp") ?? ""),
+                        FirstName,
+                        LastName,
+                        new Email(Email),
+                        new PhoneNumber(PhoneNumber),
+                        new HashedPassword(userCredentialsFromDB[0], userCredentialsFromDB[1], false)
+                    );
                 }
+                else
+                {
+                    // if new password is provided, use the new one
+                    user = new User(
+                        int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0"),
+                        new Cnp(UserSession.Instance.GetUserData("cnp") ?? ""),
+                        FirstName,
+                        LastName,
+                        new Email(Email),
+                        new PhoneNumber(PhoneNumber),
+                        new HashedPassword(NewPassword)
+                    );
+                }
+
                 bool ok = await _userService.UpdateUser(user);
                 if (!ok)
                 {
                     ErrorMessage = "Failed to update user information";
                     return;
                 }
+                // update user session
+                UserSession.Instance.SetUserData("first_name", FirstName);
+                UserSession.Instance.SetUserData("last_name", LastName);
+                UserSession.Instance.SetUserData("email", Email);
+                UserSession.Instance.SetUserData("phone_number", PhoneNumber);
+                WindowManager.shouldReloadWelcomeText = true;
             }
             catch (Exception ex)
             {
@@ -383,12 +415,8 @@ namespace LoanShark.ViewModel
         // opens the delete user confirmation window
         public void DeleteUser()
         {
-            if (user == null)
-            {
-                return;
-            }
-            DeleteAccountView m_window = new DeleteAccountView(user.UserID);
-            m_window.Activate();
+            DeleteAccountView deleteAccountWindow = new DeleteAccountView();
+            deleteAccountWindow.Activate();
         }
     }
 }

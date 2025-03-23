@@ -45,21 +45,25 @@ namespace LoanShark.View
             centeredTextField.Text = this.ViewModel.WelcomeText;
         }
 
-        public void CheckBalanceButtonHandler(object sender, RoutedEventArgs e)
+        public async void CheckBalanceButtonHandler(object sender, RoutedEventArgs e)
         {
-            this.ViewModel.CheckBalanceButtonHandler();
+            await this.ViewModel.CheckBalanceButtonHandler();
         }
 
-        public void LoanButtonHandler(object sender, RoutedEventArgs e)
+        public async void LoanButtonHandler(object sender, RoutedEventArgs e)
         {
-            var loanView = new LoanView();
-            loanView.Activate();
+            var errorMessage = await this.ViewModel.LoanButtonHandler();
+            if (errorMessage != null) {
+                await this.ShowDialog(errorMessage);
+            }
         }
 
-        private void TransactionButtonHandler(object sender, RoutedEventArgs e)
+        private async void TransactionButtonHandler(object sender, RoutedEventArgs e)
         {
-            var transactionView = new TransactionsView();
-            transactionView.Activate();
+            var errorMessage = await this.ViewModel.TransactionButtonHandler();
+            if (errorMessage != null) {
+                await this.ShowDialog(errorMessage);
+            }
         }
         
         private void AccountsFlipView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -84,44 +88,60 @@ namespace LoanShark.View
 
         private void AccountSettingsButtonHandler(object sender, RoutedEventArgs e)
         {
-            return;
+            this.ViewModel.AccountSettingsButtonHandler();
         }
 
         private void LogOutButtonHandler(object sender, RoutedEventArgs e)
         {
+            // Create the login window but don't invalidate the session yet
             LoginView logInWindow = new LoginView();
             logInWindow.Activate();
-            // Only after all handlers have completed, invalidate the session
-            UserSession.Instance.InvalidateUserSession();
+            
+            // Close current window
             this.Close();
         }
 
         private void ExitLoanSharkButtonHandler(object sender, RoutedEventArgs e)
         {
-            WindowManager.CleanupResources();
+            // Just close the window, let WindowManager handle cleanup
+            this.Close();
         }
 
         private void BankAccountCreateButtonHandler(object sender, RoutedEventArgs e)
         {
-            var bankAccountCreateView = new BankAccountCreateView();
-            bankAccountCreateView.Activate();
+            this.ViewModel.BankAccountCreateButtonHandler();
         }
 
-        private void BankAccountDetailsViewButtonHandler(object sender, RoutedEventArgs e)
+        private async void BankAccountDetailsViewButtonHandler(object sender, RoutedEventArgs e)
         {
-            var bankAccountDetailsView = new BankAccountDetailsView();
-            bankAccountDetailsView.Activate();
+            var errorMessage = await this.ViewModel.BankAccountDetailsButtonHandler();
+            if (errorMessage != null) {
+                await this.ShowDialog(errorMessage);
+            }
         }
 
-        private void BankAccountSettingsButtonHandler(object sender, RoutedEventArgs e)
+        private async void BankAccountSettingsButtonHandler(object sender, RoutedEventArgs e)
         {
-            var bankAccountUpdateView = new BankAccountUpdateView();
-            bankAccountUpdateView.Activate();
+            var errorMessage = await this.ViewModel.BankAccountSettingsButtonHandler();
+            if (errorMessage != null) {
+                await this.ShowDialog(errorMessage);
+            }
         }
 
         public async Task RefreshBankAccounts()
         {
             await this.ViewModel.RefreshBankAccounts();
+        }
+
+        private async Task ShowDialog(string message) {
+            var dialog = new ContentDialog
+            {
+                Title = "Error",
+                Content = message,
+                CloseButtonText = "OK",
+                XamlRoot = this.Content.XamlRoot
+            };
+            await dialog.ShowAsync();
         }
     }
 }

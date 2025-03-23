@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using LoanShark.View;
 
 namespace LoanShark.ViewModel
 {
@@ -286,25 +287,26 @@ namespace LoanShark.ViewModel
 
             //return [lengthOk, uppserCaseOk, lowerCaseOk, numberOk, specialCharOk];
             bool[] result = HashedPassword.VerifyPasswordStrength(Password);
+            PasswordError = "";
             if (!result[0])
             {
-                PasswordError = "Password must have at least 8 characters";
+                PasswordError += "Password must have at least 8 characters\n";
             }
             if (!result[1])
             {
-                PasswordError = "Password must contain at least one uppercase letter";
+                PasswordError += "Password must contain at least one uppercase letter\n";
             }
             if (!result[2])
             {
-                PasswordError = "Password must contain at least one lowercase letter";
+                PasswordError += "Password must contain at least one lowercase letter\n";
             }
             if (!result[3])
             {
-                PasswordError = "Password must contain at least one number";
+                PasswordError += "Password must contain at least one number\n";
             }
             if (!result[4])
             {
-                PasswordError = "Password must contain at least one special character";
+                PasswordError += "Password must contain at least one special character\n";
             }
 
             string? cnpError = await _userService.CheckCnp(Cnp);

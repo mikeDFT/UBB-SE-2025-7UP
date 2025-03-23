@@ -14,6 +14,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using LoanShark.ViewModel;
 using System.Threading.Tasks;
+using LoanShark.Helper; 
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -27,11 +28,12 @@ namespace LoanShark.View
     {
         private readonly DeleteAccountViewModel _viewModel;
 
-        public DeleteAccountView(int currentUserId)
+        public DeleteAccountView()
         {
             this.InitializeComponent();
-            _viewModel = new DeleteAccountViewModel(currentUserId);
+            _viewModel = new DeleteAccountViewModel();
             MainGrid.DataContext = _viewModel;
+            WindowManager.RegisterWindow(this);
         }
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -46,8 +48,8 @@ namespace LoanShark.View
             
             if (result == "Succes")
             {
-                // The UserService will handle the app exit
-                return;
+                // automatically invalidates the session in constructor
+                WindowManager.LogOut();
             }
             else
             {
