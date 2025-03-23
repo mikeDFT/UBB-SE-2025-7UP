@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.UI.Windowing;
 using Microsoft.UI;
+using System.Diagnostics;
 
 namespace LoanShark
 {
@@ -46,6 +47,12 @@ namespace LoanShark
 
         private void LoadPieChart(Dictionary<string, int> transactionTypeCounts)
         {
+
+            foreach (var kvp in transactionTypeCounts)
+            {
+                Debug.WriteLine("kvp: " + kvp.Key + " " + kvp.Value);
+            }
+
             if (transactionTypeCounts == null || transactionTypeCounts.Count == 0)
                 return;
 
@@ -55,6 +62,18 @@ namespace LoanShark
             double centerY = TransactionPieChart.Height / 2;
             double radius = Math.Min(centerX, centerY) - 5;
 
+            // Special case: If there's only one type, create a full circle
+            if (transactionTypeCounts.Count == 1)
+            {
+                var kvp = transactionTypeCounts.First();
+                Windows.UI.Color sliceColor = GetRandomColor();
+                _legendColors[kvp.Key] = sliceColor;
+                var fullCircle = CreateFullCircle(centerX, centerY, radius, sliceColor, kvp.Key);
+                TransactionPieChart.Children.Add(fullCircle);
+                return;
+            }
+
+            // Normal case: Multiple types
             foreach (var kvp in transactionTypeCounts)
             {
                 double sliceAngle = (kvp.Value / (double)total) * 360;
@@ -122,6 +141,26 @@ namespace LoanShark
                 legendItem.Children.Add(label);
                 LegendPanel.Children.Add(legendItem);
             }
+        }
+
+        private Path CreateFullCircle(double centerX, double centerY, double radius, Windows.UI.Color color, string name)
+        {
+            var ellipse = new EllipseGeometry
+            {
+                Center = new Windows.Foundation.Point(centerX, centerY),
+                RadiusX = radius,
+                RadiusY = radius
+            };
+
+            var path = new Path
+            {
+                Fill = new SolidColorBrush(color),
+                Data = ellipse
+            };
+
+            ToolTipService.SetToolTip(path, name);
+
+            return path;
         }
 
         private Windows.Foundation.Point ComputeCartesianCoordinate(double angle, double radius, double centerX, double centerY)

@@ -157,7 +157,7 @@ namespace LoanShark.Service
         {
             ObservableCollection<Transaction> transactions = await repo.getTransactionsNormal();
             return transactions
-                .Where(t => t.SenderIban == this.iban)
+                .Where(t => t.SenderIban == this.iban || t.ReceiverIban == this.iban)
                 .GroupBy(t => t.TransactionType)
                 .ToDictionary(g => g.Key, g => g.Count());
         }
