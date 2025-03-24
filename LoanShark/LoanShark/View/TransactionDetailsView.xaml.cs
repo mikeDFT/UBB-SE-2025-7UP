@@ -10,12 +10,12 @@ using System;
 namespace LoanShark
 {
     // this displays the details of a transaction, no biggie
-    public sealed partial class TransactionDetails : Window
+    public sealed partial class TransactionDetailsView : Window
     {
         private Transaction _transaction;
         private AppWindow _appWindow;
 
-        public TransactionDetails(string transactionDetails, Transaction transaction)
+        public TransactionDetailsView(string transactionDetails, Transaction transaction)
         {
             this.InitializeComponent();
             TransactionDetailsTextBlock.Text = transactionDetails;

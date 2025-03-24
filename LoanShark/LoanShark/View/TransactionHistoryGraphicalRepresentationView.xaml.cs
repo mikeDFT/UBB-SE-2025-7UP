@@ -12,12 +12,12 @@ using System.Diagnostics;
 namespace LoanShark
 {
 
-    public sealed partial class TransactionHistoryGraphicalRepresentation : Window
+    public sealed partial class TransactionHistoryGraphicalRepresentationView : Window
     {
         private static Random _random = new Random();
         private Dictionary<string, Windows.UI.Color> _legendColors = new Dictionary<string, Windows.UI.Color>();
 
-        public TransactionHistoryGraphicalRepresentation(Dictionary<string, int> transactionTypeCounts)
+        public TransactionHistoryGraphicalRepresentationView(Dictionary<string, int> transactionTypeCounts)
         {
             this.InitializeComponent();
             ResizeWindow(600, 600);

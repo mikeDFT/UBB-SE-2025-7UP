@@ -118,7 +118,7 @@ namespace LoanShark
                 // Retrieve the detailed information of the selected transaction
                 var selectedTransaction = await transactionsViewModel.GetTransactionByMenuString(selectedTransactionForMenu);
                 string detailedTransaction = selectedTransaction.tostringDetailed();
-                TransactionDetails transactionDetailsWindow = new TransactionDetails(detailedTransaction, selectedTransaction);
+                TransactionDetailsView transactionDetailsWindow = new TransactionDetailsView(detailedTransaction, selectedTransaction);
                 transactionDetailsWindow.Activate();
             }
         }
@@ -126,7 +126,7 @@ namespace LoanShark
         private async void ViewGraphics_Click(object sender, RoutedEventArgs e)
         {
             var transactionTypeCounts = await transactionsViewModel.GetTransactionTypeCounts();
-            TransactionHistoryGraphicalRepresentation transactionGraphicsWindow = new TransactionHistoryGraphicalRepresentation(transactionTypeCounts);
+            TransactionHistoryGraphicalRepresentationView transactionGraphicsWindow = new TransactionHistoryGraphicalRepresentationView(transactionTypeCounts);
             transactionGraphicsWindow.Activate();
         }
     }

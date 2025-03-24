@@ -104,7 +104,7 @@ namespace LoanShark.Service
                 ObservableCollection<String> TransactionsSorted = new ObservableCollection<string>();
                 foreach (var transaction in Transactions.OrderBy(x => x.TransactionDatetime))
                 {
-                    if (transaction.SenderIban == this.iban)
+                    if (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban)
                         TransactionsSorted.Add(transaction.tostringForMenu());
                 }
                 return TransactionsSorted;
@@ -115,7 +115,7 @@ namespace LoanShark.Service
                 ObservableCollection<String> TransactionsSorted = new ObservableCollection<string>();
                 foreach (var transaction in Transactions.OrderByDescending(x => x.TransactionDatetime))
                 {
-                    if (transaction.SenderIban == this.iban)
+                    if (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban)
                         TransactionsSorted.Add(transaction.tostringForMenu());
                 }
                 return TransactionsSorted;
@@ -137,7 +137,7 @@ namespace LoanShark.Service
             csv.AppendLine("Transaction ID,Sender IBAN,Receiver IBAN,Transaction Date,Sender Currency,Receiver Currency,Sender Amount,Receiver Amount,Transaction Type,Transaction Description");
             foreach (var transaction in Transactions)
             {
-                if (transaction.SenderIban == this.iban)
+                if (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban)
                     csv.AppendLine(transaction.tostringCSV());
             }
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "transactions.csv");
