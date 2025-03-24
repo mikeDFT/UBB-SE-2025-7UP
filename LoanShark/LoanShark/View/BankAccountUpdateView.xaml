@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="LoanShark.View.BankAccountUpdateView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LoanShark.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Loan Shark - Update Bank Account">
+
+    <Grid x:Name="MainGrid" Padding="24">
+        <StackPanel Spacing="16">
+            <TextBlock Text="Update Bank Account" 
+                       FontSize="24" FontWeight="SemiBold"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,16"/>
+
+            <TextBlock Text="Account Name:" FontWeight="SemiBold"/>
+            <TextBox x:Name="AccountName" Text="{Binding AccountName, Mode=TwoWay}" 
+                     PlaceholderText="Enter account name" 
+                     Margin="0,0,0,8"/>
+            
+            <TextBlock Text="Daily Limit:" FontWeight="SemiBold"/>
+            <NumberBox x:Name="DailyLimit" Value="{Binding DailyLimit, Mode=TwoWay}" 
+                       PlaceholderText="Enter daily limit" 
+                       SpinButtonPlacementMode="Compact"
+                       Minimum="0"
+                       SmallChange="100"
+                       LargeChange="1000"
+                       Margin="0,0,0,8"/>
+            
+            <TextBlock Text="Maximum Amount Per Transaction:" FontWeight="SemiBold"/>
+            <NumberBox x:Name="MaxAmmTrans" Value="{Binding MaximumPerTransaction, Mode=TwoWay}" 
+                       PlaceholderText="Enter maximum amount per transaction" 
+                       SpinButtonPlacementMode="Compact"
+                       Minimum="0"
+                       SmallChange="100"
+                       LargeChange="500"
+                       Margin="0,0,0,8"/>
+            
+            <TextBlock Text="Maximum Number of Daily Transactions:" FontWeight="SemiBold"/>
+            <NumberBox x:Name="MaxNrTrans" Value="{Binding MaximumNrTransactions, Mode=TwoWay}" 
+                       PlaceholderText="Enter maximum number of daily transactions" 
+                       SpinButtonPlacementMode="Compact"
+                       Minimum="0"
+                       SmallChange="1"
+                       LargeChange="5"
+                       Margin="0,0,0,8"/>
+            
+            <TextBlock Text="Account Status:" FontWeight="SemiBold"/>
+            <ToggleSwitch x:Name="IsBlocked" IsOn="{Binding IsBlocked, Mode=TwoWay}" 
+                          OnContent="Blocked" 
+                          OffContent="Active"
+                          Margin="0,0,0,16"/>
+
+            <StackPanel x:Name="CancelButton" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
+                <Button Content="Cancel" 
+                        Click="CancelButton_Click"/>
+                
+                <Button x:Name="UpdateButton" Content="Update Account" 
+                        Click="UpdateButton_Click" 
+                        Background="{ThemeResource SystemAccentColor}"
+                        Foreground="White"/>
+                <Button x:Name="DeleteButton" Content="Delete Account" 
+                        Click="DeleteButton_Click" 
+                        Background="{ThemeResource SystemAccentColor}"
+                        Foreground="White"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

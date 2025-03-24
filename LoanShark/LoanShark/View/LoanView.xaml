@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="LoanShark">
+    Title="Loan Shark - Loans">
 
 
     <!--
@@ -183,7 +183,7 @@
                     <TextBlock Text="Enter the amount you wish to borrow in the currency of the selected account" 
                               FontSize="12" Opacity="0.8" Margin="0,0,0,5"/>
                     <TextBox x:Name="AmountTextBox" 
-                            Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                            Text="{Binding Amount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                             PlaceholderText="Enter Amount" 
                             Margin="0,0,0,5"
                             TextChanged="AmountTextBox_TextChanged"

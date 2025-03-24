@@ -1,0 +1,1 @@
+ALTER TABLE bank_accounts ADD date_created DATETIME DEFAULT CURRENT_TIMESTAMP;

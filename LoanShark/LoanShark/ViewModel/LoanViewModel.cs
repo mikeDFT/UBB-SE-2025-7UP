@@ -5,22 +5,18 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Input;
 using System.Diagnostics;
-using Windows.Media.Core;
-using Microsoft.UI.Xaml.Controls;
 
 
 namespace LoanShark.ViewModel
 {
     public class LoanViewModel : INotifyPropertyChanged
     {
-        private int userID;
         private string selectedBankAccount;
         private Loan selectedLoan;
         private string selectedLoanDisplay;
-        private float amount;
+        private decimal amount;
         private int selectedMonths;
         private string takeErrorMessage;
         private string payErrorMessage;
@@ -100,7 +96,7 @@ namespace LoanShark.ViewModel
             }
         }
 
-        public float Amount
+        public decimal Amount
         {
             get => amount;
             set
@@ -288,10 +284,8 @@ namespace LoanShark.ViewModel
             }
         }
 
-        public LoanViewModel(int userID)
+        public LoanViewModel()
         {
-            this.userID = userID;
-            
             // Initialize the loan service
             _loanService = new LoanService();
             
@@ -334,33 +328,33 @@ namespace LoanShark.ViewModel
                 if (SelectedMonths <= 0)
                 {
                     TaxPercentage = "Tax Percentage: N/A";
+                    AmountToPay = "Amount to Pay: N/A";
                 }
                 else
                 {
-                    float taxPercentageValue = _loanService.CalculateTaxPercentage(SelectedMonths);
+                    decimal taxPercentageValue = _loanService.CalculateTaxPercentage(SelectedMonths);
+                    decimal amountToPayValue = _loanService.CalculateAmountToPay(Amount, taxPercentageValue);
                     TaxPercentage = $"Tax Percentage: {taxPercentageValue}%";
+                    AmountToPay = $"Amount to Pay: {amountToPayValue:F2}";
                 }
-
-                AmountToPay = "Amount to Pay: N/A";
-                return;
             }
             
             try
             {
                 // Use service to calculate tax percentage and amount to pay
-                float taxPercentageValue = _loanService.CalculateTaxPercentage(SelectedMonths);
-                float amountToPayValue = _loanService.CalculateAmountToPay(Amount, taxPercentageValue);
+                decimal taxPercentageValue = _loanService.CalculateTaxPercentage(SelectedMonths);
+                decimal amountToPayValue = _loanService.CalculateAmountToPay(Amount, taxPercentageValue);
                 
                 TaxPercentage = $"Tax Percentage: {taxPercentageValue}%";
                 AmountToPay = $"Amount to Pay: {amountToPayValue:F2}";}
-            catch (Exception ex)
+            catch (Exception)
             {
                 TaxPercentage = "Tax Percentage: Error";
                 AmountToPay = "Amount to Pay: Error";
             }
         }
 
-        private void TakeLoan()
+        private async void TakeLoan()
         {
             Debug.WriteLine("TakeLoan method called");
             
@@ -379,7 +373,7 @@ namespace LoanShark.ViewModel
                 string currency = ExtractCurrencyFromBankAccount(SelectedBankAccount);
                 
                 // Create new loan using the service
-                var newLoan = _loanService.TakeLoan(userID, Amount, currency, ExtractIbanFromBankAccount(SelectedBankAccount), SelectedMonths);
+                var newLoan = await _loanService.TakeLoanAsync(int.Parse(UserSession.Instance.GetUserData("id_user")), Amount, currency, ExtractIbanFromBankAccount(SelectedBankAccount), SelectedMonths);
 
                 // Refreshing the data from the service
                 LoadData();
@@ -466,7 +460,7 @@ namespace LoanShark.ViewModel
         }
 
         // For the pay a loan page (the details in the box)
-        private void UpdatePayLoanBoxDetails()
+        private async void UpdatePayLoanBoxDetails()
         {
             Debug.WriteLine("UpdatePayLoanBoxDetails called");
             
@@ -484,7 +478,7 @@ namespace LoanShark.ViewModel
                 if (parts.Length >= 3)
                 {
                     string accountCurrency = parts[1].Trim();
-                    float accountBalance = float.Parse(parts[2].Trim());
+                    decimal accountBalance = decimal.Parse(parts[2].Trim());
                     string bankAccountId = parts[0].Trim();
                     
                     // Set account balance display
@@ -495,7 +489,7 @@ namespace LoanShark.ViewModel
                         return;
 
                     // Extract loan details
-                    float loanAmount = (float)selectedLoan.AmountToPay;
+                    decimal loanAmount = selectedLoan.AmountToPay;
                     string loanCurrency = selectedLoan.Currency;
                     
                     // Check if currencies match
@@ -507,7 +501,7 @@ namespace LoanShark.ViewModel
                     else
                     {
                         // Convert loan amount to account currency using service
-                        float convertedAmount = _loanService.ConvertCurrency(loanAmount, loanCurrency, accountCurrency);
+                        decimal convertedAmount = await _loanService.ConvertCurrency(loanAmount, loanCurrency, accountCurrency);
                         ConvertedLoanAmount = $"Payment Required: {convertedAmount:F2} {accountCurrency} (converted from {loanAmount:F2} {loanCurrency})";
                     }
                 }
@@ -543,7 +537,7 @@ namespace LoanShark.ViewModel
         }
 
 
-        private void PayLoan()
+        private async void PayLoan()
         {
             Debug.WriteLine("PayLoan method called");
             
@@ -560,7 +554,7 @@ namespace LoanShark.ViewModel
                 string bankAccountId = ExtractIbanFromBankAccount(SelectedBankAccount);
                 
                 // Pay the loan using the service
-                string errorMessage = _loanService.PayLoan(userID, selectedLoan.LoanID, bankAccountId);
+                string errorMessage = await _loanService.PayLoanAsync(int.Parse(UserSession.Instance.GetUserData("id_user")), selectedLoan.LoanID, bankAccountId);
                 
                 if (errorMessage != "success")
                 {
@@ -609,7 +603,7 @@ namespace LoanShark.ViewModel
         }
 
         // Load data from the service, also used for reloading (refreshing) data
-        private void LoadData()
+        private async void LoadData()
         {
             try
             {
@@ -620,14 +614,14 @@ namespace LoanShark.ViewModel
                 UnpaidLoansDisplay.Clear();
                 
                 // Get loans from service
-                var userLoans = _loanService.GetUserLoans(userID);
+                var userLoans = await _loanService.GetUserLoans(int.Parse(UserSession.Instance.GetUserData("id_user")));
                 foreach (var loan in userLoans)
                 {
                     Loans.Add(loan);
                 }
 
                 // Get unpaid loans for display
-                List<Loan> unpaidLoans = _loanService.GetUnpaidUserLoans(userID);
+                List<Loan> unpaidLoans = await _loanService.GetUnpaidUserLoans(int.Parse(UserSession.Instance.GetUserData("id_user")));
                 unpaidLoans.Sort((loan1, loan2) => loan1.DateTaken.CompareTo(loan2.DateTaken));
 
                 foreach (var loan in unpaidLoans)
@@ -638,7 +632,7 @@ namespace LoanShark.ViewModel
                 }
                 
                 // Get bank accounts from service
-                var formattedAccounts = _loanService.GetFormattedBankAccounts(userID);
+                var formattedAccounts = await _loanService.GetFormattedBankAccounts(int.Parse(UserSession.Instance.GetUserData("id_user")));
                 foreach (var account in formattedAccounts)
                 {
                     BankAccounts.Add(account);
@@ -660,7 +654,7 @@ namespace LoanShark.ViewModel
         private readonly Action execute;
         private readonly Func<bool> canExecute;
 
-        public RelayCommand(Action execute, Func<bool> canExecute = null)
+        public RelayCommand(Action execute, Func<bool>? canExecute = null)
         {
             this.execute = execute;
             this.canExecute = canExecute;

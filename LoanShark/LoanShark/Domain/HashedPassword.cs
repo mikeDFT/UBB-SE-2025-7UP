@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
-using BCrypt.Net;
-using System.Security.Cryptography;
 using System.Linq;
-using Microsoft.Identity.Client;
-using System.ComponentModel;
-using Microsoft.UI.Xaml.CustomAttributes;
+using BCrypt.Net;
 
 namespace LoanShark.Domain
 {
-    class HashedPassword
+    public class HashedPassword
     {
         private string hashedPassword;
         private string salt;
@@ -31,7 +26,6 @@ namespace LoanShark.Domain
             }
             this.salt = BCrypt.Net.BCrypt.GenerateSalt(10); // this will generate a 29 character string
             this.hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, this.salt); // this will hash the password with the generated salt
-            Debug.Print("Salt: " + this.salt + " | HashedPassword: " + this.hashedPassword);
         }
 
         // this constructor will be used to create a HashedPassword object with the data retrieved

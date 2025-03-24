@@ -29,7 +29,7 @@ namespace LoanShark.Helper
         // This will get the connection string from the appsettings.json file in the project
         public static string? GetConnectionString(string name)
         {
-            return configuration[$"ConnectionStrings:{name}"];
+            return configuration?[$"ConnectionStrings:{name}"];
         }
     }
 }

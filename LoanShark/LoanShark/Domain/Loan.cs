@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LoanShark.Domain
 {
@@ -10,8 +6,8 @@ namespace LoanShark.Domain
     {
         public int LoanID { get; set; }
         public int UserID { get; set; }
-        public double Amount { get; set; }
-        public double AmountToPay
+        public decimal Amount { get; set; }
+        public decimal AmountToPay
         {
             get { return Amount * (1 + TaxPercentage/100); }
         }
@@ -19,14 +15,14 @@ namespace LoanShark.Domain
         public DateTime DateTaken { get; set; }
         public DateTime DateDeadline { get; set; }
         public DateTime? DatePaid { get; set; } // Nullable for unpaid loans
-        public float TaxPercentage { get; set; }
+        public decimal TaxPercentage { get; set; }
         public int NumberMonths { get; set; }
         public string State { get; private set; } // "paid" or "unpaid"
 
 
-        public Loan(int loanID, int userID, double amount,
+        public Loan(int loanID, int userID, decimal amount,
             string currency, DateTime dateTaken, DateTime? datePaid,
-            float taxPercentage, int numberMonths, string state)
+            decimal taxPercentage, int numberMonths, string state)
         {
             LoanID = loanID;
             UserID = userID;

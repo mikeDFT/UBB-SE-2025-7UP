@@ -27,6 +27,7 @@ CREATE TABLE bank_accounts (
     max_per_transaction FLOAT NOT NULL DEFAULT 50000,
     max_nr_transactions_daily INT NOT NULL DEFAULT 100,
     blocked BIT NOT NULL DEFAULT 0,
+	date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
 	FOREIGN KEY (currency) REFERENCES currencies(currency_name),
 );

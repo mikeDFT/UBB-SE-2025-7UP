@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="LoanShark.View.DeleteAccountView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LoanShark.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Loan Shark - Delete Account">
+
+    <Grid x:Name="MainGrid" Padding="20">
+        <StackPanel Spacing="20" VerticalAlignment="Center">
+            <TextBlock Text="Are you sure you want to delete your account?" 
+                       Style="{StaticResource TitleLargeTextBlockStyle}"
+                       HorizontalAlignment="Center"/>
+            
+            <TextBlock Text="This action cannot be undone. Please enter your password to confirm."
+                       Style="{StaticResource BodyTextBlockStyle}"
+                       HorizontalAlignment="Center"
+                       TextWrapping="Wrap"/>
+
+            <PasswordBox x:Name="PasswordInput" 
+                        PlaceholderText="Enter your password"
+                         Style="{StaticResource DefaultPasswordBoxStyle}"
+                        Width="300"/>
+
+            <Button x:Name="DeleteButton"
+                    Content="Delete Account"
+                    Click="DeleteButton_Click"
+                    HorizontalAlignment="Center"
+                    Background="Red"
+                    />
+        </StackPanel>
+    </Grid>
+</Window>
