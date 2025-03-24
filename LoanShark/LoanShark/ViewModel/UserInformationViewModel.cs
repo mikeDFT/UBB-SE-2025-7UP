@@ -1,7 +1,6 @@
 ﻿using LoanShark.Domain;
 using LoanShark.Service;
 using LoanShark.View;
-using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

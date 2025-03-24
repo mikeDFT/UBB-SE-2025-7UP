@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using LoanShark.Data;
 using LoanShark.Domain;
 using LoanShark.Service;
-using Microsoft.UI.Xaml;
 using LoanShark.View;   
-using Microsoft.UI.Xaml.Controls;
-using Windows.ApplicationModel.Background;
-using LoanShark.Helper;
 
 namespace LoanShark.ViewModel
 {

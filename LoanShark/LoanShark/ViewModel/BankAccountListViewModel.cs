@@ -1,5 +1,4 @@
 ﻿using LoanShark.Domain;
-using LoanShark.Helper;
 using LoanShark.Service;
 using LoanShark.View;
 using System;

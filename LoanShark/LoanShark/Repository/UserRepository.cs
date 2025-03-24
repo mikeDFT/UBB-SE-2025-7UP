@@ -1,18 +1,11 @@
 ﻿using LoanShark.Data;
 using LoanShark.Domain;
 using Microsoft.Data.SqlClient;
-using Microsoft.UI.Xaml.Shapes;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.UserDataTasks;
-using Windows.System;
-using User = LoanShark.Domain.User;
 
 namespace LoanShark.Repository
 {

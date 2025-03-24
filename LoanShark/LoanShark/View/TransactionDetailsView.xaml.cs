@@ -1,6 +1,5 @@
 using LoanShark.ViewModel;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 using LoanShark.Domain;
 using Microsoft.UI.Windowing;
 using WinRT.Interop;

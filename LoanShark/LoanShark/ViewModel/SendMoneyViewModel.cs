@@ -1,14 +1,11 @@
 ﻿using LoanShark.Service;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using System.Windows.Input;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using LoanShark.Domain;
-using LoanShark.Helper;
 
 namespace LoanShark.ViewModel
 {

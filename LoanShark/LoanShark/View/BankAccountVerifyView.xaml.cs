@@ -4,7 +4,6 @@ using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Threading.Tasks;
 using LoanShark.Helper;
-using Windows.UI.Core;
 using Microsoft.UI.Xaml.Input;
 
 // To learn more about WinUI, the WinUI project structure,

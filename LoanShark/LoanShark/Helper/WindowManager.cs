@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using System.Diagnostics;
 using LoanShark.Data;
 using LoanShark.Domain;
 using LoanShark.View;
-using Windows.System.Profile;
 
 namespace LoanShark.Helper
 {
