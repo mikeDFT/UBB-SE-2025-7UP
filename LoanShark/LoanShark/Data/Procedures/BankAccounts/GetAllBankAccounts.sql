@@ -1,0 +1,5 @@
+CREATE OR ALTER PROCEDURE GetAllBankAccounts
+AS
+BEGIN
+	SELECT * FROM bank_accounts;
+END

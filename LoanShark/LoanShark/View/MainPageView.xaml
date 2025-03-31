@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="LoanShark.View.MainPageView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LoanShark.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:domain="using:LoanShark.Domain"
+    xmlns:viewmodel="using:LoanShark.ViewModel"
+    mc:Ignorable="d"
+    Title="Loan Shark">
+
+    <Grid>
+        <DropDownButton x:Name="menuButton" 
+                        VerticalAlignment="Top" 
+                        HorizontalAlignment="Left" 
+                        Margin="10,10,0,0" 
+                        AutomationProperties.Name="Menu">
+            <DropDownButton.Content>
+                <FontIcon Glyph="&#xE700;" FontSize="20"/>
+            </DropDownButton.Content>
+            <DropDownButton.Flyout>
+                <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                    <MenuFlyoutItem x:Name="accountSettingsButton" Text="Account Settings" Click="AccountSettingsButtonHandler">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon Glyph="&#xE713;"/>
+                        </MenuFlyoutItem.Icon>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem x:Name="logOutButton" Text="Log Out" Click="LogOutButtonHandler">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon Glyph="&#xE89B;"/>
+                        </MenuFlyoutItem.Icon>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem x:Name="exitLoanSharkButton" Text="Exit Loan Shark" Click="ExitLoanSharkButtonHandler">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon Glyph="&#xE10A;"/>
+                        </MenuFlyoutItem.Icon>
+                    </MenuFlyoutItem>
+                </MenuFlyout>
+            </DropDownButton.Flyout>
+        </DropDownButton>
+        
+        <TextBlock x:Name="centeredTextField"
+                 Width="Auto"
+                 TextWrapping="Wrap"
+                 TextTrimming="CharacterEllipsis"
+                 VerticalAlignment="Top"
+                 HorizontalAlignment="Center"
+                 Margin="0,50,0,20"
+                 FontSize="24"
+                 Text="{x:Bind ViewModel.WelcomeText, Mode=OneWay}"/>
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <!-- FlipView for bank accounts displaying name and iban -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <FlipView x:Name="accountsFlipView"
+                        Width="300"
+                        MaxHeight="80"
+                        HorizontalAlignment="Center"
+                        Margin="65,0,0,0"
+                        SelectionChanged="AccountsFlipView_SelectionChanged"
+                        ItemsSource="{x:Bind ViewModel.UserBankAccounts, Mode=OneWay}">
+                    <FlipView.ItemTemplate>
+                        <DataTemplate x:DataType="domain:BankAccount">
+                            <Grid>
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock Text="{x:Bind name}" 
+                                            FontSize="20" 
+                                            Margin="0,0,0,10"/>
+                                    <TextBlock Text="{x:Bind iban}" 
+                                            FontSize="14"
+                                            TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </FlipView.ItemTemplate>
+                </FlipView>
+                
+                <Button x:Name="accountDetailsButton"
+                        Margin="20,0,0,0"
+                        Click="BankAccountDetailsViewButtonHandler">
+                    <Button.Content>
+                        <FontIcon Glyph="&#xE946;" FontSize="20"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <Button x:Name="checkBalanceButton"
+                    Content="{x:Bind ViewModel.BalanceButtonContent, Mode=OneWay}"
+                    Click="CheckBalanceButtonHandler"
+                    HorizontalAlignment="Center"
+                    Margin="0,20,0,0"
+                    Grid.Row="1"/>
+                    
+            <!-- First row of side-by-side buttons -->
+            <Grid Grid.Row="2" Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button x:Name="transactionButton"
+                        Content="Transaction"
+                        Grid.Column="0"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,10,0"
+                        Width="200"
+                        Height="40"
+                        Click="TransactionButtonHandler"/>
+                
+                <Button x:Name="transactionHistoryButton"
+                        Content="Transaction History"
+                        Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        Margin="10,0,0,0"
+                        Width="200"
+                        Height="40"
+                        Click="TransactionHistoryButtonHandler"/>
+            </Grid>
+
+            <!-- Third row of side-by-side buttons -->
+            <Grid Grid.Row="3" Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="bankAccountSettingsButton"
+                    Content="Bank Account Settings"
+                    Grid.Row="4"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,10,0"
+                    Width="200"
+                    Height="40"
+                    Click="BankAccountSettingsButtonHandler"/>
+
+                
+                <Button x:Name="bankAccountCreateButton"
+                    Content="Create Bank Account"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    Margin="10,0,0,0"
+                    Width="200"
+                    Height="40"
+                    Click="BankAccountCreateButtonHandler"/>
+            </Grid>
+            
+            <!-- Fourth row with loan button -->
+            <Button x:Name="loanButton"
+                    Content="Loan"
+                    Grid.Row="4"
+                    HorizontalAlignment="Center"
+                    Margin="0,20,0,0"
+                    Width="200"
+                    Height="40"
+                    Click="LoanButtonHandler"/>
+        </Grid>
+    </Grid>
+</Window>

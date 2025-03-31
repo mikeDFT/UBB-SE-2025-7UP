@@ -1,0 +1,5 @@
+CREATE OR ALTER PROCEDURE GetCurrencies
+AS
+BEGIN
+	SELECT * FROM currencies;
+END

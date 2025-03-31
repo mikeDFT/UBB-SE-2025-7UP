@@ -1,0 +1,316 @@
+<Window
+    x:Class="LoanShark.LoanView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LoanShark"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Loan Shark - Loans">
+
+
+    <!--
+    <Window.DataContext>
+        <local:LoanViewModel />
+    </Window.DataContext>
+    -->
+    
+
+    <Grid x:Name="MainGrid">
+        <!-- Main Loans Page -->
+        <UserControl x:Name="MainLoansPage" Visibility="{Binding MainLoansPageVisibility}">
+            <ScrollViewer VerticalScrollMode="Auto" HorizontalScrollMode="Auto" HorizontalScrollBarVisibility="Auto">
+                <StackPanel Orientation="Vertical" 
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Center"
+                           Width="900"
+                           Padding="20,10,20,10">
+                    <TextBlock Text="My Loans" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,20"/>
+
+                    <Grid Background="#232F33" Padding="0" CornerRadius="4" BorderBrush="#445A63" BorderThickness="1">
+                        <!-- Table Header -->
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Header Row -->
+                        <Grid Grid.Row="0" Background="#1A2327" Padding="10,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock Grid.Column="0" Text="Loan ID" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="Currency" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="Amount Taken" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="Amount To Pay" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="Date Taken" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="5" Text="Due Date" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="6" Text="Nr. Months" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="7" Text="Tax %" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
+                        </Grid>
+                        
+                        <!-- Table Content -->
+                        <ListView x:Name="LoansListView" 
+                                  Grid.Row="1" 
+                                  ItemsSource="{Binding UnpaidLoans}" 
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  MaxHeight="400"
+                                  Padding="0"
+                                  SelectionMode="None"
+                                  IsItemClickEnabled="False">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="Margin" Value="0,0,0,2"/>
+                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                    <Setter Property="BorderBrush" Value="#445A63"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="10,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <!-- ID -->
+                                            <ColumnDefinition Width="80"/>
+                                            <!-- Currency -->
+                                            <ColumnDefinition Width="110"/>
+                                            <!-- Amount -->
+                                            <ColumnDefinition Width="110"/>
+                                            <!-- To Pay -->
+                                            <ColumnDefinition Width="150"/>
+                                            <!-- Date Taken -->
+                                            <ColumnDefinition Width="150"/>
+                                            <!-- Due Date -->
+                                            <ColumnDefinition Width="80"/>
+                                            <!-- Months -->
+                                            <ColumnDefinition Width="100"/>
+                                            <!-- Tax Percentage-->
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="{Binding LoanID}" Foreground="White" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Currency}" Foreground="White" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding Amount}" Foreground="White" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+                                        <TextBlock Grid.Column="3" Text="{Binding AmountToPay}" Foreground="#29E3A4" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+                                        <TextBlock Grid.Column="4" Text="{Binding DateTaken}" Foreground="White" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+                                        <TextBlock Grid.Column="5" Text="{Binding DateDeadline}" Foreground="White" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+                                        <TextBlock Grid.Column="6" Text="{Binding NumberMonths}" Foreground="White" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+                                        <TextBlock Grid.Column="7" Text="{Binding TaxPercentage}" Foreground="White" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <ItemsStackPanel/>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                        </ListView>
+                    </Grid>
+
+                    <!-- Message when no loans 
+                    <TextBlock Text="You don't have any active loans" 
+                               Visibility="{Binding HasUnpaidLoans}"
+                               Foreground="Gray" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,20,0,0"/> -->
+                    
+                    <!-- Action Buttons -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,30,0,10">
+                        <Button Content="Take Loan" 
+                                Command="{Binding GoToTakeLoanPageCommand}" 
+                                Margin="10,0" 
+                                Padding="20,10"
+                                Background="#0078D7"
+                                Foreground="White"
+                                FontWeight="SemiBold"
+                                CornerRadius="4"/>
+                        <Button Content="Pay Loan" 
+                                Command="{Binding GoToPayLoanPageCommand}" 
+                                Margin="10,0" 
+                                Padding="20,10"
+                                Background="#0078D7"
+                                Foreground="White"
+                                FontWeight="SemiBold"
+                                CornerRadius="4"/>
+                    </StackPanel>
+                    
+                    <Button Content="Close" 
+                            Command="{Binding CloseCommand}" 
+                            HorizontalAlignment="Center" 
+                            Margin="0,15,0,10" 
+                            Padding="30,10"
+                            CornerRadius="4"/>
+                </StackPanel>
+            </ScrollViewer>
+        </UserControl>
+
+        <!-- Take Loan Page -->
+        <UserControl x:Name="TakeLoanPage" Visibility="{Binding TakeLoanPageVisibility}">
+            <ScrollViewer VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
+                <StackPanel Orientation="Vertical" 
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Center" 
+                           Width="500"
+                           Padding="20,10,20,10">
+                    <TextBlock Text="Take Loan" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,20"/>
+
+                    <!-- Bank Account Selection -->
+                    <TextBlock Text="Bank Account" FontWeight="SemiBold" Margin="0,5,0,2"/>
+                    <TextBlock Text="Choose the account where the loan amount will be deposited" 
+                              FontSize="12" Opacity="0.8" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="BankAccountComboBox" 
+                             ItemsSource="{Binding BankAccounts}" 
+                             SelectedItem="{Binding SelectedBankAccount, Mode=TwoWay}" 
+                             PlaceholderText="Select Bank Account" 
+                             Margin="0,0,0,15"
+                             HorizontalAlignment="Stretch"/>
+                             <!-- SelectionChanged="{Binding BankAccountComboBox_SelectionChanged}"/> -->
+
+                    <!-- Loan Amount -->
+                    <TextBlock Text="Loan Amount" FontWeight="SemiBold" Margin="0,5,0,2"/>
+                    <TextBlock Text="Enter the amount you wish to borrow in the currency of the selected account" 
+                              FontSize="12" Opacity="0.8" Margin="0,0,0,5"/>
+                    <TextBox x:Name="AmountTextBox" 
+                            Text="{Binding Amount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                            PlaceholderText="Enter Amount" 
+                            Margin="0,0,0,5"
+                            TextChanged="AmountTextBox_TextChanged"
+                            HorizontalAlignment="Stretch"/>
+                            <!-- TextChanged="{Binding AmountTextBox_TextChanged}"/> -->
+                    <TextBlock Text="Amount cannot exceed one million" Foreground="Gray" Margin="0,0,0,15" FontSize="12"/>
+
+
+                    <!-- Loan Duration -->
+                    <TextBlock Text="Loan Duration" FontWeight="SemiBold" Margin="0,5,0,2"/>
+                    <TextBlock Text="Select the number of months for repayment" 
+                              FontSize="12" Opacity="0.8" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="MonthsComboBox" 
+                             ItemsSource="{Binding Months}" 
+                             SelectedItem="{Binding SelectedMonths, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                             PlaceholderText="Select Number of Months" 
+                             Margin="0,0,0,15"
+                             HorizontalAlignment="Stretch"/>
+                             <!-- SelectionChanged="{Binding MonthsComboBox_SelectionChanged}"/> -->
+
+
+                    <!-- Loan Details -->
+                    <Border Background="#232F33" BorderBrush="#445A63" BorderThickness="1" Padding="15" CornerRadius="4" Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock Text="Loan Details" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="TaxPercentageTextBlock" Text="{Binding TaxPercentage, Mode=OneWay}" Margin="0,5,0,5"/>
+                            <TextBlock x:Name="AmountToPayTextBlock" Text="{Binding AmountToPay, Mode=OneWay}" Margin="0,5,0,0" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Action Buttons -->
+                    <Button Content="Take Loan" 
+                           Command="{Binding TakeLoanCommand}" 
+                           Margin="0,10,0,5" 
+                           HorizontalAlignment="Stretch"
+                           Background="#0078D7"
+                           Foreground="White"
+                           Padding="0,8,0,8"
+                           FontWeight="SemiBold"/>
+
+                    <!-- Error Message -->
+                    <TextBlock x:Name="ErrorMessageTextBlock" 
+                              Text="{Binding TakeErrorMessage}" 
+                              Foreground="Red" 
+                              Margin="0,5,0,15"
+                              HorizontalAlignment="Center"/>
+
+                    <!-- Back Button -->
+                    <Button Content="Back" 
+                           Command="{Binding BackCommand}" 
+                           Click="BackButton_TakeLoan_Click"
+                           Margin="0,5,0,10" 
+                           HorizontalAlignment="Center"
+                           Padding="20,5,20,5"/>
+                </StackPanel>
+            </ScrollViewer>
+        </UserControl>
+
+        <!-- Pay Loan Page -->
+        <UserControl x:Name="PayLoanPage" Visibility="{Binding PayLoanPageVisibility}">
+            <ScrollViewer VerticalScrollMode="Auto" HorizontalScrollMode="Disabled">
+                <StackPanel Orientation="Vertical" 
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Center"
+                           Width="500"
+                           Padding="20,10,20,10">
+                    <TextBlock Text="Pay Loan" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,20"/>
+
+                    <!-- Bank Account Selection -->
+                    <TextBlock Text="Bank Account" FontWeight="SemiBold" Margin="0,5,0,2"/>
+                    <TextBlock Text="Choose the account to use for payment" 
+                     FontSize="12" Opacity="0.8" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="PayBankAccountComboBox" 
+                     ItemsSource="{Binding BankAccounts}" 
+                     SelectedItem="{Binding SelectedBankAccount, Mode=TwoWay}" 
+                     PlaceholderText="Select Bank Account" 
+                     Margin="0,0,0,15"
+                     HorizontalAlignment="Stretch"/>
+
+                    <!-- Loan Selection -->
+                    <TextBlock Text="Loan to Pay" FontWeight="SemiBold" Margin="0,5,0,2"/>
+                    <TextBlock Text="Select the loan you wish to pay off" 
+                     FontSize="12" Opacity="0.8" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="LoanToPayComboBox"
+                     ItemsSource="{Binding UnpaidLoansDisplay}" 
+                     SelectedItem="{Binding SelectedLoanDisplay, Mode=TwoWay}" 
+                     PlaceholderText="Select Loan to Pay" 
+                     Margin="0,0,0,15"
+                     HorizontalAlignment="Stretch"/>
+
+                    <!-- Loan Details -->
+                    <Border Background="#232F33" BorderBrush="#445A63" BorderThickness="1" Padding="15" CornerRadius="4" Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock Text="Payment Details" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,10"/>
+                            <TextBlock x:Name="LoanAmountTextBlock" Text="{Binding SelectedLoanAmount, Mode=OneWay}" Foreground="White" Margin="0,5,0,5"/>
+                            <TextBlock x:Name="AccountBalanceTextBlock" Text="{Binding SelectedAccountBalance, Mode=OneWay}" Foreground="White" Margin="0,5,0,5"/>
+                            <Rectangle Height="1" Fill="#445A63" Margin="0,5,0,5"/>
+                            <TextBlock x:Name="ConvertedLoanAmountTextBlock" Text="{Binding ConvertedLoanAmount, Mode=OneWay}" Foreground="#29E3A4" FontWeight="SemiBold" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Action Buttons -->
+                    <Button Content="Pay Loan" 
+                           Command="{Binding PayLoanCommand}" 
+                           Margin="0,10,0,5" 
+                           HorizontalAlignment="Stretch"
+                           Background="#0078D7"
+                           Foreground="White"
+                           Padding="0,8,0,8"
+                           FontWeight="SemiBold"/>
+
+                    <!-- Error Message -->
+                    <TextBlock x:Name="PayErrorMessageTextBlock" 
+                              Text="{Binding PayErrorMessage}" 
+                              Foreground="Red" 
+                              Margin="0,5,0,15"
+                              HorizontalAlignment="Center"/>
+
+                    <!-- Back Button -->
+                    <Button Content="Back" 
+                           Command="{Binding BackCommand}" 
+                           Click="BackButton_PayLoan_Click"
+                           Margin="0,5,0,10" 
+                           HorizontalAlignment="Center"
+                           Padding="20,5,20,5"/>
+                </StackPanel>
+            </ScrollViewer>
+        </UserControl>
+    </Grid>
+</Window>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="LoanShark.View.LoginView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LoanShark.View"
+    xmlns:viewmodel="using:LoanShark.viewModel"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Loan Shark - Login">
+
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
+        <TextBlock x:Name="titleTextBlock" Text="Welcome to Loan Shark" FontSize="24" Margin="0,0,0,10"/>
+        <TextBox x:Name="emailTextBox" PlaceholderText="Email" Width="250" KeyDown="EmailBox_KeyDown" 
+                 Text="{x:Bind viewModel.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <PasswordBox x:Name="passwordBox" Width="250" PlaceholderText="Password" PasswordChar="•" PasswordRevealMode="Peek" 
+                    KeyDown="PasswordBox_KeyDown"/>
+        <TextBlock x:Name="errorMessageLabel" Foreground="Red" 
+                   Text="{x:Bind viewModel.ErrorMessage, Mode=OneWay}" 
+                   Visibility="{x:Bind viewModel.IsErrorVisible, Mode=OneWay}" 
+                   TextWrapping="Wrap" Width="250"/>
+        <Button x:Name="loginButton" Click="LoginButtonHandler" HorizontalAlignment="Center" Width="100">Login</Button>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5" Margin="0,30,0,0">
+            <TextBlock Text="Don't have an account?" VerticalAlignment="Center"/>
+            <HyperlinkButton Content="Sign up" Click="SignUpButtonHandler"/>
+        </StackPanel>
+    </StackPanel>
+
+</Window>
