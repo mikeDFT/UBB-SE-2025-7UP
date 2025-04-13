@@ -67,7 +67,7 @@ namespace LoanShark.View
 
         private void OpenMainPageWindow() // opens the main page window and closes the login window
         {
-            WindowManager.shouldReloadBankAccounts = false; // bank accounts are loaded by the constructor of the main page window
+            WindowManager.ShouldReloadBankAccounts = false; // bank accounts are loaded by the constructor of the main page window
             MainPageView mainPageWindow = new MainPageView();
             mainPageWindow.Activate();
             this.Close();

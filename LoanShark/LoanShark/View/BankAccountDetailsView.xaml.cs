@@ -4,7 +4,6 @@ using LoanShark.Helper;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace LoanShark.View
 {
     /// <summary>
@@ -12,7 +11,7 @@ namespace LoanShark.View
     /// </summary>
     public partial class BankAccountDetailsView : Window
     {
-        BankAccountDetailsViewModel viewModel;
+        private BankAccountDetailsViewModel viewModel;
         public BankAccountDetailsView()
         {
             this.InitializeComponent();
