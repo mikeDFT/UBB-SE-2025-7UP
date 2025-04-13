@@ -1,6 +1,6 @@
-﻿using LoanShark.Domain;
+﻿using System;
+using LoanShark.Domain;
 using Microsoft.UI.Xaml.Data;
-using System;
 
 namespace LoanShark.Helper
 {

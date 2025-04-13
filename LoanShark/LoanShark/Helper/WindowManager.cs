@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
-using System.Diagnostics;
 using LoanShark.Data;
 using LoanShark.Domain;
 using LoanShark.View;
@@ -14,8 +14,8 @@ namespace LoanShark.Helper
     {
         // Track all active windows
         private static List<Window> activeWindows = new List<Window>();
-        public static bool shouldReloadBankAccounts = false;
-        public static bool shouldReloadWelcomeText = false;
+        public static bool ShouldReloadBankAccounts = false;
+        public static bool ShouldReloadWelcomeText = false;
 
         // Static method to register windows with the tracking system
         public static void RegisterWindow(Window window)
@@ -32,7 +32,6 @@ namespace LoanShark.Helper
             {
                 activeWindows.Remove(window);
                 Debug.Print($"Window closed. Remaining windows: {activeWindows.Count}");
-                
                 // If this was the last window, clean up resources
                 if (activeWindows.Count == 0)
                 {
@@ -42,17 +41,17 @@ namespace LoanShark.Helper
                 }
 
                 // after closing any window, if the only window is the main page window, refresh the bank accounts flip view
-                if (activeWindows.Count == 1 && activeWindows.First() is MainPageView mainWindow && shouldReloadBankAccounts)
+                if (activeWindows.Count == 1 && activeWindows.First() is MainPageView mainWindow && ShouldReloadBankAccounts)
                 {
                     await RefreshBankAccounts(mainWindow);
-                    shouldReloadBankAccounts = false;
+                    ShouldReloadBankAccounts = false;
                 }
 
                 // after updating the user data, refresh the welcome text
-                if (activeWindows.Count == 1 && activeWindows.First() is MainPageView mainWindow2 && shouldReloadWelcomeText)
+                if (activeWindows.Count == 1 && activeWindows.First() is MainPageView mainWindow2 && ShouldReloadWelcomeText)
                 {
                     mainWindow2.ViewModel.InitializeWelcomeText();
-                    shouldReloadWelcomeText = false;
+                    ShouldReloadWelcomeText = false;
                 }
             }
         }
@@ -62,10 +61,8 @@ namespace LoanShark.Helper
             UserSession.Instance.InvalidateUserSession();
             LoginView loginView = new LoginView();
             loginView.Activate();
-            
             // Create a copy of the active windows collection to safely iterate
             List<Window> windowsToClose = activeWindows.ToList();
-            
             // close all windows except the login window
             foreach (Window window in windowsToClose)
             {
@@ -85,7 +82,7 @@ namespace LoanShark.Helper
             Application.Current.Exit();
         }
 
-        public static async Task RefreshBankAccounts(MainPageView mp_window) 
+        public static async Task RefreshBankAccounts(MainPageView mp_window)
         {
             await mp_window.RefreshBankAccounts();
         }

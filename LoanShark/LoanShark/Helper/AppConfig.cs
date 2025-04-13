@@ -1,12 +1,12 @@
 ﻿using System;
-using Microsoft.Extensions.Configuration;
 using System.IO;
+using Microsoft.Extensions.Configuration;
 
 namespace LoanShark.Helper
 {
     public static class AppConfig
     {
-        public static IConfiguration? configuration { get; private set; }
+        public static IConfiguration? Configuration { get; private set; }
 
         // Static constructor to load configuration once
         static AppConfig()
@@ -21,7 +21,7 @@ namespace LoanShark.Helper
             var builder = new ConfigurationBuilder()
                 .AddJsonFile(jsonFilePath, optional: true, reloadOnChange: true);
 
-            configuration = builder.Build();
+            Configuration = builder.Build();
         }
 
         // Helper method to get values
@@ -29,7 +29,7 @@ namespace LoanShark.Helper
         // This will get the connection string from the appsettings.json file in the project
         public static string? GetConnectionString(string name)
         {
-            return configuration?[$"ConnectionStrings:{name}"];
+            return Configuration?[$"ConnectionStrings:{name}"];
         }
     }
 }
