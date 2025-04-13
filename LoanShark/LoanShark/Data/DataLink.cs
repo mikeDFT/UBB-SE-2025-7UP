@@ -34,7 +34,8 @@ namespace LoanShark.Data
         private DataLink() {
             connectionString = AppConfig.GetConnectionString("MyLocalDb");
 
-            try {
+            try 
+            {
                 sqlConnection = new SqlConnection(connectionString);
             }
             catch (Exception ex) {
