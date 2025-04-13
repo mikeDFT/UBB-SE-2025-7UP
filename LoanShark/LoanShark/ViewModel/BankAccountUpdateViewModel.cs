@@ -130,11 +130,11 @@ namespace LoanShark.ViewModel
             await LoadBankAccount();
             BankAccount bk = _bankAccount;
 
-            AccountName = bk.name;
-            DailyLimit = Decimal.ToDouble(bk.dailyLimit);
-            MaximumPerTransaction = Decimal.ToDouble(bk.maximumPerTransaction);
-            MaximumNrTransactions = bk.maximumNrTransactions;
-            IsBlocked = bk.blocked;
+            AccountName = bk.Name;
+            DailyLimit = Decimal.ToDouble(bk.DailyLimit);
+            MaximumPerTransaction = Decimal.ToDouble(bk.MaximumPerTransaction);
+            MaximumNrTransactions = bk.MaximumNrTransactions;
+            IsBlocked = bk.Blocked;
         }
 
         // loads the bank account with the given iban from the database
@@ -151,12 +151,12 @@ namespace LoanShark.ViewModel
                 _bankAccount = await _bankAccountService.FindBankAccount(iban);
                 if (_bankAccount != null)
                 {
-                    AccountIBAN = _bankAccount.iban ?? string.Empty;
-                    AccountName = _bankAccount.name ?? string.Empty;
-                    DailyLimit = Decimal.ToDouble(_bankAccount.dailyLimit);
-                    MaximumPerTransaction = Decimal.ToDouble(_bankAccount.maximumPerTransaction);
-                    MaximumNrTransactions = _bankAccount.maximumNrTransactions;
-                    IsBlocked = _bankAccount.blocked;
+                    AccountIBAN = _bankAccount.Iban ?? string.Empty;
+                    AccountName = _bankAccount.Name ?? string.Empty;
+                    DailyLimit = Decimal.ToDouble(_bankAccount.DailyLimit);
+                    MaximumPerTransaction = Decimal.ToDouble(_bankAccount.MaximumPerTransaction);
+                    MaximumNrTransactions = _bankAccount.MaximumNrTransactions;
+                    IsBlocked = _bankAccount.Blocked;
                 }
                 else
                 {
@@ -200,10 +200,10 @@ namespace LoanShark.ViewModel
                 {
                     return "Maximum number of transactions cannot be negative";
                 }
-                if (AccountName == _bankAccount.name && DailyLimit==Decimal.ToDouble(_bankAccount.dailyLimit) &&
-                    MaximumPerTransaction == Decimal.ToDouble(_bankAccount.maximumPerTransaction) &&
-                    MaximumNrTransactions == _bankAccount.maximumNrTransactions &&
-                    IsBlocked == _bankAccount.blocked)
+                if (AccountName == _bankAccount.Name && DailyLimit==Decimal.ToDouble(_bankAccount.DailyLimit) &&
+                    MaximumPerTransaction == Decimal.ToDouble(_bankAccount.MaximumPerTransaction) &&
+                    MaximumNrTransactions == _bankAccount.MaximumNrTransactions &&
+                    IsBlocked == _bankAccount.Blocked)
                     return "Failed to update bank account. No settings were changed";
 
                 bool result = await _bankAccountService.UpdateBankAccount(

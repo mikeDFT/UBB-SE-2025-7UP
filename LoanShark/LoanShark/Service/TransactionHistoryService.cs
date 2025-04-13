@@ -34,7 +34,7 @@ namespace LoanShark.Service
             {
                 if (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban)
                 {
-                    TransactionsForMenu.Add(transaction.tostringForMenu());
+                    TransactionsForMenu.Add(transaction.TostringForMenu());
                 }
             }
             return TransactionsForMenu;
@@ -50,7 +50,7 @@ namespace LoanShark.Service
             {
                 foreach (var transaction in Transactions)
                 {
-                    TransactionsForMenu.Add(transaction.tostringForMenu());
+                    TransactionsForMenu.Add(transaction.TostringForMenu());
                 }
             }
             else
@@ -59,7 +59,7 @@ namespace LoanShark.Service
                 {
                     if (transaction.TransactionType.Contains(type, StringComparison.OrdinalIgnoreCase))
                     {
-                        TransactionsForMenu.Add(transaction.tostringForMenu());
+                        TransactionsForMenu.Add(transaction.TostringForMenu());
                     }
                 }
             }
@@ -77,7 +77,7 @@ namespace LoanShark.Service
             {
                 foreach (var transaction in Transactions)
                 {
-                    TransactionsDetailed.Add(transaction.tostringDetailed());
+                    TransactionsDetailed.Add(transaction.TostringDetailed());
                 }
             }
             else
@@ -86,7 +86,7 @@ namespace LoanShark.Service
                 {
                     if (transaction.TransactionType.Contains(type, StringComparison.OrdinalIgnoreCase) && (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban))
                     {
-                        TransactionsDetailed.Add(transaction.tostringDetailed());
+                        TransactionsDetailed.Add(transaction.TostringDetailed());
                     }
                 }
             }
@@ -105,7 +105,7 @@ namespace LoanShark.Service
                 foreach (var transaction in Transactions.OrderBy(x => x.TransactionDatetime))
                 {
                     if (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban)
-                        TransactionsSorted.Add(transaction.tostringForMenu());
+                        TransactionsSorted.Add(transaction.TostringForMenu());
                 }
                 return TransactionsSorted;
             }
@@ -116,7 +116,7 @@ namespace LoanShark.Service
                 foreach (var transaction in Transactions.OrderByDescending(x => x.TransactionDatetime))
                 {
                     if (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban)
-                        TransactionsSorted.Add(transaction.tostringForMenu());
+                        TransactionsSorted.Add(transaction.TostringForMenu());
                 }
                 return TransactionsSorted;
 
@@ -138,7 +138,7 @@ namespace LoanShark.Service
             foreach (var transaction in Transactions)
             {
                 if (transaction.SenderIban == this.iban || transaction.ReceiverIban == this.iban)
-                    csv.AppendLine(transaction.tostringCSV());
+                    csv.AppendLine(transaction.TostringCSV());
             }
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "transactions.csv");
             System.IO.File.WriteAllText(filePath, csv.ToString());
@@ -148,7 +148,7 @@ namespace LoanShark.Service
         public async Task<Transaction> GetTransactionByMenuString(string menuString)
         {
             ObservableCollection<Transaction> Transactions = await repo.getTransactionsNormal();
-            return Transactions.FirstOrDefault(t => t.tostringForMenu() == menuString);
+            return Transactions.FirstOrDefault(t => t.TostringForMenu() == menuString);
         }
 
 

@@ -98,7 +98,7 @@ namespace LoanShark
                 string selectedTransactionForMenu = TransactionList.SelectedItem as string;
                 // Retrieve the detailed information of the selected transaction
                 var selectedTransaction = await transactionsViewModel.GetTransactionByMenuString(selectedTransactionForMenu);
-                string detailedTransaction = selectedTransaction.tostringDetailed();
+                string detailedTransaction = selectedTransaction.TostringDetailed();
                 TransactionDetailsView transactionDetailsWindow = new TransactionDetailsView(detailedTransaction, selectedTransaction);
                 transactionDetailsWindow.Activate();
             }

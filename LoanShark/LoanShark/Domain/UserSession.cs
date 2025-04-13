@@ -10,15 +10,13 @@ namespace LoanShark.Domain
         // id_user, cnp, first_name, last_name, email, phone_number, current_bank_account_iban
         // for the hashed_password and password_salt, we will allways fetch from the database for security reasons
         private Dictionary<string, string?>? userData;
-        
         private static UserSession? instance;
-        private static readonly object lockObject = new object();
-        
+        private static readonly object LockObject = new object();
         public static UserSession Instance
         {
             get
             {
-                lock (lockObject)
+                lock (LockObject)
                 {
                     if (instance == null)
                     {
@@ -29,7 +27,6 @@ namespace LoanShark.Domain
                 }
             }
         }
-        
         // Make constructors private to prevent external instantiation
         private UserSession()
         {
@@ -50,7 +47,7 @@ namespace LoanShark.Domain
             {
                 this.userData = new Dictionary<string, string?>();
             }
-            
+
             this.userData["id_user"] = id_user;
             this.userData["cnp"] = cnp;
             this.userData["first_name"] = first_name;
@@ -101,7 +98,7 @@ namespace LoanShark.Domain
             this.userData.Add("email", null);
             this.userData.Add("phone_number", null);
             this.userData.Add("current_bank_account_iban", null);
-            
+
             Debug.Print("UserSession invalidated safely");
         }
     }

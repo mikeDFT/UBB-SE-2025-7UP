@@ -5,18 +5,20 @@ namespace LoanShark.Domain
 {
     public class Transaction
     {
-        public int TransactionId { get; set; } 
-        public string SenderIban { get; set; } 
+        public int TransactionId { get; set; }
+        public string SenderIban { get; set; }
         public string ReceiverIban { get; set; }
-        public DateTime TransactionDatetime { get; set; } 
-        public string SenderCurrency { get; set; } 
+        public DateTime TransactionDatetime { get; set; }
+        public string SenderCurrency { get; set; }
         public string ReceiverCurrency { get; set; }
-        public decimal SenderAmount { get; set; }  
-        public decimal ReceiverAmount { get; set; } 
-        public string TransactionType { get; set; } 
+        public decimal SenderAmount { get; set; }
+        public decimal ReceiverAmount { get; set; }
+        public string TransactionType { get; set; }
         public string TransactionDescription { get; set; }
 
-        public Transaction() { }
+        public Transaction()
+        {
+        }
 
         public Transaction(int transactionId, string senderIban, string receiverIban, DateTime transactionDatetime,
                            string senderCurrency, string receiverCurrency, decimal senderAmount, decimal receiverAmount,
@@ -39,8 +41,8 @@ namespace LoanShark.Domain
             return $"Transaction ID: {TransactionId} | From: {SenderIban} | To: {ReceiverIban} | Amount: {SenderAmount} {SenderCurrency} → {ReceiverAmount} {ReceiverCurrency} | Type: {TransactionType} | Date: {TransactionDatetime}";
         }
 
-        //tostringDetailed() and tostringForMenu() format the transaction to be displayed in the UI
-        public string tostringDetailed()
+        // tostringDetailed() and tostringForMenu() format the transaction to be displayed in the UI
+        public string TostringDetailed()
         {
             return "Transaction ID: " + TransactionId + "\n" +
                    "Sender IBAN: " + SenderIban + "\n" +
@@ -54,19 +56,18 @@ namespace LoanShark.Domain
                    "Transaction Description: " + TransactionDescription + "\n";
         }
 
-        public string tostringForMenu()
+        public string TostringForMenu()
         {
             return "Sender IBAN: " + SenderIban + "\n" +
-                   "Receiver IBAN: " + ReceiverIban + "\n\n" + 
-                   "Sent Amount: " + SenderAmount + " " + SenderCurrency + "\n" + 
+                   "Receiver IBAN: " + ReceiverIban + "\n\n" +
+                   "Sent Amount: " + SenderAmount + " " + SenderCurrency + "\n" +
                    "Received Amount: " + ReceiverAmount + " " + ReceiverCurrency + "\n\n" +
                    "Date: " + TransactionDatetime + "\n\n" +
                    "Type: " + TransactionType;
         }
 
-
         // this formats the transaction to be written to a CSV file
-        public string tostringCSV()
+        public string TostringCSV()
         {
             return $"{TransactionId},{SenderIban},{ReceiverIban},{TransactionDatetime},{SenderCurrency},{ReceiverCurrency},{SenderAmount},{ReceiverAmount},{TransactionType},{TransactionDescription}";
         }

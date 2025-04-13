@@ -38,24 +38,24 @@ namespace LoanShark.Service
                 if (senderAccount == null) return "Sender account does not exist.";
                 if (receiverAccount == null) return "Receiver account does not exist.";
 
-                if (senderAccount.blocked) return "Sender account is blocked.";
-                if (receiverAccount.blocked) return "Receiver account is blocked.";
+                if (senderAccount.Blocked) return "Sender account is blocked.";
+                if (receiverAccount.Blocked) return "Receiver account is blocked.";
 
-                if (senderAccount.balance < amount)
+                if (senderAccount.Balance < amount)
                 {
                     return "Insufficient funds.";
                 }
 
-                if (amount > senderAccount.maximumPerTransaction)
+                if (amount > senderAccount.MaximumPerTransaction)
                 {
-                    return $"Transaction exceeds maximum limit per transaction ({senderAccount.maximumPerTransaction}).";
+                    return $"Transaction exceeds maximum limit per transaction ({senderAccount.MaximumPerTransaction}).";
                 }
 
                 decimal receiverAmount = amount;
 
-                if (senderAccount.currency != receiverAccount.currency)
+                if (senderAccount.Currency != receiverAccount.Currency)
                 {
-                    decimal exchangeRate = await _transactionsRepository.GetExchangeRate(senderAccount.currency, receiverAccount.currency);
+                    decimal exchangeRate = await _transactionsRepository.GetExchangeRate(senderAccount.Currency, receiverAccount.Currency);
                     if (exchangeRate == -1)
                     {
                         return "Exchange rate not available.";
@@ -69,8 +69,8 @@ namespace LoanShark.Service
                     SenderIban = senderIban,
                     ReceiverIban = receiverIban,
                     TransactionDatetime = DateTime.UtcNow,
-                    SenderCurrency = senderAccount.currency,
-                    ReceiverCurrency = receiverAccount.currency,
+                    SenderCurrency = senderAccount.Currency,
+                    ReceiverCurrency = receiverAccount.Currency,
                     SenderAmount = amount,
                     ReceiverAmount = receiverAmount,
                     TransactionType = "user to user",
@@ -78,8 +78,8 @@ namespace LoanShark.Service
                 };
 
                 await _transactionsRepository.AddTransaction(transaction);
-                await _transactionsRepository.UpdateBankAccountBalance(senderIban, senderAccount.balance - amount);
-                await _transactionsRepository.UpdateBankAccountBalance(receiverIban, receiverAccount.balance + receiverAmount);
+                await _transactionsRepository.UpdateBankAccountBalance(senderIban, senderAccount.Balance - amount);
+                await _transactionsRepository.UpdateBankAccountBalance(receiverIban, receiverAccount.Balance + receiverAmount);
 
                 return "Transaction successful!";
             }
@@ -106,17 +106,17 @@ namespace LoanShark.Service
                 BankAccount? userAccount = await _transactionsRepository.GetBankAccountByIBAN(iban);
 
                 if (userAccount == null) return "Bank account does not exist.";
-                if (userAccount.blocked) return "Bank account is blocked.";
+                if (userAccount.Blocked) return "Bank account is blocked.";
 
-                await _transactionsRepository.UpdateBankAccountBalance(iban, userAccount.balance + loanAmount);
+                await _transactionsRepository.UpdateBankAccountBalance(iban, userAccount.Balance + loanAmount);
 
                 Transaction transaction = new Transaction
                 {
                     SenderIban = "RO90BANK0000000000000005",
                     ReceiverIban = iban,
                     TransactionDatetime = DateTime.UtcNow,
-                    SenderCurrency = userAccount.currency,
-                    ReceiverCurrency = userAccount.currency,
+                    SenderCurrency = userAccount.Currency,
+                    ReceiverCurrency = userAccount.Currency,
                     SenderAmount = loanAmount,
                     ReceiverAmount = loanAmount,
                     TransactionType = "loan",
@@ -150,19 +150,19 @@ namespace LoanShark.Service
                 BankAccount? bankAccount = await _transactionsRepository.GetBankAccountByIBAN(bankIban);
 
                 if (userAccount == null) return "User account does not exist.";
-                if (userAccount.blocked) return "User account is blocked.";
-                if (userAccount.balance < paymentAmount) return "Insufficient funds.";
+                if (userAccount.Blocked) return "User account is blocked.";
+                if (userAccount.Balance < paymentAmount) return "Insufficient funds.";
                 if (bankAccount == null) return "Bank account does not exist.";
 
-                await _transactionsRepository.UpdateBankAccountBalance(iban, userAccount.balance - paymentAmount);
+                await _transactionsRepository.UpdateBankAccountBalance(iban, userAccount.Balance - paymentAmount);
 
                 Transaction transaction = new Transaction
                 {
                     SenderIban = iban,
                     ReceiverIban = bankIban,  
                     TransactionDatetime = DateTime.UtcNow,
-                    SenderCurrency = userAccount.currency,
-                    ReceiverCurrency = userAccount.currency,
+                    SenderCurrency = userAccount.Currency,
+                    ReceiverCurrency = userAccount.Currency,
                     SenderAmount = paymentAmount,
                     ReceiverAmount = paymentAmount,
                     TransactionType = "loan",

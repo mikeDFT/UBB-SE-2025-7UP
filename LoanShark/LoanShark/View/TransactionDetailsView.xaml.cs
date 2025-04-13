@@ -39,7 +39,7 @@ namespace LoanShark
             {
                 _transaction.TransactionDescription = newDescription;
                 TransactionsHistoryViewModel.UpdateTransactionDescription(_transaction.TransactionId, newDescription);
-                TransactionDetailsTextBlock.Text = _transaction.tostringDetailed();
+                TransactionDetailsTextBlock.Text = _transaction.TostringDetailed();
             }
 
             DescriptionTextBox.Text = string.Empty;

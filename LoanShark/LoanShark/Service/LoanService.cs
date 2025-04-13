@@ -99,12 +99,12 @@ namespace LoanShark.Service
             }
             
             // Deduct from bank account
-            decimal deductAmount = loan.Currency == bankAccount.currency
+            decimal deductAmount = loan.Currency == bankAccount.Currency
                 ? loan.AmountToPay
-                : await ConvertCurrency(loan.AmountToPay, loan.Currency, bankAccount.currency);
+                : await ConvertCurrency(loan.AmountToPay, loan.Currency, bankAccount.Currency);
                 
             try {
-                await UpdateBankAccount(userID, accountIBAN, deductAmount, bankAccount.currency);
+                await UpdateBankAccount(userID, accountIBAN, deductAmount, bankAccount.Currency);
             }
             catch (Exception ex)
             {
@@ -205,7 +205,7 @@ namespace LoanShark.Service
         public async Task<bool> CheckSufficientFunds(int userID, string accountIBAN, decimal amount, string currency)
         {
             var _bankAccounts = await GetUserBankAccounts(userID);
-            BankAccount? bankAccount = _bankAccounts.Find((bankAcc) => bankAcc.iban == accountIBAN);
+            BankAccount? bankAccount = _bankAccounts.Find((bankAcc) => bankAcc.Iban == accountIBAN);
 
             if (bankAccount == null)
             {
@@ -213,14 +213,14 @@ namespace LoanShark.Service
             }
             
             // If currencies match, simple comparison
-            if (bankAccount.currency == currency)
+            if (bankAccount.Currency == currency)
             {
-                return bankAccount.balance >= amount;
+                return bankAccount.Balance >= amount;
             }
             
             // Convert amount to account currency
-            decimal convertedAmount = await ConvertCurrency(amount, currency, bankAccount.currency);
-            return bankAccount.balance >= convertedAmount;
+            decimal convertedAmount = await ConvertCurrency(amount, currency, bankAccount.Currency);
+            return bankAccount.Balance >= convertedAmount;
         }
 
         // Update bank account balance
@@ -232,12 +232,12 @@ namespace LoanShark.Service
                 throw new ArgumentException($"Bank account not found: {accountIBAN}");
             }
             
-            if (bankAccount.currency != currency)
+            if (bankAccount.Currency != currency)
             {
                 throw new ArgumentException("Currency mismatch");
             }
 
-            if (! await _loanRepository.UpdateBankAccountBalance(accountIBAN, bankAccount.balance - amount))
+            if (! await _loanRepository.UpdateBankAccountBalance(accountIBAN, bankAccount.Balance - amount))
             {
                 throw new Exception("Failed to update bank account balance");
             }
@@ -259,7 +259,7 @@ namespace LoanShark.Service
         public async Task<List<string>> GetFormattedBankAccounts(int userId)
         {
             return (await GetUserBankAccounts(userId))
-                .Select(account => $"{account.iban} - {account.currency} - {account.balance}")
+                .Select(account => $"{account.Iban} - {account.Currency} - {account.Balance}")
                 .ToList();
         }
     }

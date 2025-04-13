@@ -153,18 +153,18 @@ namespace LoanShark.Repository
         {
             try
             {
-                Debug.WriteLine(bankAccount.iban);
+                Debug.WriteLine(bankAccount.Iban);
                 var sqlParams = new SqlParameter[]
                 {
-                    new SqlParameter("@iban", bankAccount.iban),
-                    new SqlParameter("@currency", bankAccount.currency),
-                    new SqlParameter("@amount", bankAccount.balance),
-                    new SqlParameter("@id_user", bankAccount.userID),
-                    new SqlParameter("@custom_name",                bankAccount.name),
-                    new SqlParameter("@daily_limit",                bankAccount.dailyLimit),
-                    new SqlParameter("@max_per_transaction",        bankAccount.maximumPerTransaction),
-                    new SqlParameter("@max_nr_transactions_daily",  bankAccount.maximumNrTransactions),
-                    new SqlParameter("@blocked",                    bankAccount.blocked)
+                    new SqlParameter("@iban", bankAccount.Iban),
+                    new SqlParameter("@currency", bankAccount.Currency),
+                    new SqlParameter("@amount", bankAccount.Balance),
+                    new SqlParameter("@id_user", bankAccount.UserID),
+                    new SqlParameter("@custom_name",                bankAccount.Name),
+                    new SqlParameter("@daily_limit",                bankAccount.DailyLimit),
+                    new SqlParameter("@max_per_transaction",        bankAccount.MaximumPerTransaction),
+                    new SqlParameter("@max_nr_transactions_daily",  bankAccount.MaximumNrTransactions),
+                    new SqlParameter("@blocked",                    bankAccount.Blocked)
                 };
                 await DataLink.Instance.ExecuteNonQuery("AddBankAccount", sqlParams);
                 return true;
@@ -284,11 +284,11 @@ namespace LoanShark.Repository
                 var sqlParams = new SqlParameter[]
                 {
                              new SqlParameter("@iban", IBAN),
-                             new SqlParameter("@custom_name", NBA.name),
-                             new SqlParameter("@daily_limit", NBA.dailyLimit),
-                             new SqlParameter("@max_per_transaction",NBA.maximumPerTransaction),
-                             new SqlParameter("@max_nr_transactions_daily",NBA.maximumNrTransactions),
-                             new SqlParameter("@blocked",NBA.blocked)
+                             new SqlParameter("@custom_name", NBA.Name),
+                             new SqlParameter("@daily_limit", NBA.DailyLimit),
+                             new SqlParameter("@max_per_transaction",NBA.MaximumPerTransaction),
+                             new SqlParameter("@max_nr_transactions_daily",NBA.MaximumNrTransactions),
+                             new SqlParameter("@blocked",NBA.Blocked)
                 };
                 await DataLink.Instance.ExecuteNonQuery("UpdateBankAccount", sqlParams);
                 return true;

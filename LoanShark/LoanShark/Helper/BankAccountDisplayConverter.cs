@@ -10,9 +10,9 @@ namespace LoanShark.Helper
         {
             if (value is BankAccount account)
             {
-                return string.IsNullOrEmpty(account.name)
-                    ? $"{account.iban} ({account.currency})"
-                    : account.name;
+                return string.IsNullOrEmpty(account.Name)
+                    ? $"{account.Iban} ({account.Currency})"
+                    : account.Name;
             }
             return "Unknown Account";
         }

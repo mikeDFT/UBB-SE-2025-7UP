@@ -93,7 +93,7 @@ namespace LoanShark.Repository
                     }
 
                     Transaction transaction = new Transaction(hashMap);
-                    TransactionsForMenu.Add(transaction.tostringForMenu());
+                    TransactionsForMenu.Add(transaction.TostringForMenu());
                 }
             }
             catch (Exception ex)
@@ -124,7 +124,7 @@ namespace LoanShark.Repository
                     }
 
                     Transaction transaction = new Transaction(hashMap);
-                    TransactionsDetailed.Add(transaction.tostringDetailed());
+                    TransactionsDetailed.Add(transaction.TostringDetailed());
                 }
             }
             catch (Exception ex)

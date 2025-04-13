@@ -84,7 +84,7 @@ namespace LoanShark.Service
         /// <returns>True if a bank account with the IBAN exists, false otherwise</returns>
         public async Task<bool> CheckIBANExists(string IBAN)
         {
-            List<string> listIBAN = (await _bankAccountRepository.GetAllBankAccounts())?.Select(account => account.iban).ToList() ?? new List<string>();
+            List<string> listIBAN = (await _bankAccountRepository.GetAllBankAccounts())?.Select(account => account.Iban).ToList() ?? new List<string>();
             return listIBAN.Any(x => x == IBAN);
         }
 

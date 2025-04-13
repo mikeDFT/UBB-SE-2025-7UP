@@ -14,7 +14,6 @@ namespace LoanShark.Data
         private static readonly object lockObject = new object();
         private SqlConnection sqlConnection;
         private readonly string? connectionString;
-        
         // Singleton accessor
         public static DataLink Instance
         {
@@ -31,22 +30,24 @@ namespace LoanShark.Data
             }
         }
 
-        private DataLink() {
-            connectionString = AppConfig.GetConnectionString("MyLocalDb");
-
-            try 
+        private DataLink()
+        {
+            // connectionString = AppConfig.GetConnectionString("MyLocalDb");
+            connectionString = @"Data Source=DESKTOP-FEAUT17;Initial Catalog=loan_shark;Integrated Security=True;TrustServerCertificate=True";
+            try
             {
                 sqlConnection = new SqlConnection(connectionString);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 throw new Exception($"Error connecting to the database: {ex.Message}");
             }
         }
-
-
         // The open and close connection are intentionally not async to avoid blocking the main thread
-        public void OpenConnection() {
-            if (sqlConnection.State != System.Data.ConnectionState.Open) {
+        public void OpenConnection()
+        {
+            if (sqlConnection.State != System.Data.ConnectionState.Open)
+            {
                 sqlConnection.Open();
                 Debug.Print("Connection to the database is now open");
             }
@@ -56,8 +57,10 @@ namespace LoanShark.Data
             }
         }
 
-        public void CloseConnection() {
-            if (sqlConnection.State != System.Data.ConnectionState.Closed) {
+        public void CloseConnection()
+        {
+            if (sqlConnection.State != System.Data.ConnectionState.Closed)
+            {
                 sqlConnection.Close();
                 Debug.Print("Connection to the database is now closed");
             }
@@ -66,8 +69,6 @@ namespace LoanShark.Data
                 Debug.Print("Connection was already closed beforehand");
             }
         }
-
-
         // Executes a stored procedure and returns a single scalar value (e.g., COUNT(*), SUM(), MAX(), etc.)
         public async Task<T?> ExecuteScalar<T>(string storedProcedure, SqlParameter[]? sqlParameters = null)
         {
@@ -123,8 +124,6 @@ namespace LoanShark.Data
                 throw new Exception($"Error - ExecuteReader: {ex.Message}");
             }
         }
-
-
         // Executes a stored procedure that modifies data (INSERT, UPDATE, DELETE) and returns the number of affected rows
         public async Task<int> ExecuteNonQuery(string storedProcedure, SqlParameter[]? sqlParameters = null)
         {
@@ -147,6 +146,5 @@ namespace LoanShark.Data
                 throw new Exception($"Error - ExecuteNonQuery: {ex.Message}");
             }
         }
-
     }
 }

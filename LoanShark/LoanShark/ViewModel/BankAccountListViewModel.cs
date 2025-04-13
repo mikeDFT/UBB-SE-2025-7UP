@@ -96,7 +96,7 @@ namespace LoanShark.ViewModel
         /// </summary>
         public void ViewDetails()
         {
-            Debug.WriteLine(SelectedBankAccount.iban);
+            Debug.WriteLine(SelectedBankAccount.Iban);
             if (SelectedBankAccount != null)
             {
                 var window = new BankAccountDetailsView();

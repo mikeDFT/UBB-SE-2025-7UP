@@ -69,11 +69,11 @@ namespace LoanShark.View
             if (flipView?.SelectedItem is BankAccount selectedAccount)
             {
                 // Optional: You can handle the selection change here
-                Debug.Print($"Selected account: {selectedAccount.name}, IBAN: {selectedAccount.iban}");
+                Debug.Print($"Selected account: {selectedAccount.Name}, IBAN: {selectedAccount.Iban}");
                 
                 try
                 {
-                    UserSession.Instance.SetUserData("current_bank_account_iban", selectedAccount.iban);
+                    UserSession.Instance.SetUserData("current_bank_account_iban", selectedAccount.Iban);
                 }
                 catch (Exception ex)
                 {

@@ -5,47 +5,47 @@ namespace LoanShark.Domain
         /// <summary>
         /// The International Bank Account Number (IBAN) of the account
         /// </summary>
-        public string iban { get; set; }
+        public string Iban { get; set; }
 
         /// <summary>
         /// The currency of the account (e.g., USD, EUR, RON)
         /// </summary>
-        public string currency { get; set; }
+        public string Currency { get; set; }
 
         /// <summary>
         /// The account balance (amount of money in the account)
         /// </summary>
-        public decimal balance { get; set; }
+        public decimal Balance { get; set; }
 
         /// <summary>
         /// Indicates whether the account is blocked/frozen
         /// </summary>
-        public bool blocked { get; set; }
+        public bool Blocked { get; set; }
 
         /// <summary>
         /// The ID of the user who owns the account
         /// </summary>
-        public int userID { get; set; }
+        public int UserID { get; set; }
 
         /// <summary>
         /// The custom name assigned to the account
         /// </summary>
-        public string name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// The maximum amount that can be transacted in a day
         /// </summary>
-        public decimal dailyLimit { get; set; }
+        public decimal DailyLimit { get; set; }
 
         /// <summary>
         /// The maximum amount that can be transacted in a single transaction
         /// </summary>
-        public decimal maximumPerTransaction { get; set; }
+        public decimal MaximumPerTransaction { get; set; }
 
         /// <summary>
         /// The maximum number of transactions allowed per day
         /// </summary>
-        public int maximumNrTransactions { get; set; }
+        public int MaximumNrTransactions { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the BankAccount class with the specified parameters
@@ -61,23 +61,23 @@ namespace LoanShark.Domain
         /// <param name="maximumNrTransactions">The maximum number of transactions per day</param>
         public BankAccount(string iban, string currency, decimal balance, bool blocked, int userID, string name, decimal dailyLimit, decimal maximumPerTransaction, int maximumNrTransactions)
         {
-            this.iban = iban;
-            this.currency = currency;
-            this.balance = balance;
-            this.blocked = blocked;
-            this.userID = userID;
-            this.name = name;
-            this.dailyLimit = dailyLimit;
-            this.maximumPerTransaction = maximumPerTransaction;
-            this.maximumNrTransactions = maximumNrTransactions;
+            this.Iban = iban;
+            this.Currency = currency;
+            this.Balance = balance;
+            this.Blocked = blocked;
+            this.UserID = userID;
+            this.Name = name;
+            this.DailyLimit = dailyLimit;
+            this.MaximumPerTransaction = maximumPerTransaction;
+            this.MaximumNrTransactions = maximumNrTransactions;
         }
 
         /// <summary>
         /// Toggles the blocked status of the account
         /// </summary>
-        public void toggleBlocked()
+        public void ToggleBlocked()
         {
-            blocked = !blocked;
+            Blocked = !Blocked;
         }
     }
 
@@ -86,8 +86,8 @@ namespace LoanShark.Domain
         public BankAccountMessage(string iban, string name)
             : base(iban, "EUR", 0, false, 0, name, 0, 0, 0)
         {
-            this.iban = iban;
-            this.name = name;
+            this.Iban = iban;
+            this.Name = name;
         }
     }
 }

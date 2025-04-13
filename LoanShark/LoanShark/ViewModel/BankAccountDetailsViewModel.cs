@@ -42,7 +42,7 @@ namespace LoanShark.ViewModel
         {
             get
             {
-                if (BankAccount?.blocked == true)
+                if (BankAccount?.Blocked == true)
                     return "Blocked";
                 else
                     return "Active";
