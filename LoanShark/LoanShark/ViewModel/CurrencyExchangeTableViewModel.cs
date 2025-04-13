@@ -1,15 +1,15 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LoanShark.Service;
-using LoanShark.Domain;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System;
+using CommunityToolkit.Mvvm.ComponentModel;
+using LoanShark.Service;
+using LoanShark.Domain;
 
 namespace LoanShark.ViewModel
 {
     public class CurrencyExchangeTableViewModel : ObservableObject
     {
-        private readonly TransactionsService _transactionService;
+        private readonly TransactionsService transactionService;
 
         public ObservableCollection<CurrencyExchange> ExchangeRates { get; } = new ObservableCollection<CurrencyExchange>();
 
@@ -19,7 +19,7 @@ namespace LoanShark.ViewModel
 
         public CurrencyExchangeTableViewModel()
         {
-            _transactionService = new TransactionsService();
+            transactionService = new TransactionsService();
             LoadExchangeRatesAsync();
 
             CloseCommand = new RelayCommand(CloseWindow);
@@ -27,7 +27,7 @@ namespace LoanShark.ViewModel
 
         private async void LoadExchangeRatesAsync()
         {
-            var rates = await _transactionService.GetAllCurrencyExchangeRates();
+            var rates = await transactionService.GetAllCurrencyExchangeRates();
 
             ExchangeRates.Clear();
             foreach (var rate in rates)

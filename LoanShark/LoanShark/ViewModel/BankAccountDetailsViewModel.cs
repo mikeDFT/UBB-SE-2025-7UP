@@ -1,18 +1,18 @@
-﻿using LoanShark.Domain;
-using LoanShark.Helper;
-using LoanShark.Service;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using LoanShark.Domain;
+using LoanShark.Helper;
+using LoanShark.Service;
 
 namespace LoanShark.ViewModel
 {
     /// <summary>
     /// ViewModel for displaying bank account details
     /// </summary>
-    class BankAccountDetailsViewModel : INotifyPropertyChanged
+    public class BankAccountDetailsViewModel : INotifyPropertyChanged
     {
         /// <summary>
         /// Command for the back button to return to the previous view
@@ -27,13 +27,13 @@ namespace LoanShark.ViewModel
         /// <summary>
         /// The bank account whose details are being displayed
         /// </summary>
-        private BankAccount? _bankAccount;
+        private BankAccount? bankAccount;
         public BankAccount? BankAccount
         {
-            get => _bankAccount;
+            get => bankAccount;
             set
             {
-                _bankAccount = value;
+                bankAccount = value;
                 OnPropertyChanged(nameof(BankAccount));
             }
         }
@@ -43,9 +43,13 @@ namespace LoanShark.ViewModel
             get
             {
                 if (BankAccount?.Blocked == true)
+                {
                     return "Blocked";
+                }
                 else
+                {
                     return "Active";
+                }
             }
         }
 
@@ -59,7 +63,6 @@ namespace LoanShark.ViewModel
         {
             service = new BankAccountService();
             ButtonCommand = new RelayCommand(OnBackButtonClicked);
-            
             // Start loading data but don't await it
             _ = LoadBankAccountAsync();
         }
@@ -67,7 +70,7 @@ namespace LoanShark.ViewModel
         private async Task LoadBankAccountAsync()
         {
             BankAccount = await service.FindBankAccount(
-                UserSession.Instance.GetUserData("current_bank_account_iban") ?? "");
+                UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty);
         }
 
         /// <summary>
@@ -77,7 +80,7 @@ namespace LoanShark.ViewModel
         public void OnBackButtonClicked()
         {
             Debug.WriteLine("Back button clicked in bank account details page");
-            WindowManager.shouldReloadBankAccounts = false;
+            WindowManager.ShouldReloadBankAccounts = false;
             OnClose?.Invoke();
         }
 

@@ -1,7 +1,7 @@
-﻿using Microsoft.UI.Xaml;
+﻿using System.Diagnostics;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using LoanShark.ViewModel;
-using System.Diagnostics;
 using Microsoft.UI.Windowing;
 using Microsoft.UI;
 using WinRT.Interop;
@@ -14,18 +14,18 @@ namespace LoanShark
         public LoanView()
         {
             InitializeComponent();
-            var ViewModel = new LoanViewModel();
-            MainGrid.DataContext = ViewModel;
+            var viewModel = new LoanViewModel();
+            MainGrid.DataContext = viewModel;
 
-            ViewModel.CloseAction = () => this.Close(); // the closing action
+            viewModel.CloseAction = () => this.Close(); // the closing action
 
             WindowManager.RegisterWindow(this);
 
             // Resizing window to see the whole table
-            resizeWindow(1800, 900);
+            ResizeWindow(1800, 900);
         }
 
-        private void resizeWindow(int width, int height)
+        private void ResizeWindow(int width, int height)
         {
             // Set window size after initialization
             var windowHandle = WindowNative.GetWindowHandle(this);
@@ -65,7 +65,7 @@ namespace LoanShark
         private void BackButton_TakeLoan_Click(object sender, RoutedEventArgs e)
         {
             BankAccountComboBox.SelectedIndex = -1;
-            //AmountTextBox.Text = string.Empty;
+            // AmountTextBox.Text = string.Empty;
             MonthsComboBox.SelectedIndex = -1;
         }
 

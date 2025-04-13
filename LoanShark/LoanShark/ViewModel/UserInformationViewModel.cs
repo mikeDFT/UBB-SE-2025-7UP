@@ -399,7 +399,7 @@ namespace LoanShark.ViewModel
                 UserSession.Instance.SetUserData("last_name", LastName);
                 UserSession.Instance.SetUserData("email", Email);
                 UserSession.Instance.SetUserData("phone_number", PhoneNumber);
-                WindowManager.shouldReloadWelcomeText = true;
+                WindowManager.ShouldReloadWelcomeText = true;
             }
             catch (Exception ex)
             {

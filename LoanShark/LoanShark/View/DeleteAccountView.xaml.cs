@@ -1,13 +1,12 @@
+using System.Threading.Tasks;
 using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using LoanShark.ViewModel;
-using System.Threading.Tasks;
-using LoanShark.Helper; 
+using LoanShark.Helper;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace LoanShark.View
 {
     /// <summary>
@@ -15,13 +14,13 @@ namespace LoanShark.View
     /// </summary>
     public sealed partial class DeleteAccountView : Window
     {
-        private readonly DeleteAccountViewModel _viewModel;
+        private readonly DeleteAccountViewModel viewModel;
 
         public DeleteAccountView()
         {
             this.InitializeComponent();
-            _viewModel = new DeleteAccountViewModel();
-            MainGrid.DataContext = _viewModel;
+            viewModel = new DeleteAccountViewModel();
+            MainGrid.DataContext = viewModel;
             WindowManager.RegisterWindow(this);
         }
 
@@ -33,8 +32,8 @@ namespace LoanShark.View
                 return;
             }
 
-            var result = await _viewModel.DeleteAccount(PasswordInput.Password);
-            
+            var result = await viewModel.DeleteAccount(PasswordInput.Password);
+
             if (result == "Succes")
             {
                 // automatically invalidates the session in constructor

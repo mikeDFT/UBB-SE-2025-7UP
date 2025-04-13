@@ -1,9 +1,9 @@
-﻿using LoanShark.Helper;
-using LoanShark.Service;
-using LoanShark.View;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Windows.Input;
+using LoanShark.Helper;
+using LoanShark.Service;
+using LoanShark.View;
 using LoanShark.Domain;
 
 namespace LoanShark.ViewModel
@@ -11,7 +11,7 @@ namespace LoanShark.ViewModel
     /// <summary>
     /// ViewModel for the bank account deletion confirmation view
     /// </summary>
-    class BankAccountDeleteViewModel
+    public class BankAccountDeleteViewModel
     {
         /// <summary>
         /// Command for the No button to cancel deletion
@@ -26,10 +26,10 @@ namespace LoanShark.ViewModel
         /// <summary>
         /// Action to be invoked when the view should be closed
         /// </summary>
-        public Action? onClose { get; set; }
+        public Action? OnClose { get; set; }
 
         private BankAccountService service;
-        private string _iban;
+        private string iban;
 
         /// <summary>
         /// Initializes a new instance of the BankAccountDeleteViewModel class
@@ -37,7 +37,7 @@ namespace LoanShark.ViewModel
         public BankAccountDeleteViewModel()
         {
             service = new BankAccountService();
-            _iban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
+            iban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
             NoCommand = new RelayCommand(OnNoButtonClicked);
             YesCommand = new RelayCommand(OnYesButtonClicked);
         }
@@ -49,8 +49,8 @@ namespace LoanShark.ViewModel
         public void OnNoButtonClicked()
         {
             Debug.WriteLine("Back button");
-            WindowManager.shouldReloadBankAccounts = false;
-            onClose?.Invoke();
+            WindowManager.ShouldReloadBankAccounts = false;
+            OnClose?.Invoke();
         }
 
         /// <summary>
@@ -62,8 +62,8 @@ namespace LoanShark.ViewModel
             Debug.WriteLine("Yes button");
             BankAccountVerifyView window = new BankAccountVerifyView();
             window.Activate();
-            WindowManager.shouldReloadBankAccounts = false;
-            onClose?.Invoke();
+            WindowManager.ShouldReloadBankAccounts = false;
+            OnClose?.Invoke();
         }
     }
 }

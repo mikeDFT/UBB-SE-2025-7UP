@@ -1,11 +1,10 @@
+using System;
 using LoanShark.ViewModel;
 using Microsoft.UI.Xaml;
-using System;
 using LoanShark.Helper;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace LoanShark.View
 {
     /// <summary>
@@ -13,8 +12,8 @@ namespace LoanShark.View
     /// </summary>
     public sealed partial class BankAccountListView : Window
     {
-        BankAccountListViewModel viewModel;
-        Boolean isDoubleClicked = false;
+        private BankAccountListViewModel viewModel;
+        private bool isDoubleClicked = false;
         public BankAccountListView()
         {
             this.InitializeComponent();

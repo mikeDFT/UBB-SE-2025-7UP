@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using LoanShark.Domain;
 using LoanShark.Service;
 using LoanShark.View;
@@ -11,91 +11,91 @@ namespace LoanShark.ViewModel
 {
     public class BankAccountUpdateViewModel : INotifyPropertyChanged
     {
-        private readonly BankAccountService? _bankAccountService;
-        private BankAccount? _bankAccount;
+        private readonly BankAccountService? bankAccountService;
+        private BankAccount? bankAccount;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private string _accountIBAN = string.Empty;
+        private string accountIBAN = string.Empty;
         public string AccountIBAN
         {
-            get => _accountIBAN;
+            get => accountIBAN;
             set
             {
-                if (_accountIBAN != value)
+                if (accountIBAN != value)
                 {
-                    _accountIBAN = value ?? string.Empty;
+                    accountIBAN = value ?? string.Empty;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private string _accountName = string.Empty;
+        private string accountName = string.Empty;
         public string AccountName
         {
-            get => _accountName;
+            get => accountName;
             set
             {
-                if (_accountName != value)
+                if (accountName != value)
                 {
-                    _accountName = value ?? string.Empty;
+                    accountName = value ?? string.Empty;
                     OnPropertyChanged();
                 }
             }
         }
 
         // left those two as double because the NumberBox expects a double to display the value
-        private double _dailyLimit = 1000.0;
+        private double dailyLimit = 1000.0;
         public double DailyLimit
         {
-            get => _dailyLimit;
+            get => dailyLimit;
             set
             {
-                if (_dailyLimit != value)
+                if (dailyLimit != value)
                 {
-                    _dailyLimit = value;
+                    dailyLimit = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private double _maximumPerTransaction = 200.0;
+        private double maximumPerTransaction = 200.0;
         public double MaximumPerTransaction
         {
-            get => _maximumPerTransaction;
+            get => maximumPerTransaction;
             set
             {
-                if (_maximumPerTransaction != value)
+                if (maximumPerTransaction != value)
                 {
-                    _maximumPerTransaction = value;
+                    maximumPerTransaction = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private int _maximumNrTransactions = 10;
+        private int maximumNrTransactions = 10;
         public int MaximumNrTransactions
         {
-            get => _maximumNrTransactions;
+            get => maximumNrTransactions;
             set
             {
-                if (_maximumNrTransactions != value)
+                if (maximumNrTransactions != value)
                 {
-                    _maximumNrTransactions = value;
+                    maximumNrTransactions = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private bool _isBlocked = false;
+        private bool isBlocked = false;
         public bool IsBlocked
         {
-            get => _isBlocked;
+            get => isBlocked;
             set
             {
-                if (_isBlocked != value)
+                if (isBlocked != value)
                 {
-                    _isBlocked = value;
+                    isBlocked = value;
                     OnPropertyChanged();
                 }
             }
@@ -114,7 +114,7 @@ namespace LoanShark.ViewModel
 
             try
             {
-                _bankAccountService = new BankAccountService();
+                bankAccountService = new BankAccountService();
                 // Note: Async initialization will be done by calling InitializeAsync()
                 _ = InitializeAsync();
             }
@@ -128,11 +128,11 @@ namespace LoanShark.ViewModel
         public async Task InitializeAsync()
         {
             await LoadBankAccount();
-            BankAccount bk = _bankAccount;
+            BankAccount bk = bankAccount;
 
             AccountName = bk.Name;
-            DailyLimit = Decimal.ToDouble(bk.DailyLimit);
-            MaximumPerTransaction = Decimal.ToDouble(bk.MaximumPerTransaction);
+            DailyLimit = decimal.ToDouble(bk.DailyLimit);
+            MaximumPerTransaction = decimal.ToDouble(bk.MaximumPerTransaction);
             MaximumNrTransactions = bk.MaximumNrTransactions;
             IsBlocked = bk.Blocked;
         }
@@ -147,16 +147,16 @@ namespace LoanShark.ViewModel
 
             try
             {
-                string iban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? "";
-                _bankAccount = await _bankAccountService.FindBankAccount(iban);
-                if (_bankAccount != null)
+                string iban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
+                bankAccount = await bankAccountService.FindBankAccount(iban);
+                if (bankAccount != null)
                 {
-                    AccountIBAN = _bankAccount.Iban ?? string.Empty;
-                    AccountName = _bankAccount.Name ?? string.Empty;
-                    DailyLimit = Decimal.ToDouble(_bankAccount.DailyLimit);
-                    MaximumPerTransaction = Decimal.ToDouble(_bankAccount.MaximumPerTransaction);
-                    MaximumNrTransactions = _bankAccount.MaximumNrTransactions;
-                    IsBlocked = _bankAccount.Blocked;
+                    AccountIBAN = bankAccount.Iban ?? string.Empty;
+                    AccountName = bankAccount.Name ?? string.Empty;
+                    DailyLimit = decimal.ToDouble(bankAccount.DailyLimit);
+                    MaximumPerTransaction = decimal.ToDouble(bankAccount.MaximumPerTransaction);
+                    MaximumNrTransactions = bankAccount.MaximumNrTransactions;
+                    IsBlocked = bankAccount.Blocked;
                 }
                 else
                 {
@@ -200,13 +200,15 @@ namespace LoanShark.ViewModel
                 {
                     return "Maximum number of transactions cannot be negative";
                 }
-                if (AccountName == _bankAccount.Name && DailyLimit==Decimal.ToDouble(_bankAccount.DailyLimit) &&
-                    MaximumPerTransaction == Decimal.ToDouble(_bankAccount.MaximumPerTransaction) &&
-                    MaximumNrTransactions == _bankAccount.MaximumNrTransactions &&
-                    IsBlocked == _bankAccount.Blocked)
+                if (AccountName == bankAccount.Name && DailyLimit == decimal.ToDouble(bankAccount.DailyLimit) &&
+                    MaximumPerTransaction == decimal.ToDouble(bankAccount.MaximumPerTransaction) &&
+                    MaximumNrTransactions == bankAccount.MaximumNrTransactions &&
+                    IsBlocked == bankAccount.Blocked)
+                {
                     return "Failed to update bank account. No settings were changed";
+                }
 
-                bool result = await _bankAccountService.UpdateBankAccount(
+                bool result = await bankAccountService.UpdateBankAccount(
                     AccountIBAN,
                     AccountName,
                     (decimal)DailyLimit, // converting back from double to decimal
@@ -218,7 +220,7 @@ namespace LoanShark.ViewModel
                 {
                     return "Success";
                 }
-                
+
                 return "Failed to update bank account";
             }
             catch (Exception ex)
@@ -230,7 +232,8 @@ namespace LoanShark.ViewModel
 
         public void DeleteBankAccount()
         {
-            try {
+            try
+            {
                 BankAccountDeleteView deleteBankAccountView = new BankAccountDeleteView();
                 deleteBankAccountView.Activate();
                 OnClose?.Invoke();
@@ -246,6 +249,5 @@ namespace LoanShark.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }
