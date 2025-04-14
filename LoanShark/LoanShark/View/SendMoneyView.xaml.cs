@@ -1,12 +1,13 @@
 ﻿using System;
-using LoanShark.ViewModel;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Windowing;
-using Microsoft.UI;
-using WinRT.Interop;
-using LoanShark.Helper;
-using Microsoft.UI.Xaml.Controls;
 using System.Threading.Tasks;
+using LoanShark.Helper;
+using LoanShark.ViewModel;
+using Microsoft.UI;
+using Microsoft.UI.Windowing;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+
+using WinRT.Interop;
 
 namespace LoanShark.View
 {
@@ -14,7 +15,7 @@ namespace LoanShark.View
     {
         public SendMoneyViewModel ViewModel { get; private set; }
 
-        private AppWindow _appWindow;
+        private AppWindow appWindow;
 
         public SendMoneyView()
         {
@@ -24,7 +25,7 @@ namespace LoanShark.View
             this.ViewModel.CloseAction = CloseWindow;
 
             WindowManager.RegisterWindow(this);
-            
+
             InitializeWindow();
         }
 
@@ -32,11 +33,11 @@ namespace LoanShark.View
         {
             var windowHandle = WindowNative.GetWindowHandle(this);
             var windowId = Win32Interop.GetWindowIdFromWindow(windowHandle);
-            _appWindow = AppWindow.GetFromWindowId(windowId);
-            
-            if (_appWindow != null)
+            appWindow = AppWindow.GetFromWindowId(windowId);
+
+            if (appWindow != null)
             {
-                _appWindow.Resize(new Windows.Graphics.SizeInt32(1000, 800));
+                appWindow.Resize(new Windows.Graphics.SizeInt32(1000, 800));
             }
         }
 

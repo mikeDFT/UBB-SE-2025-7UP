@@ -1,28 +1,27 @@
-﻿using LoanShark.Domain;
-using LoanShark.Repository;
-using System;
+﻿using System;
 using System.Data;
-using System.Threading.Tasks;
 using System.Diagnostics;
-
+using System.Threading.Tasks;
+using LoanShark.Domain;
+using LoanShark.Repository;
 namespace LoanShark.Service
 {
-    class LoginService
+    public class LoginService
     {
-        public LoginRepository repo;
+        public LoginRepository Repo;
 
         public LoginService()
         {
-            this.repo = new LoginRepository();
+            this.Repo = new LoginRepository();
         }
 
         public async Task<bool> ValidateUserCredentials(string email, string password)
         {
             try
             {
-                DataTable dt = await this.repo.GetUserCredentials(email);
+                DataTable dt = await this.Repo.GetUserCredentials(email);
 
-                //if exception is not thorwn, then the user exists and we continue with the validation
+                // if exception is not thorwn, then the user exists and we continue with the validation
                 string hashedPassword = dt.Rows[0]["hashed_password"]?.ToString() ?? string.Empty;
                 string passwordSalt = dt.Rows[0]["password_salt"]?.ToString() ?? string.Empty;
 
@@ -38,11 +37,11 @@ namespace LoanShark.Service
             }
         }
 
-        public async Task InstantiateUserSessionAfterLogin(string email) 
+        public async Task InstantiateUserSessionAfterLogin(string email)
         {
-            DataTable dt_user_info = await this.repo.GetUserInfoAfterLogin(email);
-            DataTable dt_bank_accounts = await this.repo.GetUserBankAccounts(int.Parse(dt_user_info.Rows[0]["id_user"]?.ToString() ?? string.Empty));
-            string iban = "";
+            DataTable dt_user_info = await this.Repo.GetUserInfoAfterLogin(email);
+            DataTable dt_bank_accounts = await this.Repo.GetUserBankAccounts(int.Parse(dt_user_info.Rows[0]["id_user"]?.ToString() ?? string.Empty));
+            string iban = string.Empty;
 
             if (dt_bank_accounts.Rows.Count > 0)
             {
@@ -56,8 +55,7 @@ namespace LoanShark.Service
                 dt_user_info.Rows[0]["last_name"]?.ToString() ?? string.Empty,
                 dt_user_info.Rows[0]["email"]?.ToString() ?? string.Empty,
                 dt_user_info.Rows[0]["phone_number"]?.ToString() ?? string.Empty,
-                iban
-            );
+                iban);
         }
     }
 }

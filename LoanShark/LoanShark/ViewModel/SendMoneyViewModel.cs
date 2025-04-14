@@ -1,34 +1,34 @@
-﻿using LoanShark.Service;
-using Microsoft.UI.Xaml;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Diagnostics;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using LoanShark.Domain;
+using LoanShark.Service;
+using Microsoft.UI.Xaml;
 
 namespace LoanShark.ViewModel
 {
     public class SendMoneyViewModel : INotifyPropertyChanged
     {
-        private readonly TransactionsService _transactionService;
+        private readonly TransactionsService transactionService;
 
-        private string _iban;
-        private string _sumOfMoney;
-        private string _details;
-        private string _errorMessage;
-        private Visibility _isErrorVisible = Visibility.Collapsed;
+        private string iban;
+        private string sumOfMoney;
+        private string details;
+        private string errorMessage;
+        private Visibility isErrorVisible = Visibility.Collapsed;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public string Iban
         {
-            get => _iban;
+            get => iban;
             set
             {
-                if (_iban != value)
+                if (iban != value)
                 {
-                    _iban = value;
+                    iban = value;
                     OnPropertyChanged();
                 }
             }
@@ -36,12 +36,12 @@ namespace LoanShark.ViewModel
 
         public string SumOfMoney
         {
-            get => _sumOfMoney;
+            get => sumOfMoney;
             set
             {
-                if (_sumOfMoney != value)
+                if (sumOfMoney != value)
                 {
-                    _sumOfMoney = value;
+                    sumOfMoney = value;
                     OnPropertyChanged();
                 }
             }
@@ -49,12 +49,12 @@ namespace LoanShark.ViewModel
 
         public string Details
         {
-            get => _details;
+            get => details;
             set
             {
-                if (_details != value)
+                if (details != value)
                 {
-                    _details = value;
+                    details = value;
                     OnPropertyChanged();
                 }
             }
@@ -62,12 +62,12 @@ namespace LoanShark.ViewModel
 
         public string ErrorMessage
         {
-            get => _errorMessage;
+            get => errorMessage;
             set
             {
-                if (_errorMessage != value)
+                if (errorMessage != value)
                 {
-                    _errorMessage = value;
+                    errorMessage = value;
                     OnPropertyChanged();
                 }
             }
@@ -75,12 +75,12 @@ namespace LoanShark.ViewModel
 
         public Visibility IsErrorVisible
         {
-            get => _isErrorVisible;
+            get => isErrorVisible;
             set
             {
-                if (_isErrorVisible != value)
+                if (isErrorVisible != value)
                 {
-                    _isErrorVisible = value;
+                    isErrorVisible = value;
                     OnPropertyChanged();
                 }
             }
@@ -93,13 +93,12 @@ namespace LoanShark.ViewModel
 
         public SendMoneyViewModel()
         {
-            _transactionService = new TransactionsService();
-            
+            transactionService = new TransactionsService();
             // Initialize properties
-            _iban = string.Empty;
-            _sumOfMoney = string.Empty;
-            _details = string.Empty;
-            _errorMessage = string.Empty;
+            iban = string.Empty;
+            sumOfMoney = string.Empty;
+            details = string.Empty;
+            errorMessage = string.Empty;
 
             // Using standard Command implementations
             PayCommand = new RelayCommand(async () => await ProcessPaymentAsync());
@@ -141,9 +140,8 @@ namespace LoanShark.ViewModel
 
             Debug.WriteLine($"DEBUG: Sending money from {currentUserIban} to {Iban}, Amount: {amount}");
 
-            string result = await _transactionService.AddTransaction(
-                currentUserIban, Iban, amount, Details
-            );
+            string result = await transactionService.AddTransaction(
+                currentUserIban, Iban, amount, Details);
 
             if (result != "Transaction successful!")
             {

@@ -6,21 +6,21 @@ using LoanShark.Service;
 
 namespace LoanShark.ViewModel
 {
-
-    //transactions View Model class needs an iban to be passed in the constructor
-    //this iban is used to filter the transactions by the sender iban or receiver iban
+    // transactions View Model class needs an iban to be passed in the constructor
+    // this iban is used to filter the transactions by the sender iban or receiver iban
     public class TransactionsHistoryViewModel
     {
         private TransactionHistoryService service;
 
-        public TransactionsHistoryViewModel() {
+        public TransactionsHistoryViewModel()
+        {
             this.service = new TransactionHistoryService();
         }
 
         // retrieveForMenu() returns a list of transactions formatted for the menu
-        public async Task<ObservableCollection<string>> retrieveForMenu()
+        public async Task<ObservableCollection<string>> RetrieveForMenu()
         {
-            return await service.retrieveForMenu();
+            return await service.RetrieveForMenu();
         }
 
         // FilterByTypeForMenu() returns a list of transactions formatted for the menu filtered by the transaction type
@@ -41,7 +41,7 @@ namespace LoanShark.ViewModel
             return await service.SortByDate(order);
         }
 
-        // CreateCSV() creates a CSV file with the transactions 
+        // CreateCSV() creates a CSV file with the transactions
         public void CreateCSV()
         {
             service.CreateCSV();
@@ -58,7 +58,6 @@ namespace LoanShark.ViewModel
         {
             await TransactionHistoryService.UpdateTransactionDescription(transactionId, newDescription);
         }
-
 
         // GetTransactionTypeCounts() returns a dictionary with the transaction type counts
         public async Task<Dictionary<string, int>> GetTransactionTypeCounts()
