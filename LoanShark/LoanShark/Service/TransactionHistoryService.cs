@@ -27,7 +27,7 @@ namespace LoanShark.Service
         // retrieveForMenu() returns a list of transactions formatted for the menu
         public async Task<ObservableCollection<string>> retrieveForMenu()
         {
-            ObservableCollection<Transaction> Transactions = await repo.getTransactionsNormal();
+            ObservableCollection<Transaction> Transactions = await repo.GetTransactionsNormal();
             ObservableCollection<String> TransactionsForMenu = new ObservableCollection<string>();
 
             foreach (var transaction in Transactions)
@@ -43,7 +43,7 @@ namespace LoanShark.Service
         // FilterByTypeForMenu() returns a list of transactions formatted for the menu filtered by the transaction type
         public async Task<ObservableCollection<string>> FilterByTypeForMenu(string type)
         {
-            ObservableCollection<Transaction> Transactions = await repo.getTransactionsNormal();
+            ObservableCollection<Transaction> Transactions = await repo.GetTransactionsNormal();
             ObservableCollection<String> TransactionsForMenu = new ObservableCollection<string>();
 
             if (string.IsNullOrWhiteSpace(type)) 
@@ -70,7 +70,7 @@ namespace LoanShark.Service
         // FilterByTypeDetailed() returns a list of transactions formatted in detail filtered by the transaction type
         public async Task<ObservableCollection<string>> FilterByTypeDetailed(string type)
         {
-            ObservableCollection<Transaction> Transactions = await repo.getTransactionsNormal();
+            ObservableCollection<Transaction> Transactions = await repo.GetTransactionsNormal();
             ObservableCollection<String> TransactionsDetailed = new ObservableCollection<string>();
 
             if (string.IsNullOrWhiteSpace(type))
@@ -100,7 +100,7 @@ namespace LoanShark.Service
 
             if (order == "Ascending")
             {
-                ObservableCollection<Transaction> Transactions = await repo.getTransactionsNormal();
+                ObservableCollection<Transaction> Transactions = await repo.GetTransactionsNormal();
                 ObservableCollection<String> TransactionsSorted = new ObservableCollection<string>();
                 foreach (var transaction in Transactions.OrderBy(x => x.TransactionDatetime))
                 {
@@ -111,7 +111,7 @@ namespace LoanShark.Service
             }
             else if (order == "Descending")
             {
-                ObservableCollection<Transaction> Transactions = await repo.getTransactionsNormal();
+                ObservableCollection<Transaction> Transactions = await repo.GetTransactionsNormal();
                 ObservableCollection<String> TransactionsSorted = new ObservableCollection<string>();
                 foreach (var transaction in Transactions.OrderByDescending(x => x.TransactionDatetime))
                 {
@@ -132,7 +132,7 @@ namespace LoanShark.Service
         // CreateCSV() creates a CSV file with the transactions 
         public async Task CreateCSV()
         {
-            ObservableCollection<Transaction> Transactions = await repo.getTransactionsNormal();
+            ObservableCollection<Transaction> Transactions = await repo.GetTransactionsNormal();
             StringBuilder csv = new StringBuilder();
             csv.AppendLine("Transaction ID,Sender IBAN,Receiver IBAN,Transaction Date,Sender Currency,Receiver Currency,Sender Amount,Receiver Amount,Transaction Type,Transaction Description");
             foreach (var transaction in Transactions)
@@ -147,7 +147,7 @@ namespace LoanShark.Service
         // GetTransactionByMenuString() returns a transaction object based on the menu string
         public async Task<Transaction> GetTransactionByMenuString(string menuString)
         {
-            ObservableCollection<Transaction> Transactions = await repo.getTransactionsNormal();
+            ObservableCollection<Transaction> Transactions = await repo.GetTransactionsNormal();
             return Transactions.FirstOrDefault(t => t.TostringForMenu() == menuString);
         }
 
@@ -155,7 +155,7 @@ namespace LoanShark.Service
         // GetTransactionTypeCounts() returns a dictionary with the transaction type counts
         public async Task<Dictionary<string, int>> GetTransactionTypeCounts()
         {
-            ObservableCollection<Transaction> transactions = await repo.getTransactionsNormal();
+            ObservableCollection<Transaction> transactions = await repo.GetTransactionsNormal();
             return transactions
                 .Where(t => t.SenderIban == this.iban || t.ReceiverIban == this.iban)
                 .GroupBy(t => t.TransactionType)
