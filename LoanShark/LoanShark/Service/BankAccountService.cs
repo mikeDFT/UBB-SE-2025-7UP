@@ -19,10 +19,14 @@ namespace LoanShark.Service
 
         /// <summary>
         /// Initializes a new instance of the BankAccountService class
-        /// </summary>
         public BankAccountService()
         {
             bankAccountRepository = new BankAccountRepository();
+        }
+
+        public BankAccountService(IBankAccountRepository repository)
+        {
+            bankAccountRepository = repository;
         }
 
         /// <summary>
