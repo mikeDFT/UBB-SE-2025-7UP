@@ -1,21 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using Microsoft.UI;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.UI.Windowing;
-using Microsoft.UI;
-using System.Diagnostics;
 
 namespace LoanShark
 {
-
     public sealed partial class TransactionHistoryGraphicalRepresentationView : Window
     {
-        private static Random _random = new Random();
-        private Dictionary<string, Windows.UI.Color> _legendColors = new Dictionary<string, Windows.UI.Color>();
+        private static Random random = new Random();
+        private Dictionary<string, Windows.UI.Color> legendColors = new Dictionary<string, Windows.UI.Color>();
 
         public TransactionHistoryGraphicalRepresentationView(Dictionary<string, int> transactionTypeCounts)
         {
@@ -38,8 +37,7 @@ namespace LoanShark
                 {
                     var centeredPosition = new Windows.Graphics.PointInt32(
                         (displayArea.WorkArea.Width - width) / 2,
-                        (displayArea.WorkArea.Height - height) / 2
-                    );
+                        (displayArea.WorkArea.Height - height) / 2);
                     appWindow.Move(centeredPosition);
                 }
             }
@@ -47,15 +45,15 @@ namespace LoanShark
 
         private void LoadPieChart(Dictionary<string, int> transactionTypeCounts)
         {
-
             foreach (var kvp in transactionTypeCounts)
             {
                 Debug.WriteLine("kvp: " + kvp.Key + " " + kvp.Value);
             }
 
             if (transactionTypeCounts == null || transactionTypeCounts.Count == 0)
+            {
                 return;
-
+            }
             var total = transactionTypeCounts.Values.Sum();
             double currentAngle = 0.0;
             double centerX = TransactionPieChart.Width / 2;
@@ -67,7 +65,7 @@ namespace LoanShark
             {
                 var kvp = transactionTypeCounts.First();
                 Windows.UI.Color sliceColor = GetRandomColor();
-                _legendColors[kvp.Key] = sliceColor;
+                legendColors[kvp.Key] = sliceColor;
                 var fullCircle = CreateFullCircle(centerX, centerY, radius, sliceColor, kvp.Key);
                 TransactionPieChart.Children.Add(fullCircle);
                 return;
@@ -78,7 +76,7 @@ namespace LoanShark
             {
                 double sliceAngle = (kvp.Value / (double)total) * 360;
                 Windows.UI.Color sliceColor = GetRandomColor();
-                _legendColors[kvp.Key] = sliceColor; 
+                legendColors[kvp.Key] = sliceColor;
                 var slice = CreatePieSlice(currentAngle, sliceAngle, kvp.Key, centerX, centerY, radius, sliceColor);
                 currentAngle += sliceAngle;
                 TransactionPieChart.Children.Add(slice);
@@ -118,8 +116,8 @@ namespace LoanShark
 
         private void LoadLegend()
         {
-            LegendPanel.Children.Clear(); 
-            foreach (var kvp in _legendColors)
+            LegendPanel.Children.Clear();
+            foreach (var kvp in legendColors)
             {
                 StackPanel legendItem = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(5) };
                 Rectangle colorBox = new Rectangle
@@ -166,14 +164,14 @@ namespace LoanShark
         private Windows.Foundation.Point ComputeCartesianCoordinate(double angle, double radius, double centerX, double centerY)
         {
             double angleRad = (Math.PI / 180.0) * (angle - 90);
-            double x = centerX + radius * Math.Cos(angleRad);
-            double y = centerY + radius * Math.Sin(angleRad);
+            double x = centerX + (radius * Math.Cos(angleRad));
+            double y = centerY + (radius * Math.Sin(angleRad));
             return new Windows.Foundation.Point(x, y);
         }
 
         private Windows.UI.Color GetRandomColor()
         {
-            return Windows.UI.Color.FromArgb(255, (byte)_random.Next(256), (byte)_random.Next(256), (byte)_random.Next(256));
+            return Windows.UI.Color.FromArgb(255, (byte)random.Next(256), (byte)random.Next(256), (byte)random.Next(256));
         }
     }
 }

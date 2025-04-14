@@ -1,41 +1,41 @@
-﻿using LoanShark.Domain;
-using LoanShark.Service;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using LoanShark.Domain;
+using LoanShark.Service;
 
 namespace LoanShark.ViewModel
 {
-    public class UserRegistrationViewModel: INotifyPropertyChanged
+    public class UserRegistrationViewModel : INotifyPropertyChanged
     {
-        private UserService _userService = new UserService();
-        private string _firstName = "";
-        private string _lastName = "";
-        private string _cnp = "";
-        private string _phoneNumber = "";
-        private string _email = "";
-        private string _password = "";
-        private string _confirmPassword = "";
-        private string _firstNameError = "";
-        private string _lastNameError = "";
-        private string _cnpError = "";
-        private string _phoneNumberError = "";
-        private string _emailError = "";
-        private string _passwordError = "";
-        private string _confirmPasswordError = "";
-        private string _errorMessage = "";
+        private UserService userService = new UserService();
+        private string firstName = string.Empty;
+        private string lastName = string.Empty;
+        private string cnp = string.Empty;
+        private string phoneNumber = string.Empty;
+        private string email = string.Empty;
+        private string password = string.Empty;
+        private string confirmPassword = string.Empty;
+        private string firstNameError = string.Empty;
+        private string lastNameError = string.Empty;
+        private string cnpError = string.Empty;
+        private string phoneNumberError = string.Empty;
+        private string emailError = string.Empty;
+        private string passwordError = string.Empty;
+        private string confirmPasswordError = string.Empty;
+        private string errorMessage = string.Empty;
 
         public string FirstName
         {
-            get => _firstName;
+            get => firstName;
             set
             {
-                if (_firstName != value)
+                if (firstName != value)
                 {
-                    _firstName = value;
+                    firstName = value;
                     OnPropertyChanged(nameof(FirstName));
                     FirstNameError = string.Empty;
                 }
@@ -44,12 +44,12 @@ namespace LoanShark.ViewModel
 
         public string LastName
         {
-            get => _lastName;
+            get => lastName;
             set
             {
-                if (_lastName != value)
+                if (lastName != value)
                 {
-                    _lastName = value;
+                    lastName = value;
                     OnPropertyChanged(nameof(LastName));
                     LastNameError = string.Empty;
                 }
@@ -58,12 +58,12 @@ namespace LoanShark.ViewModel
 
         public string Cnp
         {
-            get => _cnp;
+            get => cnp;
             set
             {
-                if (_cnp != value)
+                if (cnp != value)
                 {
-                    _cnp = value;
+                    cnp = value;
                     OnPropertyChanged(nameof(Cnp));
                     CnpError = string.Empty;
                 }
@@ -72,12 +72,12 @@ namespace LoanShark.ViewModel
 
         public string PhoneNumber
         {
-            get => _phoneNumber;
+            get => phoneNumber;
             set
             {
-                if (_phoneNumber != value)
+                if (phoneNumber != value)
                 {
-                    _phoneNumber = value;
+                    phoneNumber = value;
                     OnPropertyChanged(nameof(PhoneNumber));
                     PhoneNumberError = string.Empty;
                 }
@@ -86,12 +86,12 @@ namespace LoanShark.ViewModel
 
         public string Email
         {
-            get => _email;
+            get => email;
             set
             {
-                if (_email != value)
+                if (email != value)
                 {
-                    _email = value;
+                    email = value;
                     OnPropertyChanged(nameof(Email));
                     EmailError = string.Empty;
                 }
@@ -100,12 +100,12 @@ namespace LoanShark.ViewModel
 
         public string Password
         {
-            get => _password;
+            get => password;
             set
             {
-                if (_password != value)
+                if (password != value)
                 {
-                    _password = value;
+                    password = value;
                     OnPropertyChanged(nameof(Password));
                     PasswordError = string.Empty;
                 }
@@ -114,12 +114,12 @@ namespace LoanShark.ViewModel
 
         public string ConfirmPassword
         {
-            get => _confirmPassword;
+            get => confirmPassword;
             set
             {
-                if (_confirmPassword != value)
+                if (confirmPassword != value)
                 {
-                    _confirmPassword = value;
+                    confirmPassword = value;
                     OnPropertyChanged(nameof(ConfirmPassword));
                     ConfirmPasswordError = string.Empty;
                 }
@@ -128,12 +128,12 @@ namespace LoanShark.ViewModel
 
         public string FirstNameError
         {
-            get => _firstNameError;
+            get => firstNameError;
             set
             {
-                if (_firstNameError != value)
+                if (firstNameError != value)
                 {
-                    _firstNameError = value;
+                    firstNameError = value;
                     OnPropertyChanged(nameof(FirstNameError));
                 }
             }
@@ -141,12 +141,12 @@ namespace LoanShark.ViewModel
 
         public string LastNameError
         {
-            get => _lastNameError;
+            get => lastNameError;
             set
             {
-                if (_lastNameError != value)
+                if (lastNameError != value)
                 {
-                    _lastNameError = value;
+                    lastNameError = value;
                     OnPropertyChanged(nameof(LastNameError));
                 }
             }
@@ -154,12 +154,12 @@ namespace LoanShark.ViewModel
 
         public string CnpError
         {
-            get => _cnpError;
+            get => cnpError;
             set
             {
-                if (_cnpError != value)
+                if (cnpError != value)
                 {
-                    _cnpError = value;
+                    cnpError = value;
                     OnPropertyChanged(nameof(CnpError));
                 }
             }
@@ -167,12 +167,12 @@ namespace LoanShark.ViewModel
 
         public string PhoneNumberError
         {
-            get => _phoneNumberError;
+            get => phoneNumberError;
             set
             {
-                if (_phoneNumberError != value)
+                if (phoneNumberError != value)
                 {
-                    _phoneNumberError = value;
+                    phoneNumberError = value;
                     OnPropertyChanged(nameof(PhoneNumberError));
                 }
             }
@@ -180,12 +180,12 @@ namespace LoanShark.ViewModel
 
         public string EmailError
         {
-            get => _emailError;
+            get => emailError;
             set
             {
-                if (_emailError != value)
+                if (emailError != value)
                 {
-                    _emailError = value;
+                    emailError = value;
                     OnPropertyChanged(nameof(EmailError));
                 }
             }
@@ -193,12 +193,12 @@ namespace LoanShark.ViewModel
 
         public string PasswordError
         {
-            get => _passwordError;
+            get => passwordError;
             set
             {
-                if (_passwordError != value)
+                if (passwordError != value)
                 {
-                    _passwordError = value;
+                    passwordError = value;
                     OnPropertyChanged(nameof(PasswordError));
                 }
             }
@@ -206,12 +206,12 @@ namespace LoanShark.ViewModel
 
         public string ConfirmPasswordError
         {
-            get => _confirmPasswordError;
+            get => confirmPasswordError;
             set
             {
-                if (_confirmPasswordError != value)
+                if (confirmPasswordError != value)
                 {
-                    _confirmPasswordError = value;
+                    confirmPasswordError = value;
                     OnPropertyChanged(nameof(ConfirmPasswordError));
                 }
             }
@@ -219,12 +219,12 @@ namespace LoanShark.ViewModel
 
         public string ErrorMessage
         {
-            get => _errorMessage;
+            get => errorMessage;
             set
             {
-                if (_errorMessage != value)
+                if (errorMessage != value)
                 {
-                    _errorMessage = value;
+                    errorMessage = value;
                     OnPropertyChanged(nameof(ErrorMessage));
                 }
             }
@@ -283,9 +283,9 @@ namespace LoanShark.ViewModel
                 ConfirmPasswordError = "Passwords do not match";
             }
 
-            //return [lengthOk, uppserCaseOk, lowerCaseOk, numberOk, specialCharOk];
+            // return [lengthOk, uppserCaseOk, lowerCaseOk, numberOk, specialCharOk];
             bool[] result = HashedPassword.VerifyPasswordStrength(Password);
-            PasswordError = "";
+            PasswordError = string.Empty;
             if (!result[0])
             {
                 PasswordError += "Password must have at least 8 characters\n";
@@ -307,25 +307,26 @@ namespace LoanShark.ViewModel
                 PasswordError += "Password must contain at least one special character\n";
             }
 
-            string? cnpError = await _userService.CheckCnp(Cnp);
+            string? cnpError = await userService.CheckCnp(Cnp);
             if (cnpError != null)
             {
                 CnpError = cnpError;
             }
 
-            string? emailError = await _userService.CheckEmail(Email);
+            string? emailError = await userService.CheckEmail(Email);
             if (emailError != null)
             {
                 EmailError = emailError;
             }
 
-            string? phoneNumberError = await _userService.CheckPhoneNumber(PhoneNumber);
+            string? phoneNumberError = await userService.CheckPhoneNumber(PhoneNumber);
             if (phoneNumberError != null)
             {
                 PhoneNumberError = phoneNumberError;
             }
 
-            List<string> errors = new List<string> {
+            List<string> errors = new List<string>
+            {
                 FirstNameError,
                 LastNameError,
                 CnpError,
@@ -334,7 +335,7 @@ namespace LoanShark.ViewModel
                 PasswordError,
                 ConfirmPasswordError
             };
-            bool hasErrors = errors.Any(x => x != "");
+            bool hasErrors = errors.Any(x => x != string.Empty);
             if (hasErrors)
             {
                 return;
@@ -343,7 +344,7 @@ namespace LoanShark.ViewModel
             // Create user
             try
             {
-                await _userService.CreateUser(Cnp, FirstName, LastName, Email, PhoneNumber, Password);
+                await userService.CreateUser(Cnp, FirstName, LastName, Email, PhoneNumber, Password);
             }
             catch (Exception ex)
             {

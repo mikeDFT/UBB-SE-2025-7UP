@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using LoanShark.Domain;
 using LoanShark.Service;
-using LoanShark.View;   
+using LoanShark.View;
 
 namespace LoanShark.ViewModel
 {
@@ -16,7 +16,6 @@ namespace LoanShark.ViewModel
         private ObservableCollection<BankAccount> userBankAccounts;
         private string balanceButtonContent;
         private readonly MainPageService service;
-        
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public MainPageViewModel()
@@ -69,11 +68,13 @@ namespace LoanShark.ViewModel
 
         public void InitializeWelcomeText()
         {
-            try {
+            try
+            {
                 string? firstName = UserSession.Instance.GetUserData("first_name");
                 this.WelcomeText = firstName != null ? $"Welcome back, {firstName}" : "Welcome, user";
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 this.WelcomeText = "Welcome, user";
                 Debug.Print($"Error getting user data: {ex.Message}");
             }
@@ -91,11 +92,11 @@ namespace LoanShark.ViewModel
                 }
 
                 int idUser = int.Parse(userId);
-                
+
                 try
                 {
                     UserBankAccounts = await this.service.GetUserBankAccounts(idUser);
-                    
+
                     if (UserBankAccounts.Count == 0)
                     {
                         // Add a placeholder or default message if no accounts found
@@ -127,11 +128,11 @@ namespace LoanShark.ViewModel
             userInformationView.Activate();
         }
 
-        public async Task CheckBalanceButtonHandler() 
+        public async Task CheckBalanceButtonHandler()
         {
-            try 
+            try
             {
-                if (this.BalanceButtonContent == "Check Balance") 
+                if (this.BalanceButtonContent == "Check Balance")
                 {
                     string? currentBankAccountIban = UserSession.Instance.GetUserData("current_bank_account_iban");
                     if (string.IsNullOrEmpty(currentBankAccountIban))
@@ -145,7 +146,7 @@ namespace LoanShark.ViewModel
                         Debug.Print("There are no accounts for the current user");
                         this.BalanceButtonContent = "Check Balance";
                     }
-                    else 
+                    else
                     {
                         Tuple<decimal, string> result = await this.service.GetBankAccountBalanceByUserIban(currentBankAccountIban);
                         decimal balance = result.Item1;
@@ -155,8 +156,8 @@ namespace LoanShark.ViewModel
                         Debug.Print($"Balance: {balanceString}");
                     }
                     this.OnPropertyChanged(nameof(BalanceButtonContent));
-                } 
-                else 
+                }
+                else
                 {
                     this.BalanceButtonContent = "Check Balance";
                     this.OnPropertyChanged(nameof(BalanceButtonContent));
@@ -232,7 +233,8 @@ namespace LoanShark.ViewModel
 
         public void ResetBalanceButtonContent()
         {
-            if (this.BalanceButtonContent != "Check Balance") {
+            if (this.BalanceButtonContent != "Check Balance")
+            {
                 this.BalanceButtonContent = "Check Balance";
                 this.OnPropertyChanged(nameof(BalanceButtonContent));
             }

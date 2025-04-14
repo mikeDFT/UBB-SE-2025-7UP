@@ -1,15 +1,14 @@
 using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using LoanShark.Domain;
+using LoanShark.Helper;
+using LoanShark.ViewModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using System.Diagnostics;
-using LoanShark.Domain;
-using LoanShark.ViewModel;
-using LoanShark.Helper;
-using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace LoanShark.View
 {
     /// <summary>
@@ -20,15 +19,15 @@ namespace LoanShark.View
         public event EventHandler? LogOut;
 
         public MainPageViewModel ViewModel { get; private set; }
-        
+
         public MainPageView()
         {
             this.InitializeComponent();
             this.ViewModel = new MainPageViewModel();
-            
+
             // Register this window with the WindowManager
             WindowManager.RegisterWindow(this);
-            
+
             // Set the welcome text from ViewModel
             centeredTextField.Text = this.ViewModel.WelcomeText;
         }
@@ -41,7 +40,8 @@ namespace LoanShark.View
         public async void LoanButtonHandler(object sender, RoutedEventArgs e)
         {
             var errorMessage = await this.ViewModel.LoanButtonHandler();
-            if (errorMessage != null) {
+            if (errorMessage != null)
+            {
                 await this.ShowDialog(errorMessage);
             }
         }
@@ -49,7 +49,8 @@ namespace LoanShark.View
         private async void TransactionButtonHandler(object sender, RoutedEventArgs e)
         {
             var errorMessage = await this.ViewModel.TransactionButtonHandler();
-            if (errorMessage != null) {
+            if (errorMessage != null)
+            {
                 await this.ShowDialog(errorMessage);
             }
         }
@@ -57,11 +58,12 @@ namespace LoanShark.View
         private async void TransactionHistoryButtonHandler(object sender, RoutedEventArgs e)
         {
             var errorMessage = await this.ViewModel.TransactionHistoryButtonHandler();
-            if (errorMessage != null) {
+            if (errorMessage != null)
+            {
                 await this.ShowDialog(errorMessage);
             }
         }
-        
+
         private void AccountsFlipView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.ViewModel.ResetBalanceButtonContent();
@@ -70,7 +72,7 @@ namespace LoanShark.View
             {
                 // Optional: You can handle the selection change here
                 Debug.Print($"Selected account: {selectedAccount.Name}, IBAN: {selectedAccount.Iban}");
-                
+
                 try
                 {
                     UserSession.Instance.SetUserData("current_bank_account_iban", selectedAccount.Iban);
@@ -92,7 +94,7 @@ namespace LoanShark.View
             // Create the login window but don't invalidate the session yet
             LoginView logInWindow = new LoginView();
             logInWindow.Activate();
-            
+
             // Close current window
             this.Close();
         }
@@ -111,7 +113,8 @@ namespace LoanShark.View
         private async void BankAccountDetailsViewButtonHandler(object sender, RoutedEventArgs e)
         {
             var errorMessage = await this.ViewModel.BankAccountDetailsButtonHandler();
-            if (errorMessage != null) {
+            if (errorMessage != null)
+            {
                 await this.ShowDialog(errorMessage);
             }
         }
@@ -119,7 +122,8 @@ namespace LoanShark.View
         private async void BankAccountSettingsButtonHandler(object sender, RoutedEventArgs e)
         {
             var errorMessage = await this.ViewModel.BankAccountSettingsButtonHandler();
-            if (errorMessage != null) {
+            if (errorMessage != null)
+            {
                 await this.ShowDialog(errorMessage);
             }
         }
@@ -129,7 +133,8 @@ namespace LoanShark.View
             await this.ViewModel.RefreshBankAccounts();
         }
 
-        private async Task ShowDialog(string message) {
+        private async Task ShowDialog(string message)
+        {
             var dialog = new ContentDialog
             {
                 Title = "Error",

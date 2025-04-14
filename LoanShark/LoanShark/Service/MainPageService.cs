@@ -34,7 +34,6 @@ namespace LoanShark.Service
                     decimal maxPerTransaction = row["max_per_transaction"] != DBNull.Value ? Convert.ToDecimal(row["max_per_transaction"]) : 0;
                     int maxNrTransactionsDaily = row["max_nr_transactions_daily"] != DBNull.Value ? Convert.ToInt32(row["max_nr_transactions_daily"]) : 0;
                     bool blocked = row["blocked"] != DBNull.Value ? Convert.ToBoolean(row["blocked"]) : false;
-                    
                     bankAccounts.Add(new BankAccount(iban, currency, amount, blocked, userId, customName, dailyLimit, maxPerTransaction, maxNrTransactionsDaily));
                 }
 

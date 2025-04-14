@@ -1,7 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LoanShark.View;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using System;
+using CommunityToolkit.Mvvm.ComponentModel;
+using LoanShark.View;
 using Microsoft.UI.Xaml;
 
 namespace LoanShark.ViewModel

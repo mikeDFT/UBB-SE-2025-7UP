@@ -11,7 +11,6 @@ namespace LoanShark.ViewModel
         private string email;
         private string errorMessage;
         private bool isErrorVisible;
-        
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public LoginViewModel()
@@ -60,7 +59,7 @@ namespace LoanShark.ViewModel
                 }
             }
         }
-        
+
         public async Task<bool> ValidateCredentials(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
@@ -69,10 +68,10 @@ namespace LoanShark.ViewModel
                 this.IsErrorVisible = true;
                 return false;
             }
-            
+
             this.IsErrorVisible = false;
             bool isValid = await this.loginService.ValidateUserCredentials(email, password);
-            
+
             if (!isValid)
             {
                 this.ErrorMessage = "Invalid email or password";
@@ -83,7 +82,7 @@ namespace LoanShark.ViewModel
                 this.ErrorMessage = string.Empty;
                 this.IsErrorVisible = false;
             }
-            
+
             return isValid;
         }
 

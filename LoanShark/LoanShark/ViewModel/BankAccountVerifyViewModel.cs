@@ -82,7 +82,7 @@ namespace LoanShark.ViewModel
         public async void OnConfirmButtonClicked()
         {
             Debug.WriteLine("Confirm button");
-            if (Password != null && await service.verifyUserCredentials(email, Password))
+            if (Password != null && await service.VerifyUserCredentials(email, Password))
             {
                 if (await service.RemoveBankAccount(iban))
                 {
