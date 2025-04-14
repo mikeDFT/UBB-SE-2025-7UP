@@ -7,11 +7,11 @@ using Microsoft.Data.SqlClient;
 
 namespace LoanShark.Data
 {
-    class DataLink
+    public class DataLink
     {
         // Singleton instance
         private static DataLink? instance;
-        private static readonly object lockObject = new object();
+        private static readonly object LockObject = new object();
         private SqlConnection sqlConnection;
         private readonly string? connectionString;
         // Singleton accessor
@@ -19,7 +19,7 @@ namespace LoanShark.Data
         {
             get
             {
-                lock (lockObject)
+                lock (LockObject)
                 {
                     if (instance == null)
                     {
@@ -70,7 +70,7 @@ namespace LoanShark.Data
             }
         }
         // Executes a stored procedure and returns a single scalar value (e.g., COUNT(*), SUM(), MAX(), etc.)
-        public async Task<T?> ExecuteScalar<T>(string storedProcedure, SqlParameter[]? sqlParameters = null)
+        public async Task<T?> ExecuteScalar<T>(string storedProcedure, SqlParameter?[] sqlParameters = null)
         {
             try
             {
@@ -98,9 +98,8 @@ namespace LoanShark.Data
             }
         }
 
-
         // Executes a stored procedure and returns multiple rows and columns as a DataTable
-        public async Task<DataTable> ExecuteReader(string storedProcedure, SqlParameter[]? sqlParameters = null)
+        public async Task<DataTable> ExecuteReader(string storedProcedure, SqlParameter?[] sqlParameters = null)
         {
             try
             {
@@ -125,7 +124,7 @@ namespace LoanShark.Data
             }
         }
         // Executes a stored procedure that modifies data (INSERT, UPDATE, DELETE) and returns the number of affected rows
-        public async Task<int> ExecuteNonQuery(string storedProcedure, SqlParameter[]? sqlParameters = null)
+        public async Task<int> ExecuteNonQuery(string storedProcedure, SqlParameter?[] sqlParameters = null)
         {
             try
             {

@@ -80,7 +80,7 @@ namespace LoanShark.Domain
             {
                 numberOk = true;
             }
-            if (!password.All(char.IsLetterOrDigit)) // if the password doesn't contain only letters, it means that it must contains a special character
+            if (!password.All(char.IsLetterOrDigit))
             {
                 specialCharOk = true;
             }
