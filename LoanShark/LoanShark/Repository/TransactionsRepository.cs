@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 using LoanShark.Domain;
 using LoanShark.Data;
 using Microsoft.Data.SqlClient;
-using System.Threading.Tasks;
 
 namespace LoanShark.Repository
 {
@@ -15,7 +15,9 @@ namespace LoanShark.Repository
             try
             {
                 if (transaction == null)
+                {
                     throw new ArgumentNullException(nameof(transaction), "Transaction cannot be null");
+                }
 
                 SqlParameter[] parameters =
                 {
@@ -48,16 +50,15 @@ namespace LoanShark.Repository
                 foreach (DataRow row in result.Rows)
                 {
                     bankAccounts.Add(new BankAccount(
-                        row["iban"].ToString() ?? "",
-                        row["currency"].ToString() ?? "",
+                        row["iban"].ToString() ?? string.Empty,
+                        row["currency"].ToString() ?? string.Empty,
                         Convert.ToDecimal(row["amount"]),
                         Convert.ToBoolean(row["blocked"]),
                         Convert.ToInt32(row["id_user"]),
-                        row["custom_name"]?.ToString() ?? "",
+                        row["custom_name"]?.ToString() ?? string.Empty,
                         Convert.ToDecimal(row["daily_limit"]),
                         Convert.ToDecimal(row["max_per_transaction"]),
-                        Convert.ToInt32(row["max_nr_transactions_daily"])
-                    ));
+                        Convert.ToInt32(row["max_nr_transactions_daily"])));
                 }
 
                 return bankAccounts;
@@ -78,10 +79,9 @@ namespace LoanShark.Repository
                 foreach (DataRow row in result.Rows)
                 {
                     exchangeRates.Add(new CurrencyExchange(
-                        row["from_currency"].ToString() ?? "",
-                        row["to_currency"].ToString() ?? "",
-                        Convert.ToDecimal(row["rate"])
-                    ));
+                        row["from_currency"].ToString() ?? string.Empty,
+                        row["to_currency"].ToString() ?? string.Empty,
+                        Convert.ToDecimal(row["rate"])));
                 }
 
                 return exchangeRates;
@@ -97,26 +97,29 @@ namespace LoanShark.Repository
             try
             {
                 if (string.IsNullOrWhiteSpace(iban))
+                {
                     throw new ArgumentException("IBAN cannot be empty.", nameof(iban));
-
+                }
                 SqlParameter[] parameters = { new SqlParameter("@IBAN", iban) };
                 DataTable result = await DataLink.Instance.ExecuteReader("GetBankAccountByIBAN", parameters);
 
-                if (result.Rows.Count == 0) return null;
+                if (result.Rows.Count == 0)
+                {
+                    return null;
+                }
 
                 DataRow row = result.Rows[0];
 
                 return new BankAccount(
-                    row["iban"].ToString() ?? "",
-                    row["currency"].ToString() ?? "",
+                    row["iban"].ToString() ?? string.Empty,
+                    row["currency"].ToString() ?? string.Empty,
                     Convert.ToDecimal(row["amount"]),
                     Convert.ToBoolean(row["blocked"]),
                     Convert.ToInt32(row["id_user"]),
-                    row["custom_name"]?.ToString() ?? "",
+                    row["custom_name"]?.ToString() ?? string.Empty,
                     Convert.ToDecimal(row["daily_limit"]),
                     Convert.ToDecimal(row["max_per_transaction"]),
-                    Convert.ToInt32(row["max_nr_transactions_daily"])
-                );
+                    Convert.ToInt32(row["max_nr_transactions_daily"]));
             }
             catch (SqlException ex)
             {
@@ -129,7 +132,9 @@ namespace LoanShark.Repository
             try
             {
                 if (string.IsNullOrWhiteSpace(iban))
+                {
                     throw new ArgumentException("IBAN cannot be empty.", nameof(iban));
+                }
 
                 SqlParameter[] parameters = { new SqlParameter("@IBAN", iban) };
                 DataTable result = await DataLink.Instance.ExecuteReader("GetBankAccountTransactions", parameters);
@@ -140,16 +145,15 @@ namespace LoanShark.Repository
                 {
                     transactions.Add(new Transaction(
                         Convert.ToInt32(row["transaction_id"]),
-                        row["sender_iban"].ToString() ?? "",
-                        row["receiver_iban"].ToString() ?? "",
+                        row["sender_iban"].ToString() ?? string.Empty,
+                        row["receiver_iban"].ToString() ?? string.Empty,
                         Convert.ToDateTime(row["transaction_datetime"]),
-                        row["sender_currency"].ToString() ?? "",
-                        row["receiver_currency"].ToString() ?? "",
+                        row["sender_currency"].ToString() ?? string.Empty,
+                        row["receiver_currency"].ToString() ?? string.Empty,
                         Convert.ToDecimal(row["sender_amount"]),
                         Convert.ToDecimal(row["receiver_amount"]),
-                        row["transaction_type"].ToString() ?? "",
-                        row["transaction_description"].ToString() ?? ""
-                    ));
+                        row["transaction_type"].ToString() ?? string.Empty,
+                        row["transaction_description"].ToString() ?? string.Empty));
                 }
 
                 return transactions;
@@ -184,10 +188,14 @@ namespace LoanShark.Repository
             try
             {
                 if (string.IsNullOrWhiteSpace(iban))
+                {
                     throw new ArgumentException("IBAN must be provided.", nameof(iban));
+                }
 
                 if (newBalance < 0)
+                {
                     throw new ArgumentException("Balance cannot be negative.");
+                }
 
                 SqlParameter[] parameters =
                 {

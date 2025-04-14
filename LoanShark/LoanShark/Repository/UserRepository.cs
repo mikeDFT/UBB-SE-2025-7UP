@@ -1,11 +1,11 @@
-﻿using LoanShark.Data;
-using LoanShark.Domain;
-using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using LoanShark.Data;
+using LoanShark.Domain;
+using Microsoft.Data.SqlClient;
 
 namespace LoanShark.Repository
 {
@@ -21,9 +21,11 @@ namespace LoanShark.Repository
         Task<string[]> GetUserPasswordHashSalt();
     }
 
-    public class UserRepository: IUserRepository
+    public class UserRepository : IUserRepository
     {
-        public UserRepository() {}
+        public UserRepository()
+        {
+        }
 
         // saves a new user in the database
         // on success returns the user with the corresponding userId from the database
@@ -41,7 +43,7 @@ namespace LoanShark.Repository
                     new SqlParameter("@phone_number", user.PhoneNumber.ToString()),
                     new SqlParameter("@hashed_password", user.HashedPassword.GetHashedPassword()),
                     new SqlParameter("@password_salt", user.HashedPassword.GetSalt()),
-                    new SqlParameter("@id_user", SqlDbType.Int) { Direction = ParameterDirection.Output}
+                    new SqlParameter("@id_user", SqlDbType.Int) { Direction = ParameterDirection.Output }
                 };
                 await DataLink.Instance.ExecuteNonQuery("CreateUser", parameters);
                 int newUserId = (int)parameters.First(p => p.ParameterName == "@id_user").Value;
@@ -65,21 +67,20 @@ namespace LoanShark.Repository
                 {
                     new SqlParameter("@id_user", userId)
                 };
-                DataTable dt = await DataLink.Instance.ExecuteReader("GetUserById", parameters);
-                if (dt.Rows.Count == 0)
+                DataTable dataTable = await DataLink.Instance.ExecuteReader("GetUserById", parameters);
+                if (dataTable.Rows.Count == 0)
                 {
                     return null;
                 }
-                DataRow dr = dt.Rows[0];
+                DataRow dataRow = dataTable.Rows[0];
                 return new User(
                     userId,
-                    new Cnp(dr["cnp"].ToString() ?? ""),
-                    dr["first_name"].ToString() ?? "",
-                    dr["last_name"].ToString() ?? "",
-                    new Email(dr["email"].ToString() ?? ""),
-                    new PhoneNumber(dr["phone_number"].ToString() ?? ""),
-                    new HashedPassword(dr["hashed_password"].ToString() ?? "", dr["password_salt"].ToString() ?? "", false)
-                    );
+                    new Cnp(dataRow["cnp"].ToString() ?? string.Empty),
+                    dataRow["first_name"].ToString() ?? string.Empty,
+                    dataRow["last_name"].ToString() ?? string.Empty,
+                    new Email(dataRow["email"].ToString() ?? string.Empty),
+                    new PhoneNumber(dataRow["phone_number"].ToString() ?? string.Empty),
+                    new HashedPassword(dataRow["hashed_password"].ToString() ?? string.Empty, dataRow["password_salt"].ToString() ?? string.Empty, false));
             }
             catch (Exception ex)
             {
@@ -148,21 +149,20 @@ namespace LoanShark.Repository
                 {
                     new SqlParameter("@cnp", cnp.ToString())
                 };
-                DataTable dt = await DataLink.Instance.ExecuteReader("GetUserByCnp", parameters);
-                if (dt.Rows.Count == 0)
+                DataTable dataTable = await DataLink.Instance.ExecuteReader("GetUserByCnp", parameters);
+                if (dataTable.Rows.Count == 0)
                 {
                     return null;
                 }
-                DataRow dr = dt.Rows[0];
+                DataRow dataRow = dataTable.Rows[0];
                 return new User(
-                    Convert.ToInt32(dr["id_user"]),
-                    new Cnp(dr["cnp"].ToString() ?? ""),
-                    dr["first_name"].ToString() ?? "",
-                    dr["last_name"].ToString() ?? "",
-                    new Email(dr["email"].ToString() ?? ""),
-                    new PhoneNumber(dr["phone_number"].ToString() ?? ""),
-                    new HashedPassword(dr["hashed_password"].ToString() ?? "", dr["password_salt"].ToString() ?? "", false)
-                    );
+                    Convert.ToInt32(dataRow["id_user"]),
+                    new Cnp(dataRow["cnp"].ToString() ?? string.Empty),
+                    dataRow["first_name"].ToString() ?? string.Empty,
+                    dataRow["last_name"].ToString() ?? string.Empty,
+                    new Email(dataRow["email"].ToString() ?? string.Empty),
+                    new PhoneNumber(dataRow["phone_number"].ToString() ?? string.Empty),
+                    new HashedPassword(dataRow["hashed_password"].ToString() ?? string.Empty, dataRow["password_salt"].ToString() ?? string.Empty, false));
             }
             catch (Exception ex)
             {
@@ -181,21 +181,20 @@ namespace LoanShark.Repository
                 {
                     new SqlParameter("@email", email.ToString())
                 };
-                DataTable dt = await DataLink.Instance.ExecuteReader("GetUserByEmail", parameters);
-                if (dt.Rows.Count == 0)
+                DataTable dataTable = await DataLink.Instance.ExecuteReader("GetUserByEmail", parameters);
+                if (dataTable.Rows.Count == 0)
                 {
                     return null;
                 }
-                DataRow dr = dt.Rows[0];
+                DataRow dataRow = dataTable.Rows[0];
                 return new User(
-                    Convert.ToInt32(dr["id_user"]),
-                    new Cnp(dr["cnp"].ToString() ?? ""),
-                    dr["first_name"].ToString() ?? "",
-                    dr["last_name"].ToString() ?? "",
-                    new Email(dr["email"].ToString() ?? ""),
-                    new PhoneNumber(dr["phone_number"].ToString() ?? ""),
-                    new HashedPassword(dr["hashed_password"].ToString() ?? "", dr["password_salt"].ToString() ?? "", false)
-                    );
+                    Convert.ToInt32(dataRow["id_user"]),
+                    new Cnp(dataRow["cnp"].ToString() ?? string.Empty),
+                    dataRow["first_name"].ToString() ?? string.Empty,
+                    dataRow["last_name"].ToString() ?? string.Empty,
+                    new Email(dataRow["email"].ToString() ?? string.Empty),
+                    new PhoneNumber(dataRow["phone_number"].ToString() ?? string.Empty),
+                    new HashedPassword(dataRow["hashed_password"].ToString() ?? string.Empty, dataRow["password_salt"].ToString() ?? string.Empty, false));
             }
             catch (Exception ex)
             {
@@ -214,21 +213,20 @@ namespace LoanShark.Repository
                 {
                     new SqlParameter("@phone_number", phoneNumber.ToString())
                 };
-                DataTable dt = await DataLink.Instance.ExecuteReader("GetUserByPhoneNumber", parameters);
-                if (dt.Rows.Count == 0)
+                DataTable dataTable = await DataLink.Instance.ExecuteReader("GetUserByPhoneNumber", parameters);
+                if (dataTable.Rows.Count == 0)
                 {
                     return null;
                 }
-                DataRow dr = dt.Rows[0];
+                DataRow dataRow = dataTable.Rows[0];
                 return new User(
-                    Convert.ToInt32(dr["id_user"]),
-                    new Cnp(dr["cnp"].ToString() ?? ""),
-                    dr["first_name"].ToString() ?? "",
-                    dr["last_name"].ToString() ?? "",
-                    new Email(dr["email"].ToString() ?? ""),
-                    new PhoneNumber(dr["phone_number"].ToString() ?? ""),
-                    new HashedPassword(dr["hashed_password"].ToString() ?? "", dr["password_salt"].ToString() ?? "", false)
-                    );
+                    Convert.ToInt32(dataRow["id_user"]),
+                    new Cnp(dataRow["cnp"].ToString() ?? string.Empty),
+                    dataRow["first_name"].ToString() ?? string.Empty,
+                    dataRow["last_name"].ToString() ?? string.Empty,
+                    new Email(dataRow["email"].ToString() ?? string.Empty),
+                    new PhoneNumber(dataRow["phone_number"].ToString() ?? string.Empty),
+                    new HashedPassword(dataRow["hashed_password"].ToString() ?? string.Empty, dataRow["password_salt"].ToString() ?? string.Empty, false));
             }
             catch (Exception ex)
             {
@@ -242,18 +240,16 @@ namespace LoanShark.Repository
             // grabs the hashed password and the salt for the user from the database
             var parameterList = new SqlParameter[]
             {
-                   new SqlParameter("@id_user",userID) ,
-                   new SqlParameter("@hashed_password", System.Data.SqlDbType.VarChar,255){Direction = ParameterDirection.Output},
-                   new SqlParameter("@password_salt", System.Data.SqlDbType.VarChar,32){Direction = ParameterDirection.Output}
+                   new SqlParameter("@id_user", userID),
+                   new SqlParameter("@hashed_password", System.Data.SqlDbType.VarChar, 255) { Direction = ParameterDirection.Output },
+                   new SqlParameter("@password_salt", System.Data.SqlDbType.VarChar, 32) { Direction = ParameterDirection.Output }
                };
             await DataLink.Instance.ExecuteNonQuery("GetHashedPassword", parameterList);
-            string passwordHash = (string)parameterList.First(x=>x.ParameterName == "@hashed_password").Value;
-            string salt = (string)parameterList.First(x => x.ParameterName == "@password_salt").Value;
+            string passwordHash = (string)parameterList.First(parameter => parameter.ParameterName == "@hashed_password").Value;
+            string salt = (string)parameterList.First(parameter => parameter.ParameterName == "@password_salt").Value;
 
             string[] list = { passwordHash, salt };
             return list;
-
         }
-
     }
 }
