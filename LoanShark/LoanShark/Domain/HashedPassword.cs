@@ -40,7 +40,7 @@ namespace LoanShark.Domain
             // and create a HashedPassword object with it
             else
             {
-                this.hashedPassword = BCrypt.Net.BCrypt.HashPassword(someString, this.salt);
+               this.hashedPassword = BCrypt.Net.BCrypt.HashPassword(someString, this.salt);
             }
         }
 

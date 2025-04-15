@@ -26,6 +26,11 @@ namespace LoanShark.Repository
         public UserRepository()
         {
         }
+        private readonly DataLink dataLink;
+        public UserRepository(DataLink dataLink)
+        {
+            dataLink = dataLink;
+        }
 
         // saves a new user in the database
         // on success returns the user with the corresponding userId from the database
@@ -53,7 +58,7 @@ namespace LoanShark.Repository
             catch (Exception ex)
             {
                 Debug.WriteLine($"REPO: Error creating user: {ex.Message}");
-                return null;
+                throw;
             }
         }
 

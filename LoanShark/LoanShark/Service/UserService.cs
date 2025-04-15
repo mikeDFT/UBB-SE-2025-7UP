@@ -14,6 +14,10 @@ namespace LoanShark.Service
         {
             userRepository = new UserRepository();
         }
+        public UserService(IUserRepository userRepository)
+        {
+            this.userRepository = userRepository;
+        }
 
         // if cnp is valid and not used by another user returns null
         // otherwise returns an error message
