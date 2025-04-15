@@ -1,10 +1,9 @@
-using Microsoft.UI.Xaml;
-using LoanShark.ViewModel;
 using LoanShark.Helper;
+using LoanShark.ViewModel;
+using Microsoft.UI.Xaml;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace LoanShark.View
 {
     /// <summary>
@@ -16,7 +15,7 @@ namespace LoanShark.View
         {
             this.InitializeComponent();
             var viewModel = new UserRegistrationViewModel();
-            viewModel.CloseAction = () => 
+            viewModel.CloseAction = () =>
             {
                 LoginView loginWindow = new LoginView();
                 loginWindow.Activate();

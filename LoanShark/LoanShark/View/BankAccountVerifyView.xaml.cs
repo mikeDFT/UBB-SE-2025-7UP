@@ -1,14 +1,13 @@
+using System;
+using System.Threading.Tasks;
 using LoanShark.ViewModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using System;
-using System.Threading.Tasks;
 using LoanShark.Helper;
 using Microsoft.UI.Xaml.Input;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace LoanShark.View
 {
     /// <summary>
@@ -16,7 +15,7 @@ namespace LoanShark.View
     /// </summary>
     public sealed partial class BankAccountVerifyView : Window
     {
-        BankAccountVerifyViewModel viewModel;
+        private BankAccountVerifyViewModel viewModel;
         public BankAccountVerifyView()
         {
             this.InitializeComponent();
@@ -44,7 +43,6 @@ namespace LoanShark.View
 
             viewModel.OnClose?.Invoke();
             // update main page view model
-
         }
 
         private void PasswordBox_KeyDown(object sender, KeyRoutedEventArgs e)

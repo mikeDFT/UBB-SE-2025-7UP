@@ -5,7 +5,6 @@ using LoanShark.Domain;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace LoanShark.View
 {
     /// <summary>
@@ -19,7 +18,7 @@ namespace LoanShark.View
             var viewModel = new BankAccountDeleteViewModel();
             MainGrid.DataContext = viewModel;
 
-            viewModel.onClose = () => this.Close();
+            viewModel.OnClose = () => this.Close();
 
             WindowManager.RegisterWindow(this);
         }

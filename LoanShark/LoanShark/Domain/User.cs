@@ -5,7 +5,7 @@ namespace LoanShark.Domain
 {
     public class Email
     {
-        private string _emailAddress;
+        private string emailAddress;
 
         public Email(string emailAddress)
         {
@@ -13,7 +13,7 @@ namespace LoanShark.Domain
             {
                 throw new ArgumentException("Invalid email address");
             }
-            _emailAddress = emailAddress;
+            this.emailAddress = emailAddress;
         }
 
         // checks if a string is a valid email address
@@ -32,7 +32,7 @@ namespace LoanShark.Domain
 
         public override string ToString()
         {
-            return _emailAddress;
+            return emailAddress;
         }
 
         public override bool Equals(object? obj)
@@ -42,18 +42,18 @@ namespace LoanShark.Domain
                 return false;
             }
             return obj is Email email &&
-                   _emailAddress == email._emailAddress;
+                   emailAddress == email.emailAddress;
         }
 
         public override int GetHashCode()
         {
-            return _emailAddress.GetHashCode();
+            return emailAddress.GetHashCode();
         }
     }
 
     public class Cnp
     {
-        private string _cnp;
+        private string cnp;
 
         public Cnp(string cnp)
         {
@@ -61,7 +61,7 @@ namespace LoanShark.Domain
             {
                 throw new ArgumentException("Invalid CNP");
             }
-            _cnp = cnp;
+            this.cnp = cnp;
         }
 
         // checks if a string is a valid cnp
@@ -80,7 +80,7 @@ namespace LoanShark.Domain
 
         public override string ToString()
         {
-            return _cnp;
+            return cnp;
         }
 
         public override bool Equals(object? obj)
@@ -89,19 +89,19 @@ namespace LoanShark.Domain
             {
                 return false;
             }
-            return obj is Cnp cnp &&
-                   _cnp == cnp._cnp;
+            return obj is Cnp cnpp &&
+                   cnp == cnpp.cnp;
         }
 
         public override int GetHashCode()
         {
-            return _cnp.GetHashCode();
+            return cnp.GetHashCode();
         }
     }
 
     public class PhoneNumber
     {
-        private string _phoneNumber;
+        private string phoneNumber;
 
         public PhoneNumber(string phoneNumber)
         {
@@ -109,7 +109,7 @@ namespace LoanShark.Domain
             {
                 throw new ArgumentException("Invalid phone number");
             }
-            _phoneNumber = phoneNumber;
+            this.phoneNumber = phoneNumber;
         }
 
         // checks if a string is a valid phone number
@@ -132,7 +132,7 @@ namespace LoanShark.Domain
 
         public override string ToString()
         {
-            return _phoneNumber.ToString();
+            return phoneNumber.ToString();
         }
 
         public override bool Equals(object? obj)
@@ -141,13 +141,13 @@ namespace LoanShark.Domain
             {
                 return false;
             }
-            return obj is PhoneNumber phoneNumber &&
-                   _phoneNumber == phoneNumber._phoneNumber;
+            return obj is PhoneNumber phoneNumberr &&
+                   phoneNumber == phoneNumberr.phoneNumber;
         }
 
         public override int GetHashCode()
         {
-            return _phoneNumber.GetHashCode();
+            return phoneNumber.GetHashCode();
         }
     }
 

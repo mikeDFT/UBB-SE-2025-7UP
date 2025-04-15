@@ -1,28 +1,28 @@
-using LoanShark.ViewModel;
-using Microsoft.UI.Xaml;
-using LoanShark.Domain;
-using Microsoft.UI.Windowing;
-using WinRT.Interop;
-using Microsoft.UI;
 using System;
+using LoanShark.Domain;
+using LoanShark.ViewModel;
+using Microsoft.UI;
+using Microsoft.UI.Windowing;
+using Microsoft.UI.Xaml;
+using WinRT.Interop;
 
 namespace LoanShark
 {
     // this displays the details of a transaction, no biggie
     public sealed partial class TransactionDetailsView : Window
     {
-        private Transaction _transaction;
-        private AppWindow _appWindow;
+        private Transaction transaction;
+        private AppWindow appWindow;
 
         public TransactionDetailsView(string transactionDetails, Transaction transaction)
         {
             this.InitializeComponent();
             TransactionDetailsTextBlock.Text = transactionDetails;
-            _transaction = transaction;
+            this.transaction = transaction;
 
             // Get the AppWindow associated with this Window
             IntPtr hWnd = WindowNative.GetWindowHandle(this);
-            _appWindow = AppWindow.GetFromWindowId(Win32Interop.GetWindowIdFromWindow(hWnd));
+            appWindow = AppWindow.GetFromWindowId(Win32Interop.GetWindowIdFromWindow(hWnd));
 
             ResizeWindow(800, 600);
         }
@@ -37,9 +37,9 @@ namespace LoanShark
             string newDescription = DescriptionTextBox.Text;
             if (!string.IsNullOrEmpty(newDescription))
             {
-                _transaction.TransactionDescription = newDescription;
-                TransactionsHistoryViewModel.UpdateTransactionDescription(_transaction.TransactionId, newDescription);
-                TransactionDetailsTextBlock.Text = _transaction.tostringDetailed();
+                transaction.TransactionDescription = newDescription;
+                TransactionsHistoryViewModel.UpdateTransactionDescription(transaction.TransactionId, newDescription);
+                TransactionDetailsTextBlock.Text = transaction.TostringDetailed();
             }
 
             DescriptionTextBox.Text = string.Empty;
@@ -47,9 +47,9 @@ namespace LoanShark
 
         public void ResizeWindow(int width, int height)
         {
-            if (_appWindow != null)
+            if (appWindow != null)
             {
-                _appWindow.Resize(new Windows.Graphics.SizeInt32(width, height));
+                appWindow.Resize(new Windows.Graphics.SizeInt32(width, height));
             }
         }
     }

@@ -9,17 +9,17 @@ namespace LoanShark.View
 {
     public sealed partial class TransactionsView : Window
     {
-        private readonly TransactionsViewModel _viewModel;
-        private AppWindow _appWindow;
+        private readonly TransactionsViewModel viewModel;
+        private AppWindow appWindow;
 
         public TransactionsView()
         {
             this.InitializeComponent();
-            _viewModel = new TransactionsViewModel();
+            viewModel = new TransactionsViewModel();
 
-            MainGrid.DataContext = _viewModel;
+            MainGrid.DataContext = viewModel;
 
-            _viewModel.CloseAction = CloseWindow;
+            viewModel.CloseAction = CloseWindow;
 
             WindowManager.RegisterWindow(this);
 
@@ -30,11 +30,11 @@ namespace LoanShark.View
         {
             var windowHandle = WindowNative.GetWindowHandle(this);
             var windowId = Win32Interop.GetWindowIdFromWindow(windowHandle);
-            _appWindow = AppWindow.GetFromWindowId(windowId);
+            appWindow = AppWindow.GetFromWindowId(windowId);
 
-            if (_appWindow != null)
+            if (appWindow != null)
             {
-                _appWindow.Resize(new Windows.Graphics.SizeInt32(1000, 800));
+                appWindow.Resize(new Windows.Graphics.SizeInt32(1000, 800));
             }
         }
 

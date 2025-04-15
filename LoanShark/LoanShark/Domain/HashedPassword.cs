@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using BCrypt.Net;
 
 namespace LoanShark.Domain
 {
@@ -8,7 +7,6 @@ namespace LoanShark.Domain
     {
         private string hashedPassword;
         private string salt;
-
 
         // this constructor will be used when a user needs to be created
         // because it automatically generates a HashedPassword if the password meets the criterias specified bellow
@@ -20,7 +18,7 @@ namespace LoanShark.Domain
             {
                 throw new ArgumentNullException("Password cannot be null");
             }
-            if (isPasswordOk(password) == false) 
+            if (IsPasswordOk(password) == false)
             {
                 throw new ArgumentException("Password does not meet the criteria");
             }
@@ -34,7 +32,7 @@ namespace LoanShark.Domain
         {
             this.salt = salt;
             // if this is the password data retrieved from the database, no need for hashing
-            if (!needsHashing) 
+            if (!needsHashing)
             {
                 this.hashedPassword = someString;
             }
@@ -42,7 +40,7 @@ namespace LoanShark.Domain
             // and create a HashedPassword object with it
             else
             {
-                this.hashedPassword = BCrypt.Net.BCrypt.HashPassword(someString, this.salt);
+               this.hashedPassword = BCrypt.Net.BCrypt.HashPassword(someString, this.salt);
             }
         }
 
@@ -65,14 +63,14 @@ namespace LoanShark.Domain
         // 5. Contains at least one special character
         public static bool[] VerifyPasswordStrength(string password)
         {
-            bool lengthOk = false, uppserCaseOk = false, lowerCaseOk = false, numberOk = false, specialCharOk = false;
+            bool lengthOk = false, upperCaseOk = false, lowerCaseOk = false, numberOk = false, specialCharOk = false;
             if (password.Length >= 8)
             {
                 lengthOk = true;
             }
             if (password.Any(char.IsUpper))
             {
-                uppserCaseOk = true;
+                upperCaseOk = true;
             }
             if (password.Any(char.IsLower))
             {
@@ -82,15 +80,15 @@ namespace LoanShark.Domain
             {
                 numberOk = true;
             }
-            if (!password.All(char.IsLetterOrDigit)) // if the password doesn't contain only letters, it means that it must contains a special character
+            if (!password.All(char.IsLetterOrDigit))
             {
                 specialCharOk = true;
             }
 
-            return [lengthOk, uppserCaseOk, lowerCaseOk, numberOk, specialCharOk];
-        } 
+            return new[] { lengthOk, upperCaseOk, lowerCaseOk, numberOk, specialCharOk };
+        }
 
-        private bool isPasswordOk(string password)
+        private bool IsPasswordOk(string password)
         {
             bool[] verifications = VerifyPasswordStrength(password);
             return verifications.All(x => x == true);
@@ -103,11 +101,19 @@ namespace LoanShark.Domain
                 throw new ArgumentNullException("HashedPassword.Equals(): argument is null");
             }
 
-            if (obj.GetType()  != this.GetType()) return false;
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
 
             HashedPassword hashedObj = (HashedPassword)obj;
 
             return hashedObj.salt == this.salt && hashedObj.hashedPassword == this.hashedPassword;
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,14 +1,14 @@
+using System.Threading.Tasks;
+using System.Diagnostics;
 using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using LoanShark.ViewModel;
-using System.Diagnostics;
 using LoanShark.Helper;
-using System.Threading.Tasks;
 using Windows.UI.Notifications;
+
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace LoanShark.View
 {
     /// <summary>
@@ -16,28 +16,27 @@ namespace LoanShark.View
     /// </summary>
     public sealed partial class BankAccountUpdateView : Window
     {
-        private BankAccountUpdateViewModel? _viewModel;
+        private BankAccountUpdateViewModel? viewModel;
 
         // Initializes the view and makes the window size be 800*1400
         public BankAccountUpdateView()
         {
             try
             {
-                
                 this.InitializeComponent();
 
                 // Initialize the ViewModel after the component is initialized
-                _viewModel = new BankAccountUpdateViewModel();
+                viewModel = new BankAccountUpdateViewModel();
 
                 AppWindow.Resize(new Windows.Graphics.SizeInt32(800, 1400));
-                MainGrid.DataContext = _viewModel;
+                MainGrid.DataContext = viewModel;
 
-                _viewModel.OnUpdateSuccess = () => 
+                viewModel.OnUpdateSuccess = () =>
                 {
                     this.Close();
                 };
-                
-                _viewModel.OnClose = () => 
+
+                viewModel.OnClose = () =>
                 {
                     this.Close();
                 };
@@ -56,19 +55,19 @@ namespace LoanShark.View
         {
             try
             {
-                if (_viewModel == null)
+                if (viewModel == null)
                 {
                     await ShowDialog("Error", "ViewModel not initialized properly.", "OK");
                     return;
                 }
-                
-                string result = await _viewModel.UpdateBankAccount();
-                
+
+                string result = await viewModel.UpdateBankAccount();
+
                 if (result == "Success")
                 {
                     await ShowDialog("Success", "Bank account updated successfully.", "OK");
-                    WindowManager.shouldReloadBankAccounts = true;
-                    _viewModel.OnUpdateSuccess?.Invoke();
+                    WindowManager.ShouldReloadBankAccounts = true;
+                    viewModel.OnUpdateSuccess?.Invoke();
                 }
                 else
                 {
@@ -85,7 +84,7 @@ namespace LoanShark.View
         {
             try
             {
-                _viewModel.DeleteBankAccount();
+                viewModel.DeleteBankAccount();
             }
             catch (Exception ex)
             {
@@ -117,18 +116,18 @@ namespace LoanShark.View
                 Debug.WriteLine($"Error showing dialog: {ex.Message}");
             }
         }
-        
         private void ShowErrorDialog(string title, string message)
         {
             // Create a separate method to show error dialogs outside the normal UI thread
-            DispatcherQueue.TryEnqueue(() => {
+            DispatcherQueue.TryEnqueue(() =>
+            {
                 var errorDialog = new ContentDialog
                 {
                     Title = title,
                     Content = message,
                     CloseButtonText = "OK"
                 };
-                
+
                 if (Content != null && Content.XamlRoot != null)
                 {
                     errorDialog.XamlRoot = Content.XamlRoot;

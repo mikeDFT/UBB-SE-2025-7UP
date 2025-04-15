@@ -1,13 +1,12 @@
-﻿using LoanShark.Domain;
-using LoanShark.Service;
-using Microsoft.UI.Xaml;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Input;
 using System.Diagnostics;
-
+using System.Windows.Input;
+using LoanShark.Domain;
+using LoanShark.Service;
+using Microsoft.UI.Xaml;
 
 namespace LoanShark.ViewModel
 {
@@ -28,7 +27,7 @@ namespace LoanShark.ViewModel
         private string convertedLoanAmount = "Converted Amount: N/A";
 
         // Service for data operations and business logic
-        private readonly LoanService _loanService;
+        private readonly LoanService loanService;
 
         public ObservableCollection<Loan> Loans { get; set; }
         public ObservableCollection<string> BankAccounts { get; set; }
@@ -73,10 +72,10 @@ namespace LoanShark.ViewModel
                 {
                     selectedBankAccount = value;
                     OnPropertyChanged(nameof(SelectedBankAccount));
-                    
+
                     // For Take Loan page
                     UpdateTakeLoanBoxDetails();
-                    
+
                     // For Pay Loan page
                     UpdatePayLoanBoxDetails();
                 }
@@ -287,8 +286,8 @@ namespace LoanShark.ViewModel
         public LoanViewModel()
         {
             // Initialize the loan service
-            _loanService = new LoanService();
-            
+            loanService = new LoanService();
+
             // Initialize collections
             Loans = new ObservableCollection<Loan>();
             BankAccounts = new ObservableCollection<string>();
@@ -332,21 +331,22 @@ namespace LoanShark.ViewModel
                 }
                 else
                 {
-                    decimal taxPercentageValue = _loanService.CalculateTaxPercentage(SelectedMonths);
-                    decimal amountToPayValue = _loanService.CalculateAmountToPay(Amount, taxPercentageValue);
+                    decimal taxPercentageValue = loanService.CalculateTaxPercentage(SelectedMonths);
+                    decimal amountToPayValue = loanService.CalculateAmountToPay(Amount, taxPercentageValue);
                     TaxPercentage = $"Tax Percentage: {taxPercentageValue}%";
                     AmountToPay = $"Amount to Pay: {amountToPayValue:F2}";
                 }
             }
-            
+
             try
             {
                 // Use service to calculate tax percentage and amount to pay
-                decimal taxPercentageValue = _loanService.CalculateTaxPercentage(SelectedMonths);
-                decimal amountToPayValue = _loanService.CalculateAmountToPay(Amount, taxPercentageValue);
-                
+                decimal taxPercentageValue = loanService.CalculateTaxPercentage(SelectedMonths);
+                decimal amountToPayValue = loanService.CalculateAmountToPay(Amount, taxPercentageValue);
+
                 TaxPercentage = $"Tax Percentage: {taxPercentageValue}%";
-                AmountToPay = $"Amount to Pay: {amountToPayValue:F2}";}
+                AmountToPay = $"Amount to Pay: {amountToPayValue:F2}";
+            }
             catch (Exception)
             {
                 TaxPercentage = "Tax Percentage: Error";
@@ -357,11 +357,11 @@ namespace LoanShark.ViewModel
         private async void TakeLoan()
         {
             Debug.WriteLine("TakeLoan method called");
-            
+
             try
             {
                 // Validate inputs through the service
-                string errorMessage = _loanService.ValidateLoanRequest(Amount, SelectedMonths);
+                string errorMessage = loanService.ValidateLoanRequest(Amount, SelectedMonths);
                 if (errorMessage != "success")
                 {
                     TakeErrorMessage = errorMessage;
@@ -371,16 +371,16 @@ namespace LoanShark.ViewModel
 
                 // Get currency from selected bank account
                 string currency = ExtractCurrencyFromBankAccount(SelectedBankAccount);
-                
+
                 // Create new loan using the service
-                var newLoan = await _loanService.TakeLoanAsync(int.Parse(UserSession.Instance.GetUserData("id_user")), Amount, currency, ExtractIbanFromBankAccount(SelectedBankAccount), SelectedMonths);
+                var newLoan = await loanService.TakeLoanAsync(int.Parse(UserSession.Instance.GetUserData("id_user")), Amount, currency, ExtractIbanFromBankAccount(SelectedBankAccount), SelectedMonths);
 
                 // Refreshing the data from the service
                 LoadData();
 
                 // Clear input fields
                 ClearTakeLoanFields();
-                
+
                 // Navigate back to main page
                 CurrentPage = "MainLoansPage";
             }
@@ -394,7 +394,7 @@ namespace LoanShark.ViewModel
         private string ExtractCurrencyFromBankAccount(string bankAccount)
         {
             Debug.WriteLine($"Extracting currency from: {bankAccount}");
-            
+
             // Format: "IBAN1 - EUR - 1000"
             string[] parts = bankAccount.Split('-');
             if (parts.Length >= 2)
@@ -403,7 +403,7 @@ namespace LoanShark.ViewModel
                 Debug.WriteLine($"Extracted currency: {currency}");
                 return currency;
             }
-            
+
             Debug.WriteLine("Could not extract currency, using default EUR");
             return "EUR"; // Default currency
         }
@@ -413,7 +413,7 @@ namespace LoanShark.ViewModel
             SelectedBankAccount = null;
             Amount = 0;
             selectedMonths = 0;
-            
+
             TakeErrorMessage = string.Empty;
             TaxPercentage = "Tax Percentage: N/A";
             AmountToPay = "Amount to Pay: N/A";
@@ -433,7 +433,7 @@ namespace LoanShark.ViewModel
         private void UpdateSelectedLoan()
         {
             Debug.WriteLine($"UpdateSelectedLoan called with SelectedLoanDisplay: {SelectedLoanDisplay}");
-            
+
             if (string.IsNullOrEmpty(SelectedLoanDisplay))
             {
                 selectedLoan = null;
@@ -455,7 +455,7 @@ namespace LoanShark.ViewModel
                     break;
                 }
             }
-            
+
             UpdatePayLoanBoxDetails();
         }
 
@@ -463,7 +463,7 @@ namespace LoanShark.ViewModel
         private async void UpdatePayLoanBoxDetails()
         {
             Debug.WriteLine("UpdatePayLoanBoxDetails called");
-            
+
             if (string.IsNullOrEmpty(SelectedBankAccount))
             {
                 SelectedAccountBalance = "Account Balance: N/A";
@@ -480,18 +480,19 @@ namespace LoanShark.ViewModel
                     string accountCurrency = parts[1].Trim();
                     decimal accountBalance = decimal.Parse(parts[2].Trim());
                     string bankAccountId = parts[0].Trim();
-                    
+
                     // Set account balance display
                     SelectedAccountBalance = $"Account Balance: {accountBalance:F2} {accountCurrency}";
 
                     // If there is no loan selected
                     if (string.IsNullOrEmpty(SelectedLoanDisplay))
+                    {
                         return;
-
+                    }
                     // Extract loan details
                     decimal loanAmount = selectedLoan.AmountToPay;
                     string loanCurrency = selectedLoan.Currency;
-                    
+
                     // Check if currencies match
                     if (loanCurrency == accountCurrency)
                     {
@@ -501,7 +502,7 @@ namespace LoanShark.ViewModel
                     else
                     {
                         // Convert loan amount to account currency using service
-                        decimal convertedAmount = await _loanService.ConvertCurrency(loanAmount, loanCurrency, accountCurrency);
+                        decimal convertedAmount = await loanService.ConvertCurrency(loanAmount, loanCurrency, accountCurrency);
                         ConvertedLoanAmount = $"Payment Required: {convertedAmount:F2} {accountCurrency} (converted from {loanAmount:F2} {loanCurrency})";
                     }
                 }
@@ -514,35 +515,34 @@ namespace LoanShark.ViewModel
             }
         }
 
-        private bool arePayLoanDetailsValid()
+        private bool ArePayLoanDetailsValid()
         {
             Debug.WriteLine($"Validating pay loan details: BankAccount={SelectedBankAccount}, Loan={selectedLoan?.LoanID}");
-            
+
             // Check if bank account is selected
             if (string.IsNullOrEmpty(SelectedBankAccount))
             {
                 Debug.WriteLine("Validation failed: No bank account selected");
                 return false;
             }
-            
+
             // Check if loan is selected
             if (selectedLoan == null)
             {
                 Debug.WriteLine("Validation failed: No loan selected");
                 return false;
             }
-            
+
             Debug.WriteLine("Validation passed");
             return true;
         }
 
-
         private async void PayLoan()
         {
             Debug.WriteLine("PayLoan method called");
-            
+
             // Validate inputs
-            if (!arePayLoanDetailsValid())
+            if (!ArePayLoanDetailsValid())
             {
                 PayErrorMessage = "Invalid data provided";
                 return;
@@ -552,22 +552,22 @@ namespace LoanShark.ViewModel
             {
                 // Get bank account ID from selected bank account
                 string bankAccountId = ExtractIbanFromBankAccount(SelectedBankAccount);
-                
+
                 // Pay the loan using the service
-                string errorMessage = await _loanService.PayLoanAsync(int.Parse(UserSession.Instance.GetUserData("id_user")), selectedLoan.LoanID, bankAccountId);
-                
+                string errorMessage = await loanService.PayLoanAsync(int.Parse(UserSession.Instance.GetUserData("id_user")), selectedLoan.LoanID, bankAccountId);
+
                 if (errorMessage != "success")
                 {
-                   PayErrorMessage = errorMessage;
-                   return;
+                    PayErrorMessage = errorMessage;
+                    return;
                 }
-                
+
                 // Refreshing the data from the service
                 LoadData();
 
                 // Clear fields
                 ClearPayLoanFields();
-                
+
                 // Navigate back to main page
                 CurrentPage = "MainLoansPage";
             }
@@ -612,16 +612,16 @@ namespace LoanShark.ViewModel
                 BankAccounts.Clear();
                 UnpaidLoans.Clear();
                 UnpaidLoansDisplay.Clear();
-                
+
                 // Get loans from service
-                var userLoans = await _loanService.GetUserLoans(int.Parse(UserSession.Instance.GetUserData("id_user")));
+                var userLoans = await loanService.GetUserLoans(int.Parse(UserSession.Instance.GetUserData("id_user")));
                 foreach (var loan in userLoans)
                 {
                     Loans.Add(loan);
                 }
 
                 // Get unpaid loans for display
-                List<Loan> unpaidLoans = await _loanService.GetUnpaidUserLoans(int.Parse(UserSession.Instance.GetUserData("id_user")));
+                List<Loan> unpaidLoans = await loanService.GetUnpaidUserLoans(int.Parse(UserSession.Instance.GetUserData("id_user")));
                 unpaidLoans.Sort((loan1, loan2) => loan1.DateTaken.CompareTo(loan2.DateTaken));
 
                 foreach (var loan in unpaidLoans)
@@ -630,14 +630,14 @@ namespace LoanShark.ViewModel
                     string display = $"{loan.Currency} - {loan.AmountToPay:F2} - {loan.DateDeadline:d}";
                     UnpaidLoansDisplay.Add(display);
                 }
-                
+
                 // Get bank accounts from service
-                var formattedAccounts = await _loanService.GetFormattedBankAccounts(int.Parse(UserSession.Instance.GetUserData("id_user")));
+                var formattedAccounts = await loanService.GetFormattedBankAccounts(int.Parse(UserSession.Instance.GetUserData("id_user")));
                 foreach (var account in formattedAccounts)
                 {
                     BankAccounts.Add(account);
                 }
-                
+
                 Debug.WriteLine($"Loaded data: {Loans.Count} loans, {UnpaidLoans.Count} unpaid loans, {BankAccounts.Count} bank accounts");
             }
             catch (Exception ex)

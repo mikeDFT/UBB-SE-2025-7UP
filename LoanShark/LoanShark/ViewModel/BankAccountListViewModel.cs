@@ -1,19 +1,19 @@
-﻿using LoanShark.Domain;
-using LoanShark.Service;
-using LoanShark.View;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using LoanShark.Domain;
+using LoanShark.Service;
+using LoanShark.View;
 
 namespace LoanShark.ViewModel
 {
     /// <summary>
     /// ViewModel for displaying and managing a list of bank accounts
     /// </summary>
-    class BankAccountListViewModel : INotifyPropertyChanged
+    public class BankAccountListViewModel : INotifyPropertyChanged
     {
         /// <summary>
         /// Action to be invoked when the view should be closed
@@ -33,19 +33,19 @@ namespace LoanShark.ViewModel
         public ICommand SelectCommand { get; set; }
 
         private int userID;
-        private BankAccount? _selectedBankAccount;
+        private BankAccount? selectedBankAccount;
 
         /// <summary>
         /// The currently selected bank account
         /// </summary>
         public BankAccount SelectedBankAccount
         {
-            get => _selectedBankAccount;
+            get => selectedBankAccount;
             set
             {
-                if (_selectedBankAccount != value)
+                if (selectedBankAccount != value)
                 {
-                    _selectedBankAccount = value;
+                    selectedBankAccount = value;
                     OnPropertyChanged(nameof(SelectedBankAccount));
                 }
             }
@@ -96,7 +96,7 @@ namespace LoanShark.ViewModel
         /// </summary>
         public void ViewDetails()
         {
-            Debug.WriteLine(SelectedBankAccount.iban);
+            Debug.WriteLine(SelectedBankAccount.Iban);
             if (SelectedBankAccount != null)
             {
                 var window = new BankAccountDetailsView();

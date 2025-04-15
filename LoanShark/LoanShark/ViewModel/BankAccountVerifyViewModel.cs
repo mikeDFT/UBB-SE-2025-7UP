@@ -1,9 +1,9 @@
-﻿using LoanShark.Helper;
-using LoanShark.Service;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Input;
+using LoanShark.Helper;
+using LoanShark.Service;
 using LoanShark.Domain;
 
 namespace LoanShark.ViewModel
@@ -11,7 +11,7 @@ namespace LoanShark.ViewModel
     /// <summary>
     /// ViewModel for verifying user credentials before deleting a bank account
     /// </summary>
-    class BankAccountVerifyViewModel : INotifyPropertyChanged
+    public class BankAccountVerifyViewModel : INotifyPropertyChanged
     {
         public Action OnSuccess { get; set; }
         public Action OnFailure { get; set; }
@@ -32,9 +32,9 @@ namespace LoanShark.ViewModel
         public Action? OnClose { get; set; }
 
         private BankAccountService service;
-        private string _iban;
-        private string? _passwordInput;
-        private string _email;
+        private string iban;
+        private string? passwordInput;
+        private string email;
 
         /// <summary>
         /// The password entered by the user for verification
@@ -43,11 +43,11 @@ namespace LoanShark.ViewModel
         {
             get
             {
-                return _passwordInput ?? string.Empty;
+                return passwordInput ?? string.Empty;
             }
             set
             {
-                _passwordInput = value;
+                passwordInput = value;
                 OnPropertyChanged(nameof(Password));
             }
         }
@@ -58,8 +58,8 @@ namespace LoanShark.ViewModel
         public BankAccountVerifyViewModel()
         {
             service = new BankAccountService();
-            _email = UserSession.Instance.GetUserData("email") ?? string.Empty;
-            _iban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
+            email = UserSession.Instance.GetUserData("email") ?? string.Empty;
+            iban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
             BackCommand = new RelayCommand(OnBackButtonClicked);
             ConfirmCommand = new RelayCommand(OnConfirmButtonClicked);
         }
@@ -71,7 +71,7 @@ namespace LoanShark.ViewModel
         public void OnBackButtonClicked()
         {
             Debug.WriteLine("Back button");
-            WindowManager.shouldReloadBankAccounts = false;
+            WindowManager.ShouldReloadBankAccounts = false;
             OnClose?.Invoke();
         }
 
@@ -82,11 +82,11 @@ namespace LoanShark.ViewModel
         public async void OnConfirmButtonClicked()
         {
             Debug.WriteLine("Confirm button");
-            if (Password != null && await service.verifyUserCredentials(_email, Password))
+            if (Password != null && await service.VerifyUserCredentials(email, Password))
             {
-                if (await service.RemoveBankAccount(_iban))
+                if (await service.RemoveBankAccount(iban))
                 {
-                    WindowManager.shouldReloadBankAccounts = true;
+                    WindowManager.ShouldReloadBankAccounts = true;
                     OnSuccess?.Invoke();
                 }
             }

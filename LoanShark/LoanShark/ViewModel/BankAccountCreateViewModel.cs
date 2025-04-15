@@ -1,12 +1,12 @@
-﻿using LoanShark.Helper;
-using LoanShark.Service;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
+using LoanShark.Helper;
+using LoanShark.Service;
 using LoanShark.Domain;
 
 namespace LoanShark.ViewModel
@@ -14,7 +14,7 @@ namespace LoanShark.ViewModel
     /// <summary>
     /// ViewModel for creating a new bank account
     /// </summary>
-    class BankAccountCreateViewModel : INotifyPropertyChanged
+    public class BankAccountCreateViewModel : INotifyPropertyChanged
     {
         /// <summary>
         /// Action to be invoked when the view should be closed
@@ -44,38 +44,44 @@ namespace LoanShark.ViewModel
         /// <summary>
         /// ID of the user who will own the new bank account
         /// </summary>
-        public int userID;
+        public int UserID;
 
-        private CurrencyItem? _selectedItem;
+        private CurrencyItem? selectedItem;
 
         /// <summary>
         /// The currently selected currency for the new bank account
         /// </summary>
         public CurrencyItem? SelectedItem
         {
-            get => _selectedItem;
+            get => selectedItem;
             set
             {
-                if (_selectedItem != value)
+                if (selectedItem != value)
                 {
-                    if (_selectedItem != null) _selectedItem.IsChecked = false;
-                    _selectedItem = value;
-                    if (_selectedItem != null) _selectedItem.IsChecked = true;
+                    if (selectedItem != null)
+                    {
+                        selectedItem.IsChecked = false;
+                    }
+                    selectedItem = value;
+                    if (selectedItem != null)
+                    {
+                        selectedItem.IsChecked = true;
+                    }
                     OnPropertyChanged(nameof(SelectedItem));
                 }
             }
         }
 
-        private string? _customName;
+        private string? customName;
         public string? CustomName
         {
             get
             {
-                return _customName ?? string.Empty;
+                return customName ?? string.Empty;
             }
             set
             {
-                _customName = value;
+                customName = value;
                 OnPropertyChanged(nameof(CustomName));
             }
         }
@@ -87,7 +93,7 @@ namespace LoanShark.ViewModel
         /// </summary>
         public BankAccountCreateViewModel()
         {
-            this.userID = int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0");
+            this.UserID = int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0");
             service = new BankAccountService();
             LoadData();
             ConfirmCommand = new RelayCommand(OnConfirmButtonClicked);
@@ -100,12 +106,11 @@ namespace LoanShark.ViewModel
         /// </summary>
         public async void OnConfirmButtonClicked()
         {
-            
             Debug.WriteLine($"Pressed create confirm bank account: {SelectedItem?.Name}");
             if (SelectedItem != null)
             {
-                await service.CreateBankAccount(userID, CustomName ?? "", SelectedItem.Name);
-                WindowManager.shouldReloadBankAccounts = true;
+                await service.CreateBankAccount(UserID, CustomName ?? string.Empty, SelectedItem.Name);
+                WindowManager.ShouldReloadBankAccounts = true;
                 OnSuccess?.Invoke();
             }
             else
@@ -121,7 +126,7 @@ namespace LoanShark.ViewModel
         public void OnCancelButtonClicked()
         {
             Debug.WriteLine("Pressed cancel create bank account");
-            WindowManager.shouldReloadBankAccounts = false;
+            WindowManager.ShouldReloadBankAccounts = false;
             OnClose?.Invoke();
         }
 
@@ -164,21 +169,21 @@ namespace LoanShark.ViewModel
         /// <summary>
         /// The name of the currency
         /// </summary>
-        public string Name { get; set; } = "";
+        public string Name { get; set; } = string.Empty;
 
-        private bool _isChecked;
+        private bool isChecked;
 
         /// <summary>
         /// Indicates whether this currency is currently selected
         /// </summary>
         public bool IsChecked
         {
-            get => _isChecked;
+            get => isChecked;
             set
             {
-                if (_isChecked != value)
+                if (isChecked != value)
                 {
-                    _isChecked = value;
+                    isChecked = value;
                     OnPropertyChanged(nameof(IsChecked));
                 }
             }

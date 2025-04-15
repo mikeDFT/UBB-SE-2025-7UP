@@ -1,27 +1,27 @@
-﻿using LoanShark.Domain;
-using LoanShark.Repository;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using LoanShark.Domain;
+using LoanShark.Repository;
 
 namespace LoanShark.Service
 {
     public class LoanService
     {
         // Simulated database for demonstration purposes
-        private readonly ILoanRepository _loanRepository;
+        private readonly ILoanRepository loanRepository;
 
         public LoanService()
         {
-            _loanRepository = new LoanRepository();
+            loanRepository = new LoanRepository();
         }
 
         // Get all loans for a specific user
         public async Task<List<Loan>> GetUserLoans(int userId)
         {
-            return await _loanRepository.GetLoansByUserId(userId);
+            return await loanRepository.GetLoansByUserId(userId);
         }
 
         // Get only unpaid loans for a user
@@ -43,7 +43,8 @@ namespace LoanShark.Service
             // Calculate tax percentage
             decimal taxPercentage = CalculateTaxPercentage(months);
 
-            try {
+            try
+            {
                 await TransactionsService.TakeLoanTransaction(accountIBAN, amount);
             }
             catch (Exception ex)
@@ -62,12 +63,11 @@ namespace LoanShark.Service
                 null,
                 taxPercentage,
                 months,
-                "unpaid"
-            );
+                "unpaid");
 
             // returns the loan with its id from the db, initially it was -1, check above
-            loan = await _loanRepository.CreateLoan(loan);
-            
+            loan = await loanRepository.CreateLoan(loan);
+
             Debug.WriteLine($"Created loan: ID={loan?.LoanID}, Amount={amount}, Currency={currency}, Months={months}");
             return loan;
         }
@@ -84,27 +84,28 @@ namespace LoanShark.Service
             }
 
             // Get the bank account
-            BankAccount? bankAccount = await _loanRepository.GetBankAccountByIBAN(accountIBAN);
+            BankAccount? bankAccount = await loanRepository.GetBankAccountByIBAN(accountIBAN);
             if (bankAccount == null)
             {
                 Debug.WriteLine($"Cannot pay loan: Bank account not found. IBAN={accountIBAN}");
                 return "Bank account not found";
             }
-            
+
             // Check if there are sufficient funds
             if (!await CheckSufficientFunds(userID, accountIBAN, loan.AmountToPay, loan.Currency))
             {
                 Debug.WriteLine($"Cannot pay loan: Insufficient funds in account {accountIBAN}");
                 return "Insufficient funds";
             }
-            
+
             // Deduct from bank account
-            decimal deductAmount = loan.Currency == bankAccount.currency
+            decimal deductAmount = loan.Currency == bankAccount.Currency
                 ? loan.AmountToPay
-                : await ConvertCurrency(loan.AmountToPay, loan.Currency, bankAccount.currency);
-                
-            try {
-                await UpdateBankAccount(userID, accountIBAN, deductAmount, bankAccount.currency);
+                : await ConvertCurrency(loan.AmountToPay, loan.Currency, bankAccount.Currency);
+
+            try
+            {
+                await UpdateBankAccount(userID, accountIBAN, deductAmount, bankAccount.Currency);
             }
             catch (Exception ex)
             {
@@ -112,7 +113,8 @@ namespace LoanShark.Service
                 return "Error updating bank account balance";
             }
 
-            try {
+            try
+            {
                 await TransactionsService.PayLoanTransaction(accountIBAN, deductAmount);
             }
             catch (Exception ex)
@@ -120,16 +122,16 @@ namespace LoanShark.Service
                 Debug.WriteLine($"Error paying loan: {ex.Message}");
                 return "Error paying loan";
             }
-            
+
             // Mark loan as paid
             loan.MarkAsPaid();
-            bool success = await _loanRepository.UpdateLoan(loan);
-            if(!success)
+            bool success = await loanRepository.UpdateLoan(loan);
+            if (!success)
             {
                 Debug.WriteLine("Update loan failed");
                 return "Update loan failed";
             }
-            
+
             Debug.WriteLine($"Loan paid: ID={loanId}, Amount={loan.AmountToPay}, Currency={loan.Currency}");
             return "success";
         }
@@ -144,7 +146,7 @@ namespace LoanShark.Service
         // Calculate the total amount to be repaid
         public decimal CalculateAmountToPay(decimal amount, decimal taxPercentage)
         {
-            return amount * (1 + taxPercentage / 100);
+            return amount * (1 + (taxPercentage / 100));
         }
 
         // Handle currency conversion
@@ -155,10 +157,12 @@ namespace LoanShark.Service
                 return amount;
             }
 
-            List<CurrencyExchange> currencyRates = await _loanRepository.GetAllCurrencyExchanges();
+            List<CurrencyExchange> currencyRates = await loanRepository.GetAllCurrencyExchanges();
             CurrencyExchange? nullableCurrencyRate = GetCurrencyRate(currencyRates, fromCurrency, toCurrency);
-            if (nullableCurrencyRate == null) 
+            if (nullableCurrencyRate == null)
+            {
                 throw new ArgumentException("Can't find currencies: " + fromCurrency + " to " + toCurrency);
+            }
 
             CurrencyExchange currencyRate = nullableCurrencyRate;
 
@@ -169,14 +173,15 @@ namespace LoanShark.Service
         }
 
         // Helps find the needed currency rate
-        public CurrencyExchange? GetCurrencyRate(List<CurrencyExchange> CurrencyRates, string fromCurrency, string toCurrency)
+        public CurrencyExchange? GetCurrencyRate(List<CurrencyExchange> currencyRates, string fromCurrency, string toCurrency)
         {
-            foreach (CurrencyExchange rate in CurrencyRates)
+            foreach (CurrencyExchange rate in currencyRates)
             {
                 if (rate.FromCurrency == fromCurrency && rate.ToCurrency == toCurrency)
+                {
                     return rate;
+                }
             }
-
             return null;
         }
 
@@ -189,7 +194,7 @@ namespace LoanShark.Service
                 Debug.WriteLine($"Invalid loan amount: {amount}");
                 return "Invalid loan amount";
             }
-            
+
             // Months must be one of the allowed values
             var allowedMonths = new[] { 6, 12, 24, 36 };
             if (!allowedMonths.Contains(months))
@@ -197,47 +202,47 @@ namespace LoanShark.Service
                 Debug.WriteLine($"Invalid loan duration: {months}");
                 return "Invalid loan duration";
             }
-            
+
             return "success";
         }
 
         // Check if a bank account has sufficient funds
         public async Task<bool> CheckSufficientFunds(int userID, string accountIBAN, decimal amount, string currency)
         {
-            var _bankAccounts = await GetUserBankAccounts(userID);
-            BankAccount? bankAccount = _bankAccounts.Find((bankAcc) => bankAcc.iban == accountIBAN);
+            var bankAccounts = await GetUserBankAccounts(userID);
+            BankAccount? bankAccount = bankAccounts.Find((bankAcc) => bankAcc.Iban == accountIBAN);
 
             if (bankAccount == null)
             {
                 return false;
             }
-            
+
             // If currencies match, simple comparison
-            if (bankAccount.currency == currency)
+            if (bankAccount.Currency == currency)
             {
-                return bankAccount.balance >= amount;
+                return bankAccount.Balance >= amount;
             }
-            
+
             // Convert amount to account currency
-            decimal convertedAmount = await ConvertCurrency(amount, currency, bankAccount.currency);
-            return bankAccount.balance >= convertedAmount;
+            decimal convertedAmount = await ConvertCurrency(amount, currency, bankAccount.Currency);
+            return bankAccount.Balance >= convertedAmount;
         }
 
         // Update bank account balance
         public async Task UpdateBankAccount(int userID, string accountIBAN, decimal amount, string currency)
         {
-            BankAccount? bankAccount = await _loanRepository.GetBankAccountByIBAN(accountIBAN);
+            BankAccount? bankAccount = await loanRepository.GetBankAccountByIBAN(accountIBAN);
             if (bankAccount == null)
             {
                 throw new ArgumentException($"Bank account not found: {accountIBAN}");
             }
-            
-            if (bankAccount.currency != currency)
+
+            if (bankAccount.Currency != currency)
             {
                 throw new ArgumentException("Currency mismatch");
             }
 
-            if (! await _loanRepository.UpdateBankAccountBalance(accountIBAN, bankAccount.balance - amount))
+            if (!await loanRepository.UpdateBankAccountBalance(accountIBAN, bankAccount.Balance - amount))
             {
                 throw new Exception("Failed to update bank account balance");
             }
@@ -246,20 +251,20 @@ namespace LoanShark.Service
         // Get loan details by ID
         public async Task<Loan?> GetLoanById(int loanId)
         {
-            return (await _loanRepository.GetAllLoans()).FirstOrDefault(loan => loan.LoanID == loanId);
+            return (await loanRepository.GetAllLoans()).FirstOrDefault(loan => loan.LoanID == loanId);
         }
 
         // Get all bank accounts for a user
         public async Task<List<BankAccount>> GetUserBankAccounts(int userId)
         {
-            return await _loanRepository.GetBankAccountsByUserId(userId);
+            return await loanRepository.GetBankAccountsByUserId(userId);
         }
-        
+
         // Get formatted bank account strings for display
         public async Task<List<string>> GetFormattedBankAccounts(int userId)
         {
             return (await GetUserBankAccounts(userId))
-                .Select(account => $"{account.iban} - {account.currency} - {account.balance}")
+                .Select(account => $"{account.Iban} - {account.Currency} - {account.Balance}")
                 .ToList();
         }
     }

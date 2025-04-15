@@ -1,18 +1,22 @@
-using LoanShark.Domain;
-using LoanShark.Repository;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using LoanShark.Domain;
+using LoanShark.Repository;
 
 namespace LoanShark.Service
 {
     public class UserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository userRepository;
 
         public UserService()
         {
-            _userRepository = new UserRepository();
+            userRepository = new UserRepository();
+        }
+        public UserService(IUserRepository userRepository)
+        {
+            this.userRepository = userRepository;
         }
 
         // if cnp is valid and not used by another user returns null
@@ -27,7 +31,7 @@ namespace LoanShark.Service
             {
                 return "CNP must contain only digits";
             }
-            User? user = await _userRepository.GetUserByCnp(cnp);
+            User? user = await userRepository.GetUserByCnp(cnp);
             if (user != null && user.UserID != int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0"))
             {
                 return "CNP already in use";
@@ -43,7 +47,7 @@ namespace LoanShark.Service
             {
                 return "Invalid email address";
             }
-            User? user = await _userRepository.GetUserByEmail(email);
+            User? user = await userRepository.GetUserByEmail(email);
             if (user != null && user.UserID != int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0"))
             {
                 return "Email already in use";
@@ -67,7 +71,7 @@ namespace LoanShark.Service
             {
                 return "Phone number must start with 07";
             }
-            User? user = await _userRepository.GetUserByPhoneNumber(phoneNumber);
+            User? user = await userRepository.GetUserByPhoneNumber(phoneNumber);
             if (user != null && user.UserID != int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0"))
             {
                 return "Phone number already in use";
@@ -85,16 +89,15 @@ namespace LoanShark.Service
                 lastName,
                 new Email(email),
                 new PhoneNumber(phoneNumber),
-                new HashedPassword(password)
-            );
-            await _userRepository.CreateUser(user);
+                new HashedPassword(password));
+            await userRepository.CreateUser(user);
         }
 
         // on success returns the given user with the given userId
         // on failure returns null
         public async Task<User?> GetUserInformation()
         {
-            return await _userRepository.GetUserById(int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0"));
+            return await userRepository.GetUserById(int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0"));
         }
 
         // updates the information of the user
@@ -102,7 +105,7 @@ namespace LoanShark.Service
         // on failure returns false
         public async Task<bool> UpdateUser(User user)
         {
-            return await _userRepository.UpdateUser(user);
+            return await userRepository.UpdateUser(user);
         }
 
         public async Task<string> DeleteUser(string password)
@@ -121,7 +124,7 @@ namespace LoanShark.Service
 
             if (userInputedPassword.Equals(dataBasePassword))
             {
-                await _userRepository.DeleteUser();
+                await userRepository.DeleteUser();
 
                 // after the user is deleted from the database, he should be logged out of the session
                 return "Succes";
@@ -135,7 +138,7 @@ namespace LoanShark.Service
 
         public async Task<string[]> GetUserPasswordHashSalt()
         {
-            return await _userRepository.GetUserPasswordHashSalt();
+            return await userRepository.GetUserPasswordHashSalt();
         }
     }
 }

@@ -9,21 +9,21 @@ namespace LoanShark.View
 {
     public sealed partial class CurrencyExchangeTableView : Window
     {
-        private readonly CurrencyExchangeTableViewModel _viewModel;
-        private AppWindow _appWindow;
+        private readonly CurrencyExchangeTableViewModel viewModel;
+        private AppWindow appWindow;
 
         public CurrencyExchangeTableView()
         {
             this.InitializeComponent();
-            _viewModel = new CurrencyExchangeTableViewModel();
+            viewModel = new CurrencyExchangeTableViewModel();
 
-            MainGrid.DataContext = _viewModel; 
+            MainGrid.DataContext = viewModel;
 
             WindowManager.RegisterWindow(this);
 
-            _viewModel.CloseAction = CloseWindow; 
+            viewModel.CloseAction = CloseWindow;
 
-            InitializeWindow(1000,800);
+            InitializeWindow(1000, 800);
         }
 
         private void CloseWindow()
@@ -35,8 +35,8 @@ namespace LoanShark.View
         {
             var windowHandle = WindowNative.GetWindowHandle(this);
             var windowId = Win32Interop.GetWindowIdFromWindow(windowHandle);
-            _appWindow = AppWindow.GetFromWindowId(windowId);
-            _appWindow.Resize(new Windows.Graphics.SizeInt32(width, height));
+            appWindow = AppWindow.GetFromWindowId(windowId);
+            appWindow.Resize(new Windows.Graphics.SizeInt32(width, height));
         }
     }
 }

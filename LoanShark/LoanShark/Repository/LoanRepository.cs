@@ -1,17 +1,16 @@
-﻿using LoanShark.Data;
-using LoanShark.Domain;
-using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-
+using LoanShark.Data;
+using LoanShark.Domain;
+using Microsoft.Data.SqlClient;
 namespace LoanShark.Repository
 {
     public interface ILoanRepository
-    {   // here this is like a list of functions
+    { // here this is like a list of functions
         Task<Loan?> CreateLoan(Loan loan);
         Task<List<Loan>> GetAllLoans();
         Task<List<Loan>> GetLoansByUserId(int userId);
@@ -26,7 +25,9 @@ namespace LoanShark.Repository
 
     public class LoanRepository : ILoanRepository
     {
-        public LoanRepository() {}
+        public LoanRepository()
+        {
+        }
 
         public async Task<Loan?> CreateLoan(Loan loan)
         {
@@ -41,7 +42,7 @@ namespace LoanShark.Repository
                     new SqlParameter("@tax_percentage", loan.TaxPercentage),
                     new SqlParameter("@number_months", loan.NumberMonths),
                     new SqlParameter("@loan_state", "unpaid"), // New loans are always unpaid
-                    
+
                     // Direction of Data Flow: By setting Direction = ParameterDirection.Output,
                     // you're telling ADO.NET that this parameter isn't for sending data to the database,
                     // but for receiving data back from it.
@@ -50,7 +51,7 @@ namespace LoanShark.Repository
                 };
 
                 await DataLink.Instance.ExecuteNonQuery("CreateLoan", parameters);
-                
+
                 // Get the ID of the newly created loan
                 int newLoanId = (int)parameters.First(p => p.ParameterName == "@id_loan").Value;
                 loan.LoanID = newLoanId;
@@ -65,7 +66,6 @@ namespace LoanShark.Repository
                 return null;
             }
         }
-
 
         // LOAN FUNCTIONS
         public async Task<List<Loan>> GetAllLoans()
@@ -111,10 +111,12 @@ namespace LoanShark.Repository
                 };
 
                 DataTable dataTable = await DataLink.Instance.ExecuteReader("GetLoanById", parameters);
-                
+
                 if (dataTable.Rows.Count == 0)
+                {
                     return null;
-                
+                }
+
                 return ConvertDataRowToLoan(dataTable.Rows[0]);
             }
             catch (Exception ex)
@@ -171,8 +173,10 @@ namespace LoanShark.Repository
         }
 
         // BANK ACCOUNT FUNCTIONS
-        public async Task<List<BankAccount>> GetBankAccountsByUserId(int userId) {
-            try {
+        public async Task<List<BankAccount>> GetBankAccountsByUserId(int userId)
+        {
+            try
+            {
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@id_user", userId)
@@ -181,14 +185,17 @@ namespace LoanShark.Repository
                 DataTable dataTable = await DataLink.Instance.ExecuteReader("GetBankAccountsByUserId", parameters);
                 return ConvertDataTableToBankAccounts(dataTable);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Debug.WriteLine($"Error retrieving bank accounts for user {userId}: {ex.Message}");
                 return new List<BankAccount>();
             }
         }
 
-        public async Task<BankAccount?> GetBankAccountByIBAN(string iban) {
-            try {
+        public async Task<BankAccount?> GetBankAccountByIBAN(string iban)
+        {
+            try
+            {
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@iban", iban)
@@ -197,15 +204,17 @@ namespace LoanShark.Repository
                 DataTable dataTable = await DataLink.Instance.ExecuteReader("GetBankAccountByIBAN", parameters);
                 return ConvertDataRowToBankAccount(dataTable.Rows[0]);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Debug.WriteLine($"Error retrieving bank account by IBAN {iban}: {ex.Message}");
                 return null;
             }
         }
 
-        public async Task<bool> UpdateBankAccountBalance(string iban, decimal amount) 
+        public async Task<bool> UpdateBankAccountBalance(string iban, decimal amount)
         {
-            try {
+            try
+            {
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@iban", iban),
@@ -216,30 +225,33 @@ namespace LoanShark.Repository
                 Debug.WriteLine("REPO: Bank account updated", iban, amount);
                 return rowsAffected > 0;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Debug.WriteLine($"Error updating bank account {iban}: {ex.Message}");
                 return false;
             }
         }
 
-        // CURRENCY EXCHANGE FUNCTIONS 
-        public async Task<List<CurrencyExchange>> GetAllCurrencyExchanges() {
-            try {
+        // CURRENCY EXCHANGE FUNCTIONS
+        public async Task<List<CurrencyExchange>> GetAllCurrencyExchanges()
+        {
+            try
+            {
                 DataTable dataTable = await DataLink.Instance.ExecuteReader("GetAllCurrencyExchanges");
                 return ConvertDataTableToCurrencyExchanges(dataTable);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Debug.WriteLine($"Error retrieving all currency exchanges: {ex.Message}");
                 return new List<CurrencyExchange>();
             }
         }
 
-
         // CONVERT DATA TABLE TO LOAN FUNCTIONS
         private List<Loan> ConvertDataTableToLoans(DataTable dataTable)
         {
             List<Loan> loans = new List<Loan>();
-            
+
             foreach (DataRow row in dataTable.Rows)
             {
                 loans.Add(ConvertDataRowToLoan(row));
@@ -255,20 +267,21 @@ namespace LoanShark.Repository
                 Convert.ToInt32(row["id_loan"]),
                 Convert.ToInt32(row["id_user"]),
                 Convert.ToDecimal(row["amount"]),
-                row["currency"].ToString() ?? "",
+                row["currency"].ToString() ?? string.Empty,
                 Convert.ToDateTime(row["date_taken"]),
                 row["date_paid"] == DBNull.Value ? null : (DateTime?)Convert.ToDateTime(row["date_paid"]),
                 Convert.ToDecimal(row["tax_percentage"]),
                 Convert.ToInt32(row["number_months"]),
-                row["loan_state"].ToString() ?? ""
-            );
+                row["loan_state"].ToString() ?? string.Empty);
         }
 
         // CONVERT DATA TABLE TO BANK ACCOUNT FUNCTIONS
-        private List<BankAccount> ConvertDataTableToBankAccounts(DataTable dataTable) {
+        private List<BankAccount> ConvertDataTableToBankAccounts(DataTable dataTable)
+        {
             List<BankAccount> bankAccounts = new List<BankAccount>();
 
-            foreach (DataRow row in dataTable.Rows) {
+            foreach (DataRow row in dataTable.Rows)
+            {
                 bankAccounts.Add(ConvertDataRowToBankAccount(row));
             }
 
@@ -276,27 +289,27 @@ namespace LoanShark.Repository
             return bankAccounts;
         }
 
-        private BankAccount ConvertDataRowToBankAccount(DataRow row) {
+        private BankAccount ConvertDataRowToBankAccount(DataRow row)
+        {
             return new BankAccount(
-                row["iban"].ToString() ?? "",
-                row["currency"].ToString() ?? "",
+                row["iban"].ToString() ?? string.Empty,
+                row["currency"].ToString() ?? string.Empty,
                 Convert.ToDecimal(row["amount"]),
                 Convert.ToBoolean(row["blocked"]),
                 Convert.ToInt32(row["id_user"]),
-                row["custom_name"]?.ToString() ?? "",
+                row["custom_name"]?.ToString() ?? string.Empty,
                 Convert.ToDecimal(row["daily_limit"]),
                 Convert.ToDecimal(row["max_per_transaction"]),
-                Convert.ToInt32(row["max_nr_transactions_daily"])
-            );
-
-
+                Convert.ToInt32(row["max_nr_transactions_daily"]));
         }
 
         // CONVERT DATA TABLE TO CURRENCY EXCHANGE FUNCTIONS
-        private List<CurrencyExchange> ConvertDataTableToCurrencyExchanges(DataTable dataTable) {
+        private List<CurrencyExchange> ConvertDataTableToCurrencyExchanges(DataTable dataTable)
+        {
             List<CurrencyExchange> currencyExchanges = new List<CurrencyExchange>();
-            
-            foreach (DataRow row in dataTable.Rows) {
+
+            foreach (DataRow row in dataTable.Rows)
+            {
                 currencyExchanges.Add(ConvertDataRowToCurrencyExchange(row));
             }
 
@@ -304,12 +317,12 @@ namespace LoanShark.Repository
             return currencyExchanges;
         }
 
-        private CurrencyExchange ConvertDataRowToCurrencyExchange(DataRow row) {
+        private CurrencyExchange ConvertDataRowToCurrencyExchange(DataRow row)
+        {
             return new CurrencyExchange(
-                row["from_currency"].ToString() ?? "",
-                row["to_currency"].ToString() ?? "",
-                (decimal)Convert.ToDouble(row["rate"])
-            );
+                row["from_currency"].ToString() ?? string.Empty,
+                row["to_currency"].ToString() ?? string.Empty,
+                (decimal)Convert.ToDouble(row["rate"]));
         }
     }
 }

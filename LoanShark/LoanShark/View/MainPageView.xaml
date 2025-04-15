@@ -72,10 +72,10 @@
                         <DataTemplate x:DataType="domain:BankAccount">
                             <Grid>
                                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock Text="{x:Bind name}" 
+                                    <TextBlock Text="{x:Bind Name}" 
                                             FontSize="20" 
                                             Margin="0,0,0,10"/>
-                                    <TextBlock Text="{x:Bind iban}" 
+                                    <TextBlock Text="{x:Bind Iban}" 
                                             FontSize="14"
                                             TextWrapping="Wrap"/>
                                 </StackPanel>

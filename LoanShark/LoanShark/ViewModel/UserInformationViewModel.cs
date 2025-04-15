@@ -1,44 +1,43 @@
-﻿using LoanShark.Domain;
-using LoanShark.Service;
-using LoanShark.View;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using LoanShark.Domain;
 using LoanShark.Helper;
+using LoanShark.Service;
+using LoanShark.View;
 
 namespace LoanShark.ViewModel
 {
     public class UserInformationViewModel : INotifyPropertyChanged
     {
-        private UserService _userService = new UserService();
-        private string _firstName = "";
-        private string _lastName = "";
-        private string _phoneNumber = "";
-        private string _email = "";
-        private string _currentPassword = "";
-        private string _newPassword = "";
-        private string _confirmNewPassword = "";
-        private string _firstNameError = "";
-        private string _lastNameError = "";
-        private string _phoneNumberError = "";
-        private string _emailError = "";
-        private string _currentPasswordError = "";
-        private string _newPasswordError = "";
-        private string _confirmNewPasswordError = "";
-        private string _errorMessage = "";
+        private UserService userService = new UserService();
+        private string firstName = string.Empty;
+        private string lastName = string.Empty;
+        private string phoneNumber = string.Empty;
+        private string email = string.Empty;
+        private string currentPassword = string.Empty;
+        private string newPassword = string.Empty;
+        private string confirmNewPassword = string.Empty;
+        private string firstNameError = string.Empty;
+        private string lastNameError = string.Empty;
+        private string phoneNumberError = string.Empty;
+        private string emailError = string.Empty;
+        private string currentPasswordError = string.Empty;
+        private string newPasswordError = string.Empty;
+        private string confirmNewPasswordError = string.Empty;
+        private string errorMessage = string.Empty;
 
         public string FirstName
         {
-            get => _firstName;
+            get => firstName;
             set
             {
-                if (_firstName != value)
+                if (firstName != value)
                 {
-                    _firstName = value;
+                    firstName = value;
                     OnPropertyChanged(nameof(FirstName));
                     FirstNameError = string.Empty;
                 }
@@ -47,12 +46,12 @@ namespace LoanShark.ViewModel
 
         public string LastName
         {
-            get => _lastName;
+            get => lastName;
             set
             {
-                if (_lastName != value)
+                if (lastName != value)
                 {
-                    _lastName = value;
+                    lastName = value;
                     OnPropertyChanged(nameof(LastName));
                     LastNameError = string.Empty;
                 }
@@ -61,12 +60,12 @@ namespace LoanShark.ViewModel
 
         public string PhoneNumber
         {
-            get => _phoneNumber;
+            get => phoneNumber;
             set
             {
-                if (_phoneNumber != value)
+                if (phoneNumber != value)
                 {
-                    _phoneNumber = value;
+                    phoneNumber = value;
                     OnPropertyChanged(nameof(PhoneNumber));
                     PhoneNumberError = string.Empty;
                 }
@@ -75,12 +74,12 @@ namespace LoanShark.ViewModel
 
         public string Email
         {
-            get => _email;
+            get => email;
             set
             {
-                if (_email != value)
+                if (email != value)
                 {
-                    _email = value;
+                    email = value;
                     OnPropertyChanged(nameof(Email));
                     EmailError = string.Empty;
                 }
@@ -89,12 +88,12 @@ namespace LoanShark.ViewModel
 
         public string CurrentPassword
         {
-            get => _currentPassword;
+            get => currentPassword;
             set
             {
-                if (_currentPassword != value)
+                if (currentPassword != value)
                 {
-                    _currentPassword = value;
+                    currentPassword = value;
                     OnPropertyChanged(nameof(CurrentPassword));
                     CurrentPasswordError = string.Empty;
                 }
@@ -103,12 +102,12 @@ namespace LoanShark.ViewModel
 
         public string NewPassword
         {
-            get => _newPassword;
+            get => newPassword;
             set
             {
-                if (_newPassword != value)
+                if (newPassword != value)
                 {
-                    _newPassword = value;
+                    newPassword = value;
                     OnPropertyChanged(nameof(NewPassword));
                     NewPasswordError = string.Empty;
                 }
@@ -117,12 +116,12 @@ namespace LoanShark.ViewModel
 
         public string ConfirmNewPassword
         {
-            get => _confirmNewPassword;
+            get => confirmNewPassword;
             set
             {
-                if (_confirmNewPassword != value)
+                if (confirmNewPassword != value)
                 {
-                    _confirmNewPassword = value;
+                    confirmNewPassword = value;
                     OnPropertyChanged(nameof(ConfirmNewPassword));
                     ConfirmNewPasswordError = string.Empty;
                 }
@@ -131,12 +130,12 @@ namespace LoanShark.ViewModel
 
         public string FirstNameError
         {
-            get => _firstNameError;
+            get => firstNameError;
             set
             {
-                if (_firstNameError != value)
+                if (firstNameError != value)
                 {
-                    _firstNameError = value;
+                    firstNameError = value;
                     OnPropertyChanged(nameof(FirstNameError));
                 }
             }
@@ -144,12 +143,12 @@ namespace LoanShark.ViewModel
 
         public string LastNameError
         {
-            get => _lastNameError;
+            get => lastNameError;
             set
             {
-                if (_lastNameError != value)
+                if (lastNameError != value)
                 {
-                    _lastNameError = value;
+                    lastNameError = value;
                     OnPropertyChanged(nameof(LastNameError));
                 }
             }
@@ -157,12 +156,12 @@ namespace LoanShark.ViewModel
 
         public string PhoneNumberError
         {
-            get => _phoneNumberError;
+            get => phoneNumberError;
             set
             {
-                if (_phoneNumberError != value)
+                if (phoneNumberError != value)
                 {
-                    _phoneNumberError = value;
+                    phoneNumberError = value;
                     OnPropertyChanged(nameof(PhoneNumberError));
                 }
             }
@@ -170,12 +169,12 @@ namespace LoanShark.ViewModel
 
         public string EmailError
         {
-            get => _emailError;
+            get => emailError;
             set
             {
-                if (_emailError != value)
+                if (emailError != value)
                 {
-                    _emailError = value;
+                    emailError = value;
                     OnPropertyChanged(nameof(EmailError));
                 }
             }
@@ -183,12 +182,12 @@ namespace LoanShark.ViewModel
 
         public string CurrentPasswordError
         {
-            get => _currentPasswordError;
+            get => currentPasswordError;
             set
             {
-                if (_currentPasswordError != value)
+                if (currentPasswordError != value)
                 {
-                    _currentPasswordError = value;
+                    currentPasswordError = value;
                     OnPropertyChanged(nameof(CurrentPasswordError));
                 }
             }
@@ -196,12 +195,12 @@ namespace LoanShark.ViewModel
 
         public string NewPasswordError
         {
-            get => _newPasswordError;
+            get => newPasswordError;
             set
             {
-                if (_newPasswordError != value)
+                if (newPasswordError != value)
                 {
-                    _newPasswordError = value;
+                    newPasswordError = value;
                     OnPropertyChanged(nameof(NewPasswordError));
                 }
             }
@@ -209,12 +208,12 @@ namespace LoanShark.ViewModel
 
         public string ConfirmNewPasswordError
         {
-            get => _confirmNewPasswordError;
+            get => confirmNewPasswordError;
             set
             {
-                if (_confirmNewPasswordError != value)
+                if (confirmNewPasswordError != value)
                 {
-                    _confirmNewPasswordError = value;
+                    confirmNewPasswordError = value;
                     OnPropertyChanged(nameof(ConfirmNewPasswordError));
                 }
             }
@@ -222,12 +221,12 @@ namespace LoanShark.ViewModel
 
         public string ErrorMessage
         {
-            get => _errorMessage;
+            get => errorMessage;
             set
             {
-                if (_errorMessage != value)
+                if (errorMessage != value)
                 {
-                    _errorMessage = value;
+                    errorMessage = value;
                     OnPropertyChanged(nameof(ErrorMessage));
                 }
             }
@@ -251,10 +250,10 @@ namespace LoanShark.ViewModel
             UpdateCommand = new RelayCommand(async () => await UpdateUser());
             DeleteCommand = new RelayCommand(DeleteUser);
             CloseCommand = new RelayCommand(() => CloseAction?.Invoke());
-            FirstName = UserSession.Instance.GetUserData("first_name") ?? "";
-            LastName = UserSession.Instance.GetUserData("last_name") ?? "";
-            PhoneNumber = UserSession.Instance.GetUserData("phone_number") ?? "";
-            Email = UserSession.Instance.GetUserData("email") ?? "";
+            FirstName = UserSession.Instance.GetUserData("first_name") ?? string.Empty;
+            LastName = UserSession.Instance.GetUserData("last_name") ?? string.Empty;
+            PhoneNumber = UserSession.Instance.GetUserData("phone_number") ?? string.Empty;
+            Email = UserSession.Instance.GetUserData("email") ?? string.Empty;
         }
 
         // validates all fields and updates user information
@@ -281,7 +280,7 @@ namespace LoanShark.ViewModel
                 PhoneNumberError = "Phone number is required";
             }
 
-            string[] userCredentialsFromDB = await _userService.GetUserPasswordHashSalt();
+            string[] userCredentialsFromDB = await userService.GetUserPasswordHashSalt();
             if (string.IsNullOrWhiteSpace(Email))
             {
                 EmailError = "Email is required";
@@ -297,11 +296,11 @@ namespace LoanShark.ViewModel
                 }
             }
 
-            if (NewPassword != "")
+            if (NewPassword != string.Empty)
             {
                 // [lengthOk, uppserCaseOk, lowerCaseOk, numberOk, specialCharOk];
                 bool[] result = HashedPassword.VerifyPasswordStrength(NewPassword);
-                NewPasswordError = "";
+                NewPasswordError = string.Empty;
                 if (!result[0])
                 {
                     NewPasswordError += "Password must have at least 8 characters\n";
@@ -328,19 +327,20 @@ namespace LoanShark.ViewModel
                 ConfirmNewPasswordError = "Passwords do not match";
             }
 
-            string? emailError = await _userService.CheckEmail(Email);
+            string? emailError = await userService.CheckEmail(Email);
             if (emailError != null)
             {
                 EmailError = emailError;
             }
 
-            string? phoneNumberError = await _userService.CheckPhoneNumber(PhoneNumber);
+            string? phoneNumberError = await userService.CheckPhoneNumber(PhoneNumber);
             if (phoneNumberError != null)
             {
                 PhoneNumberError = phoneNumberError;
             }
 
-            List<string> errors = new List<string> { 
+            List<string> errors = new List<string>
+            {
                 FirstNameError,
                 LastNameError,
                 PhoneNumberError,
@@ -350,7 +350,7 @@ namespace LoanShark.ViewModel
                 ConfirmNewPasswordError
             };
 
-            bool hasErrors = errors.Any(x => x != "");
+            bool hasErrors = errors.Any(x => x != string.Empty);
 
             if (hasErrors)
             {
@@ -361,34 +361,32 @@ namespace LoanShark.ViewModel
             try
             {
                 User user;
-                if (string.IsNullOrWhiteSpace(NewPassword)) 
+                if (string.IsNullOrWhiteSpace(NewPassword))
                 {
                     // if new password is not provided, use the old one
                     user = new User(
                         int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0"),
-                        new Cnp(UserSession.Instance.GetUserData("cnp") ?? ""),
+                        new Cnp(UserSession.Instance.GetUserData("cnp") ?? string.Empty),
                         FirstName,
                         LastName,
                         new Email(Email),
                         new PhoneNumber(PhoneNumber),
-                        new HashedPassword(userCredentialsFromDB[0], userCredentialsFromDB[1], false)
-                    );
+                        new HashedPassword(userCredentialsFromDB[0], userCredentialsFromDB[1], false));
                 }
                 else
                 {
                     // if new password is provided, use the new one
                     user = new User(
                         int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0"),
-                        new Cnp(UserSession.Instance.GetUserData("cnp") ?? ""),
+                        new Cnp(UserSession.Instance.GetUserData("cnp") ?? string.Empty),
                         FirstName,
                         LastName,
                         new Email(Email),
                         new PhoneNumber(PhoneNumber),
-                        new HashedPassword(NewPassword)
-                    );
+                        new HashedPassword(NewPassword));
                 }
 
-                bool ok = await _userService.UpdateUser(user);
+                bool ok = await userService.UpdateUser(user);
                 if (!ok)
                 {
                     ErrorMessage = "Failed to update user information";
@@ -399,7 +397,7 @@ namespace LoanShark.ViewModel
                 UserSession.Instance.SetUserData("last_name", LastName);
                 UserSession.Instance.SetUserData("email", Email);
                 UserSession.Instance.SetUserData("phone_number", PhoneNumber);
-                WindowManager.shouldReloadWelcomeText = true;
+                WindowManager.ShouldReloadWelcomeText = true;
             }
             catch (Exception ex)
             {

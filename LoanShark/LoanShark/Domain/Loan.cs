@@ -9,7 +9,7 @@ namespace LoanShark.Domain
         public decimal Amount { get; set; }
         public decimal AmountToPay
         {
-            get { return Amount * (1 + TaxPercentage/100); }
+            get { return Amount * (1 + (TaxPercentage / 100)); }
         }
         public string Currency { get; set; }
         public DateTime DateTaken { get; set; }
@@ -18,7 +18,6 @@ namespace LoanShark.Domain
         public decimal TaxPercentage { get; set; }
         public int NumberMonths { get; set; }
         public string State { get; private set; } // "paid" or "unpaid"
-
 
         public Loan(int loanID, int userID, decimal amount,
             string currency, DateTime dateTaken, DateTime? datePaid,

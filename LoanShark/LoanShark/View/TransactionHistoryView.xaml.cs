@@ -1,11 +1,10 @@
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 using System.Collections.ObjectModel;
 using LoanShark.ViewModel;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace LoanShark
 {
     /// <summary>
@@ -13,13 +12,13 @@ namespace LoanShark
     /// </summary>
     public sealed partial class TransactionHistoryView : Window
     {
-        public TransactionsHistoryViewModel transactionsViewModel;
-        public ObservableCollection<string> currentList;
+        public TransactionsHistoryViewModel TransactionsViewModel;
+        public ObservableCollection<string> CurrentList;
         private bool isSortedAscending = true;
-        
+
         public TransactionHistoryView()
         {
-            this.transactionsViewModel = new TransactionsHistoryViewModel();
+            this.TransactionsViewModel = new TransactionsHistoryViewModel();
             this.InitializeComponent();
             SortAscendingButton.IsChecked = true;
             InitializeDataAsync();
@@ -27,13 +26,13 @@ namespace LoanShark
 
         private async void InitializeDataAsync()
         {
-            currentList = await transactionsViewModel.retrieveForMenu();
-            TransactionList.ItemsSource = currentList;
+            CurrentList = await TransactionsViewModel.RetrieveForMenu();
+            TransactionList.ItemsSource = CurrentList;
         }
 
         private void ExportToCSV_Click(object sender, RoutedEventArgs e)
         {
-            transactionsViewModel.CreateCSV();
+            TransactionsViewModel.CreateCSV();
             ContentDialog dialog = new ContentDialog
             {
                 Title = "Export Complete",
@@ -51,8 +50,8 @@ namespace LoanShark
                 isSortedAscending = true;
                 SortAscendingButton.IsChecked = true;
                 SortDescendingButton.IsChecked = false;
-                currentList = await transactionsViewModel.SortByDate("Ascending");
-                TransactionList.ItemsSource = currentList;
+                CurrentList = await TransactionsViewModel.SortByDate("Ascending");
+                TransactionList.ItemsSource = CurrentList;
             }
             else
             {
@@ -67,8 +66,8 @@ namespace LoanShark
                 isSortedAscending = false;
                 SortAscendingButton.IsChecked = false;
                 SortDescendingButton.IsChecked = true;
-                currentList = await transactionsViewModel.SortByDate("Descending");
-                TransactionList.ItemsSource = currentList;
+                CurrentList = await TransactionsViewModel.SortByDate("Descending");
+                TransactionList.ItemsSource = CurrentList;
             }
             else
             {
@@ -81,13 +80,13 @@ namespace LoanShark
             string typedText = (sender as TextBox).Text;
             if (!string.IsNullOrEmpty(typedText))
             {
-                currentList = await transactionsViewModel.FilterByTypeForMenu(typedText);
-                TransactionList.ItemsSource = currentList;
+                CurrentList = await TransactionsViewModel.FilterByTypeForMenu(typedText);
+                TransactionList.ItemsSource = CurrentList;
             }
             else
             {
-                currentList = await transactionsViewModel.retrieveForMenu();
-                TransactionList.ItemsSource = currentList;
+                CurrentList = await TransactionsViewModel.RetrieveForMenu();
+                TransactionList.ItemsSource = CurrentList;
             }
         }
 
@@ -97,8 +96,8 @@ namespace LoanShark
             {
                 string selectedTransactionForMenu = TransactionList.SelectedItem as string;
                 // Retrieve the detailed information of the selected transaction
-                var selectedTransaction = await transactionsViewModel.GetTransactionByMenuString(selectedTransactionForMenu);
-                string detailedTransaction = selectedTransaction.tostringDetailed();
+                var selectedTransaction = await TransactionsViewModel.GetTransactionByMenuString(selectedTransactionForMenu);
+                string detailedTransaction = selectedTransaction.TostringDetailed();
                 TransactionDetailsView transactionDetailsWindow = new TransactionDetailsView(detailedTransaction, selectedTransaction);
                 transactionDetailsWindow.Activate();
             }
@@ -106,7 +105,7 @@ namespace LoanShark
 
         private async void ViewGraphics_Click(object sender, RoutedEventArgs e)
         {
-            var transactionTypeCounts = await transactionsViewModel.GetTransactionTypeCounts();
+            var transactionTypeCounts = await TransactionsViewModel.GetTransactionTypeCounts();
             TransactionHistoryGraphicalRepresentationView transactionGraphicsWindow = new TransactionHistoryGraphicalRepresentationView(transactionTypeCounts);
             transactionGraphicsWindow.Activate();
         }

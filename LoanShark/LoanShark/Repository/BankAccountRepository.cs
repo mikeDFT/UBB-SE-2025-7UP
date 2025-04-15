@@ -1,18 +1,18 @@
-﻿using LoanShark.Data;
-using LoanShark.Domain;
-using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using LoanShark.Data;
+using LoanShark.Domain;
+using Microsoft.Data.SqlClient;
 
 namespace LoanShark.Repository
 {
     /// <summary>
     /// Interface for bank account data access operations
     /// </summary>
-    interface IBankAccountRepository
+    public interface IBankAccountRepository
     {
         /// <summary>
         /// Retrieves all bank accounts from the database
@@ -30,9 +30,9 @@ namespace LoanShark.Repository
         /// <summary>
         /// Retrieves a bank account by its IBAN
         /// </summary>
-        /// <param name="IBAN">The IBAN of the bank account to retrieve</param>
+        /// <param name="iban">The IBAN of the bank account to retrieve</param>
         /// <returns>The bank account with the specified IBAN, or null if not found</returns>
-        Task<BankAccount?> GetBankAccountByIBAN(string IBAN);
+        Task<BankAccount?> GetBankAccountByIBAN(string iban);
 
         /// <summary>
         /// Adds a new bank account to the database
@@ -44,17 +44,17 @@ namespace LoanShark.Repository
         /// <summary>
         /// Removes a bank account from the database
         /// </summary>
-        /// <param name="IBAN">The IBAN of the bank account to remove</param>
+        /// <param name="iban">The IBAN of the bank account to remove</param>
         /// <returns>True if the bank account was removed successfully, false otherwise</returns>
-        Task<bool> RemoveBankAccount(string IBAN);
+        Task<bool> RemoveBankAccount(string iban);
 
         /// <summary>
         /// Updates a bank account in the database
         /// </summary>
-        /// <param name="IBAN">The IBAN of the bank account to update</param>
-        /// <param name="NBA">The updated bank account information</param>
+        /// <param name="iban">The IBAN of the bank account to update</param>
+        /// <param name="nba">The updated bank account information</param>
         /// <returns>True if the bank account was updated successfully, false otherwise</returns>
-        Task<bool> UpdateBankAccount(string IBAN, BankAccount NBA);
+        Task<bool> UpdateBankAccount(string iban, BankAccount nba);
 
         /// <summary>
         /// Retrieves all available currencies from the database
@@ -73,12 +73,14 @@ namespace LoanShark.Repository
     /// <summary>
     /// Repository class for bank account data access
     /// </summary>
-    class BankAccountRepository : IBankAccountRepository
+    public class BankAccountRepository : IBankAccountRepository
     {
         /// <summary>
         /// Initializes a new instance of the BankAccountRepository class
         /// </summary>
-        public BankAccountRepository(){}
+        public BankAccountRepository()
+        {
+        }
 
         /// <summary>
         /// Retrieves all bank accounts from the database
@@ -124,18 +126,22 @@ namespace LoanShark.Repository
         /// <summary>
         /// Retrieves a bank account by its IBAN
         /// </summary>
-        /// <param name="IBAN">The IBAN of the bank account to retrieve</param>
+        /// <param name="iban">The IBAN of the bank account to retrieve</param>
         /// <returns>The bank account with the specified IBAN, or null if not found or an error occurs</returns>
-        public async Task<BankAccount?> GetBankAccountByIBAN(string IBAN)
+        public async Task<BankAccount?> GetBankAccountByIBAN(string iban)
         {
             try
             {
-                var sqlParams = new SqlParameter[] { new SqlParameter("@iban", IBAN) };
+                var sqlParams = new SqlParameter[] { new SqlParameter("@iban", iban) };
                 DataTable dataTable = await DataLink.Instance.ExecuteReader("GetBankAccountByIBAN", sqlParams);
                 if (dataTable != null)
+                {
                     return ConvertDataTableRowToBankAccount(dataTable.Rows[0]);
+                }
                 else
+                {
                     return null;
+                }
             }
             catch (Exception)
             {
@@ -153,18 +159,18 @@ namespace LoanShark.Repository
         {
             try
             {
-                Debug.WriteLine(bankAccount.iban);
+                Debug.WriteLine(bankAccount.Iban);
                 var sqlParams = new SqlParameter[]
                 {
-                    new SqlParameter("@iban", bankAccount.iban),
-                    new SqlParameter("@currency", bankAccount.currency),
-                    new SqlParameter("@amount", bankAccount.balance),
-                    new SqlParameter("@id_user", bankAccount.userID),
-                    new SqlParameter("@custom_name",                bankAccount.name),
-                    new SqlParameter("@daily_limit",                bankAccount.dailyLimit),
-                    new SqlParameter("@max_per_transaction",        bankAccount.maximumPerTransaction),
-                    new SqlParameter("@max_nr_transactions_daily",  bankAccount.maximumNrTransactions),
-                    new SqlParameter("@blocked",                    bankAccount.blocked)
+                    new SqlParameter("@iban", bankAccount.Iban),
+                    new SqlParameter("@currency", bankAccount.Currency),
+                    new SqlParameter("@amount", bankAccount.Balance),
+                    new SqlParameter("@id_user", bankAccount.UserID),
+                    new SqlParameter("@custom_name",                bankAccount.Name),
+                    new SqlParameter("@daily_limit",                bankAccount.DailyLimit),
+                    new SqlParameter("@max_per_transaction",        bankAccount.MaximumPerTransaction),
+                    new SqlParameter("@max_nr_transactions_daily",  bankAccount.MaximumNrTransactions),
+                    new SqlParameter("@blocked",                    bankAccount.Blocked)
                 };
                 await DataLink.Instance.ExecuteNonQuery("AddBankAccount", sqlParams);
                 return true;
@@ -179,16 +185,16 @@ namespace LoanShark.Repository
         /// <summary>
         /// Removes a bank account from the database
         /// </summary>
-        /// <param name="IBAN">The IBAN of the bank account to remove</param>
+        /// <param name="iban">The IBAN of the bank account to remove</param>
         /// <returns>True if the bank account was removed successfully, false otherwise</returns>
-        public async Task<bool> RemoveBankAccount(string IBAN)
+        public async Task<bool> RemoveBankAccount(string iban)
         {
             try
             {
-                Debug.WriteLine(IBAN);
+                Debug.WriteLine(iban);
                 var sqlParams = new SqlParameter[]
                 {
-                    new SqlParameter("@iban", IBAN)
+                    new SqlParameter("@iban", iban)
                 };
                 await DataLink.Instance.ExecuteNonQuery("RemoveBankAccount", sqlParams);
                 return true;
@@ -208,16 +214,15 @@ namespace LoanShark.Repository
         public BankAccount ConvertDataTableRowToBankAccount(DataRow row)
         {
             return new BankAccount(
-                         Convert.ToString(row["iban"]) ?? "",
-                         Convert.ToString(row["currency"]) ?? "",
-                         Decimal.Parse(row["amount"].ToString() ?? "0"),
+                         Convert.ToString(row["iban"]) ?? string.Empty,
+                         Convert.ToString(row["currency"]) ?? string.Empty,
+                         decimal.Parse(row["amount"].ToString() ?? "0"),
                          Convert.ToBoolean(row["blocked"]),
                          Convert.ToInt32(row["id_user"]),
-                         Convert.ToString(row["custom_name"]) ?? "",
-                         Decimal.Parse(row["daily_limit"].ToString() ?? "0"),
-                         Decimal.Parse(row["max_per_transaction"].ToString() ?? "0"),
-                         Convert.ToInt32(row["max_nr_transactions_daily"])
-                    );
+                         Convert.ToString(row["custom_name"]) ?? string.Empty,
+                         decimal.Parse(row["daily_limit"].ToString() ?? "0"),
+                         decimal.Parse(row["max_per_transaction"].ToString() ?? "0"),
+                         Convert.ToInt32(row["max_nr_transactions_daily"]));
         }
 
         /// <summary>
@@ -245,7 +250,7 @@ namespace LoanShark.Repository
             List<string> currencies = new List<string>();
             foreach (DataRow row in dataTable.Rows)
             {
-                currencies.Add(Convert.ToString(row["currency_name"]) ?? "");
+                currencies.Add(Convert.ToString(row["currency_name"]) ?? string.Empty);
             }
             return Task.FromResult(currencies);
         }
@@ -270,25 +275,25 @@ namespace LoanShark.Repository
             var sqlParams = new SqlParameter[] { new SqlParameter("@email", email) };
             DataTable dataTable = await DataLink.Instance.ExecuteReader("GetCredentials", sqlParams);
             List<string> credentials = new List<string>();
-            credentials.Add(Convert.ToString(dataTable.Rows[0]["hashed_password"]) ?? "");
-            credentials.Add(Convert.ToString(dataTable.Rows[0]["password_salt"]) ?? "");
+            credentials.Add(Convert.ToString(dataTable.Rows[0]["hashed_password"]) ?? string.Empty);
+            credentials.Add(Convert.ToString(dataTable.Rows[0]["password_salt"]) ?? string.Empty);
             return credentials;
         }
 
-        // updates the bank account with the given iban with the new attributes by calling 
+        // updates the bank account with the given iban with the new attributes by calling
         // the sql procedure UpdateBankAccount
-        public async Task<bool> UpdateBankAccount(string IBAN, BankAccount NBA)
+        public async Task<bool> UpdateBankAccount(string iban, BankAccount nba)
         {
             try
             {
                 var sqlParams = new SqlParameter[]
                 {
-                             new SqlParameter("@iban", IBAN),
-                             new SqlParameter("@custom_name", NBA.name),
-                             new SqlParameter("@daily_limit", NBA.dailyLimit),
-                             new SqlParameter("@max_per_transaction",NBA.maximumPerTransaction),
-                             new SqlParameter("@max_nr_transactions_daily",NBA.maximumNrTransactions),
-                             new SqlParameter("@blocked",NBA.blocked)
+                             new SqlParameter("@iban", iban),
+                             new SqlParameter("@custom_name", nba.Name),
+                             new SqlParameter("@daily_limit", nba.DailyLimit),
+                             new SqlParameter("@max_per_transaction", nba.MaximumPerTransaction),
+                             new SqlParameter("@max_nr_transactions_daily", nba.MaximumNrTransactions),
+                             new SqlParameter("@blocked", nba.Blocked)
                 };
                 await DataLink.Instance.ExecuteNonQuery("UpdateBankAccount", sqlParams);
                 return true;

@@ -1,12 +1,10 @@
 using System;
+using System.Diagnostics;
+using LoanShark.Domain;
+using LoanShark.Helper;
+using LoanShark.ViewModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Navigation;
-using System.Diagnostics;
-using LoanShark.ViewModel;
-using System.Threading.Tasks;
-using LoanShark.Helper;
-using LoanShark.Domain;
 
 namespace LoanShark.View
 {
@@ -15,13 +13,13 @@ namespace LoanShark.View
     /// </summary>
     public sealed partial class LoginView : Window
     {
-        public LoginViewModel viewModel { get; private set; }
+        public LoginViewModel ViewModel { get; private set; }
         public event EventHandler? LoginSuccess;
-        
+
         public LoginView()
         {
             this.InitializeComponent();
-            this.viewModel = new LoginViewModel();
+            this.ViewModel = new LoginViewModel();
 
             // Register this window with the WindowManager
             WindowManager.RegisterWindow(this);
@@ -29,23 +27,23 @@ namespace LoanShark.View
             UserSession.Instance.InvalidateUserSession();
         }
 
-        public async void LoginButtonHandler(object sender, RoutedEventArgs e) 
+        public async void LoginButtonHandler(object sender, RoutedEventArgs e)
         {
             string email = emailTextBox.Text;
             string password = passwordBox.Password;
 
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                this.viewModel.ErrorMessage = "Email and password cannot be empty";
-                this.viewModel.IsErrorVisible = true;
+                this.ViewModel.ErrorMessage = "Email and password cannot be empty";
+                this.ViewModel.IsErrorVisible = true;
                 return;
             }
 
-            if (await this.viewModel.ValidateCredentials(email, password))
+            if (await this.ViewModel.ValidateCredentials(email, password))
             {
                 // navigate to the main window
                 Debug.Print("Login successful");
-                await this.viewModel.InstantiateUserSessionAfterLogin(email);
+                await this.ViewModel.InstantiateUserSessionAfterLogin(email);
                 OpenMainPageWindow();
             }
             else
@@ -56,7 +54,7 @@ namespace LoanShark.View
                 passwordBox.Focus(FocusState.Programmatic);
             }
         }
-        
+
         public void SignUpButtonHandler(object sender, RoutedEventArgs e)
         {
             // navigate to the sign up window
@@ -67,7 +65,7 @@ namespace LoanShark.View
 
         private void OpenMainPageWindow() // opens the main page window and closes the login window
         {
-            WindowManager.shouldReloadBankAccounts = false; // bank accounts are loaded by the constructor of the main page window
+            WindowManager.ShouldReloadBankAccounts = false; // bank accounts are loaded by the constructor of the main page window
             MainPageView mainPageWindow = new MainPageView();
             mainPageWindow.Activate();
             this.Close();
